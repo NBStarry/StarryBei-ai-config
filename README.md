@@ -1,4 +1,4 @@
-# my-claude-code
+# StarryBei-ai-config
 
 > NBStarry 的 Claude Code 配置、脚本与扩展合集
 

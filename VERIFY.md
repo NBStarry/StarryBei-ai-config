@@ -27,6 +27,28 @@
   - 实际效果：（验证后填写）
 -->
 
+### 多工具配置仓库改造 (my-claude-code → StarryBei-ai-config)
+
+- [ ] **仓库改名 + 引用更新** (commit: pending, date: 2026-06-11)
+  - 验证方法：访问 `https://github.com/NBStarry/StarryBei-ai-config`；旧 URL `.../my-claude-code` 应 301 重定向；打开新 Pages `https://nbstarry.github.io/StarryBei-ai-config/`，Dashboard 编辑功能（走 GitHub API REPO 名）能拉取并保存一次文件
+  - 预期效果：远程仓库名、本地 remote、editor.js 的 REPO、README/CLAUDE.md 的 clone URL 全部为新名；Dashboard CRUD 正常
+  - 实际效果：（验证后填写）
+
+- [ ] **目录重构为 claude/ + codex/ 分层** (commit: pending, date: 2026-06-11)
+  - 验证方法：本地重跑 `bash scripts/generate-site-data.sh`，检查 `site/data.json` 各 tab（skills/hooks/configs/scripts/commands）数量均不为 0；`bash -n` 所有 .sh 通过
+  - 预期效果：目录迁移后 Dashboard 数据扫描路径正确，无空 tab
+  - 实际效果：（验证后填写）
+
+- [ ] **install.sh symlink 模式 + settings.json 原子写存活** (commit: pending, date: 2026-06-11)
+  - 验证方法：`bash install.sh` 后 `ls -la` 确认 `~/.claude/{settings.json,CLAUDE.md,statusline.sh,hzb-skills}` 与 `~/.codex/skills/*` 均为指向仓库的 symlink；新开 Claude 会话执行 `/model` 切换→退出→`[ -L ~/.claude/settings.json ]` 仍为 symlink；`/hzb:codex-review` 可见；codex 内 5 个 skill 可见
+  - 预期效果：symlink 不被原子写打断（若打断则回退 copy 模式）；插件与 statusline 正常
+  - 实际效果：（验证后填写）
+
+- [ ] **敏感信息未泄漏到公开仓库** (commit: pending, date: 2026-06-11)
+  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、settings.glm.json）在 .gitignore 内、未被跟踪
+  - 预期效果：仓库内只有脱敏 .example 模板，无任何真实密钥
+  - 实际效果：（验证后填写）
+
 - [ ] **本地配置同步：sync-configs.sh + Dashboard Configs 增强** (commit: pending, date: 2026-04-12)
   - 验证方法：1) `bash scripts/sync-configs.sh status` 查看同步状态 2) `bash scripts/sync-configs.sh push` 推送后查看 `git diff configs/` 3) 访问 Dashboard Configs 页面查看元数据标签和折叠展开
   - 预期效果：sync-configs.sh 正确识别本地/仓库差异，push/pull 双向同步，Dashboard 显示 model、plugin 数量、hook events 等标签
