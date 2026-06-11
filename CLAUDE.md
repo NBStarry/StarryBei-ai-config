@@ -14,8 +14,8 @@ A public repository for sharing Claude Code configurations, custom scripts, hook
 
 ```bash
 # Clone and switch to dev branch
-git clone https://github.com/NBStarry/my-claude-code.git
-cd my-claude-code && git checkout dev
+git clone https://github.com/NBStarry/StarryBei-ai-config.git
+cd StarryBei-ai-config && git checkout dev
 
 # Sync configs from repo to local (or use push to go the other way)
 bash scripts/sync-configs.sh pull
