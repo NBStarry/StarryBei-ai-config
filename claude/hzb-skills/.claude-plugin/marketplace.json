@@ -1,0 +1,15 @@
+{
+  "name": "hzb-skills",
+  "description": "hanzebei 的自建 skill 合集，统一以 hzb: 命名空间区分于第三方 skill。",
+  "owner": {
+    "name": "NBStarry",
+    "url": "https://github.com/NBStarry"
+  },
+  "plugins": [
+    {
+      "name": "hzb",
+      "source": "./plugins/hzb",
+      "description": "hanzebei 自建 skill：codex-review、conference-meeting-summary、g1-robot、web-access、wlcb-dev、save-memory-before-compact。"
+    }
+  ]
+}
