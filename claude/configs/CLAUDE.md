@@ -6,6 +6,9 @@
 ## Editing Rules
 - Before editing any file, always re-read its current content with a fresh `Read` — never edit based on assumed or stale content
 
+## Language
+- Default to Chinese when replying to the user, unless the user explicitly asks for another language
+
 ## Shell Scripts & Debugging
 - When fixing shell scripts, always test runtime behavior with a real invocation — do not rely solely on reading the code
 - For tmux operations: use `capture-pane -S -` for full scrollback
@@ -17,6 +20,7 @@
 - Identify root cause first, then propose fix — do not jump directly into implementation
 
 ## Agent Teams Rules
+- **Subagents (Agent tool) must always pass an explicit `model` parameter** (opus or sonnet) — never omit it, since omitting inherits the main-loop model, which may be an unintended tier
 - Team Lead: always use `model: "opus"`
 - Teammates: default to `model: "sonnet"`, use `model: "opus"` for complex tasks (architecture, multi-file refactoring, deep debugging)
 - Never use haiku for teammates

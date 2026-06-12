@@ -22,6 +22,14 @@ Thumbs.db
 credentials.json
 secrets.json
 
+# Real config/skill files containing credentials — committed as .example only.
+# install.sh seeds these from the .example templates on fresh machines.
+claude/configs/settings.glm.json
+claude/hzb-skills/plugins/hzb/commands/connect-internal.md
+claude/hzb-skills/plugins/hzb/commands/connect-internal-backup.md
+claude/hzb-skills/plugins/hzb/skills/g1-robot/SKILL.md
+claude/hzb-skills/plugins/hzb/skills/wlcb-dev/SKILL.md
+
 # Node modules
 node_modules/
 
