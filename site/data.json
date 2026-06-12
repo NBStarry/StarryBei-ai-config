@@ -13,9 +13,9 @@
   },
   "git": {
     "branch": "dev",
-    "commit": "670d420"
+    "commit": "8f63c5e"
   },
-  "generated_at": "2026-06-12T13:42:12Z",
+  "generated_at": "2026-06-12T13:56:26Z",
   "skills": [
     {
       "name": "lark-mail",
@@ -949,11 +949,11 @@
         "title": "Telegram bridge /compact 命令",
         "commit": "pending",
         "date": "2026-04-12",
-        "status": "pending",
-        "method": "在 Telegram 中发送 /compact，确认 Claude Code 收到并执行",
-        "expected": "/compact 命令通过 tmux send-keys 发送到当前活跃 pane",
-        "actual": "（验证后填写）",
-        "reason": ""
+        "status": "deprecated",
+        "method": "",
+        "expected": "",
+        "actual": "",
+        "reason": "Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）"
       },
       {
         "title": "CLAUDE.md 改进：依赖说明 + bash-syntax-check hook + skills 说明",
@@ -999,11 +999,11 @@
         "title": "telegram-bridge /list 进程检测 + 目标终端显示 + 动态选项标签",
         "commit": "pending",
         "date": "2026-02-10",
-        "status": "pending",
+        "status": "deprecated",
         "method": "",
-        "expected": "多终端全部可见，消息明确送达哪个终端，选项标签与实际一致",
-        "actual": "（验证后填写）",
-        "reason": ""
+        "expected": "",
+        "actual": "",
+        "reason": "Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）"
       }
     ],
     "verified": [

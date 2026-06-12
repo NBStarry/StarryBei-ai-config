@@ -910,9 +910,9 @@
 
     // Known dependencies per script (hardcoded since deps field is unreliable in data.json)
     var knownDeps = {
-      'telegram-bridge.sh': ['jq', 'tmux', 'curl'],
-      'notify-telegram.sh': ['jq', 'curl'],
-      'statusline.sh': ['jq']
+      'statusline.sh': ['jq'],
+      'generate-site-data.sh': ['jq'],
+      'export-memory.sh': ['curl', 'jq']
     };
 
     data.scripts.forEach(function (script) {

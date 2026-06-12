@@ -54,10 +54,8 @@
   - 预期效果：sync-configs.sh 正确识别本地/仓库差异，push/pull 双向同步，Dashboard 显示 model、plugin 数量、hook events 等标签
   - 实际效果：（验证后填写）
 
-- [ ] **Telegram bridge /compact 命令** (commit: pending, date: 2026-04-12)
-  - 验证方法：在 Telegram 中发送 /compact，确认 Claude Code 收到并执行
-  - 预期效果：/compact 命令通过 tmux send-keys 发送到当前活跃 pane
-  - 实际效果：（验证后填写）
+- [-] **Telegram bridge /compact 命令** (commit: pending, date: 2026-04-12)
+  - 原因：Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）
 
 - [ ] **CLAUDE.md 改进：依赖说明 + bash-syntax-check hook + skills 说明** (commit: pending, date: 2026-02-10)
   - 验证方法：阅读 CLAUDE.md，确认新增内容准确且有价值
@@ -84,13 +82,8 @@
   - 预期效果：auth gate 正常显示，错误提示准确，脚本语法正确，Gist 上传成功
   - 实际效果：（验证后填写）
 
-- [ ] **telegram-bridge /list 进程检测 + 目标终端显示 + 动态选项标签** (commit: pending, date: 2026-02-10)
-  - 验证方法：
-    1. /list 确认所有 Claude Code 终端（含 title 不含 "claude" 的）都被检测到
-    2. 发送消息确认回复包含目标终端名 `[已发送→session]`
-    3. 权限通知确认显示实际选项（非硬编码），选择后确认回复显示实际选项文本
-  - 预期效果：多终端全部可见，消息明确送达哪个终端，选项标签与实际一致
-  - 实际效果：（验证后填写）
+- [-] **telegram-bridge /list 进程检测 + 目标终端显示 + 动态选项标签** (commit: pending, date: 2026-02-10)
+  - 原因：Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）
 
 ---
 
