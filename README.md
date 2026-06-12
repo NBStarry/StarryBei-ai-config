@@ -29,7 +29,7 @@ StarryBei-ai-config/
 ├── scripts/             # 共享脚本（generate-site-data.sh、export-memory.sh）
 ├── site/                # GitHub Pages Dashboard
 ├── docs/                # 设计文档与历史计划
-├── deprecated/          # 废案归档（QQ / Telegram / sync-configs）
+├── deprecated/          # 废案归档（QQ / Telegram 通知、旧 sync-configs）
 ├── CLAUDE.md            # 本仓库的 Claude Code 约定
 ├── VERIFY.md            # dev → main 验证清单
 └── README.md           # 本文件
