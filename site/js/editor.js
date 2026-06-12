@@ -5,7 +5,7 @@ var Editor = (function () {
   'use strict';
 
   var OWNER = 'NBStarry';
-  var REPO = 'my-claude-code';
+  var REPO = 'StarryBei-ai-config';
   var BRANCH = 'dev';
   var API_BASE = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/';
 

@@ -27,15 +27,33 @@
   - 实际效果：（验证后填写）
 -->
 
-- [ ] **本地配置同步：sync-configs.sh + Dashboard Configs 增强** (commit: pending, date: 2026-04-12)
-  - 验证方法：1) `bash scripts/sync-configs.sh status` 查看同步状态 2) `bash scripts/sync-configs.sh push` 推送后查看 `git diff configs/` 3) 访问 Dashboard Configs 页面查看元数据标签和折叠展开
-  - 预期效果：sync-configs.sh 正确识别本地/仓库差异，push/pull 双向同步，Dashboard 显示 model、plugin 数量、hook events 等标签
-  - 实际效果：（验证后填写）
+### 多工具配置仓库改造 (my-claude-code → StarryBei-ai-config)
 
-- [ ] **Telegram bridge /compact 命令** (commit: pending, date: 2026-04-12)
-  - 验证方法：在 Telegram 中发送 /compact，确认 Claude Code 收到并执行
-  - 预期效果：/compact 命令通过 tmux send-keys 发送到当前活跃 pane
-  - 实际效果：（验证后填写）
+- [x] **仓库改名 + 引用更新** (commit: 7306c74, date: 2026-06-11)
+  - 验证方法：访问 `https://github.com/NBStarry/StarryBei-ai-config`；旧 URL `.../my-claude-code` 应 301 重定向；打开新 Pages `https://nbstarry.github.io/StarryBei-ai-config/`，Dashboard 编辑功能（走 GitHub API REPO 名）能拉取并保存一次文件
+  - 预期效果：远程仓库名、本地 remote、editor.js 的 REPO、README/CLAUDE.md 的 clone URL 全部为新名；Dashboard CRUD 正常
+  - 实际效果：✅ 已验证。旧 URL 正确 301 跳转到新仓库名
+
+- [x] **目录重构为 claude/ + codex/ 分层** (commit: 670d420, date: 2026-06-11)
+  - 验证方法：本地重跑 `bash scripts/generate-site-data.sh`，检查 `site/data.json` 各 tab（skills/hooks/configs/scripts/commands）数量均不为 0；`bash -n` 所有 .sh 通过
+  - 预期效果：目录迁移后 Dashboard 数据扫描路径正确，无空 tab
+  - 实际效果：✅ 已验证。data.json：skills=93 hooks=1 configs=4 scripts=1 commands=1 plugins=10，全部非 0；所有 .sh 通过 bash -n
+
+- [x] **install.sh symlink 模式 + settings.json 原子写存活** (commit: pending, date: 2026-06-11)
+  - 验证方法：`bash install.sh` 后 `ls -la` 确认 `~/.claude/{settings.json,CLAUDE.md,statusline.sh,hzb-skills}` 与 `~/.codex/skills/*` 均为指向仓库的 symlink；新开 Claude 会话执行 `/model` 切换→退出→`[ -L ~/.claude/settings.json ]` 仍为 symlink；`/hzb:codex-review` 可见；codex 内 5 个 skill 可见
+  - 预期效果：symlink 不被原子写打断（若打断则回退 copy 模式）；插件与 statusline 正常
+  - 实际效果：✅ 已验证。所有 symlink 就位；`/model` 切换后 settings.json 仍为 symlink（Claude Code 用普通写穿透 symlink，不用原子 rename，symlink 模式安全）；hzb 插件链路完好；codex skills 6 个悬空已修复
+
+- [x] **敏感信息未泄漏到公开仓库** (commit: ef615d4, date: 2026-06-11)
+  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、wlcb-dev/SKILL.md、settings.glm.json）在 .gitignore 内、未被跟踪
+  - 预期效果：仓库内只有脱敏 .example 模板，无任何真实密钥
+  - 实际效果：✅ 已验证。本次 5 个 commit + 全仓库 --all 历史 grep（机器人密码/relay 凭证/SakuraFrp pw/GLM token/OpenRouter key/飞书 ID/邮箱）零命中；这些密钥从未进入任何 git 历史；5 个含密真身经 git check-ignore 确认未跟踪；push 到 GitHub 未被 secret scanning 拦截
+
+- [-] **本地配置同步：sync-configs.sh + Dashboard Configs 增强** (commit: pending, date: 2026-04-12)
+  - 原因：sync-configs.sh 的复制+双向同步机制已被 install.sh 的 symlink 模式取代，脚本移入 deprecated/（仓库改造为多工具配置库时）
+
+- [-] **Telegram bridge /compact 命令** (commit: pending, date: 2026-04-12)
+  - 原因：Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）
 
 - [ ] **CLAUDE.md 改进：依赖说明 + bash-syntax-check hook + skills 说明** (commit: pending, date: 2026-02-10)
   - 验证方法：阅读 CLAUDE.md，确认新增内容准确且有价值
@@ -62,13 +80,8 @@
   - 预期效果：auth gate 正常显示，错误提示准确，脚本语法正确，Gist 上传成功
   - 实际效果：（验证后填写）
 
-- [ ] **telegram-bridge /list 进程检测 + 目标终端显示 + 动态选项标签** (commit: pending, date: 2026-02-10)
-  - 验证方法：
-    1. /list 确认所有 Claude Code 终端（含 title 不含 "claude" 的）都被检测到
-    2. 发送消息确认回复包含目标终端名 `[已发送→session]`
-    3. 权限通知确认显示实际选项（非硬编码），选择后确认回复显示实际选项文本
-  - 预期效果：多终端全部可见，消息明确送达哪个终端，选项标签与实际一致
-  - 实际效果：（验证后填写）
+- [-] **telegram-bridge /list 进程检测 + 目标终端显示 + 动态选项标签** (commit: pending, date: 2026-02-10)
+  - 原因：Telegram 通知方案已弃用，脚本归档在 deprecated/（仓库改造为多工具配置库时移除）
 
 ---
 

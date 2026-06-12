@@ -81,17 +81,18 @@ if [ -d "${CLAUDE_HOME}/skills" ]; then
   done < <(find -L "${CLAUDE_HOME}/skills" -name "SKILL.md" 2>/dev/null)
 fi
 
-# 2) 仓库 skills/
+# 2) 仓库 claude/skills/
 while IFS= read -r skill_file; do
   rel_path="${skill_file#${REPO_ROOT}/}"
   slash_count=$(echo "$rel_path" | tr -cd '/' | wc -c | tr -d ' ')
-  if [ "$slash_count" -ge 3 ]; then
-    source_label=$(echo "$rel_path" | cut -d'/' -f2)
+  # rel_path 形如 claude/skills/<marketplace>/<name>/SKILL.md（≥4 个斜杠）
+  if [ "$slash_count" -ge 4 ]; then
+    source_label=$(echo "$rel_path" | cut -d'/' -f3)
   else
     source_label="custom"
   fi
   scan_skill "$skill_file" "$source_label" "$rel_path"
-done < <(find "${REPO_ROOT}/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
+done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
@@ -140,7 +141,7 @@ while IFS= read -r hook_file; do
     > "$hooks_dir/$hook_idx.json"
   hook_idx=$((hook_idx + 1))
 
-done < <(find "${REPO_ROOT}/hooks" -name "*.json" -not -path "*/examples/*" 2>/dev/null)
+done < <(find "${REPO_ROOT}/claude/hooks" -name "*.json" -not -path "*/examples/*" 2>/dev/null)
 
 if ls "$hooks_dir"/*.json >/dev/null 2>&1; then
   hooks_json=$(jq -s '.' "$hooks_dir"/*.json)
@@ -154,7 +155,7 @@ configs_dir="$TMPDIR_DATA/configs"
 mkdir -p "$configs_dir"
 config_idx=0
 
-for config_file in "${REPO_ROOT}"/configs/*.json "${REPO_ROOT}"/configs/*.md; do
+for config_file in "${REPO_ROOT}"/claude/configs/*.json "${REPO_ROOT}"/claude/configs/*.md; do
   [ -f "$config_file" ] || continue
   rel_path="${config_file#${REPO_ROOT}/}"
   filename=$(basename "$config_file")
@@ -194,7 +195,7 @@ fi
 scripts_json="[]"
 total_scripts_lines=0
 
-for script_file in "${REPO_ROOT}"/scripts/*.sh; do
+for script_file in "${REPO_ROOT}"/scripts/*.sh "${REPO_ROOT}"/claude/scripts/*.sh; do
   [ -f "$script_file" ] || continue
   filename=$(basename "$script_file")
 
@@ -230,10 +231,13 @@ commands_dir_data="$TMPDIR_DATA/commands"
 mkdir -p "$commands_dir_data"
 cmd_idx=0
 
-for cmd_file in "${REPO_ROOT}"/commands/*.md; do
+for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/claude/hzb-skills/plugins/hzb/commands/*.md; do
   [ -f "$cmd_file" ] || continue
   filename=$(basename "$cmd_file")
   [ "$filename" = "README.md" ] && continue
+
+  # 跳过含密真身（有对应 .example 的文件被 .gitignore 保护，不应进 data.json）
+  [ -f "${cmd_file}.example" ] && continue
 
   rel_path="${cmd_file#${REPO_ROOT}/}"
   cmd_name="${filename%.md}"
@@ -264,7 +268,7 @@ fi
 # ─── Plugins 扫描 ───
 
 plugins_json="[]"
-plugins_file="${REPO_ROOT}/configs/recommended-plugins.json"
+plugins_file="${REPO_ROOT}/claude/configs/recommended-plugins.json"
 if [ -f "$plugins_file" ]; then
   plugins_json=$(jq '.plugins' "$plugins_file" 2>/dev/null || echo '[]')
 fi

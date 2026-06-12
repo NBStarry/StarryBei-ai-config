@@ -1,255 +1,147 @@
-# my-claude-code
+# StarryBei-ai-config
 
-> NBStarry 的 Claude Code 配置、脚本与扩展合集
+> NBStarry 的 AI 编码工具配置、脚本与扩展合集
 
 ## About
 
-这是一个公开的 Claude Code 配置仓库，用于存储和分享日常使用 Claude Code 时积累的配置文件、自定义脚本、hooks、skills、agents 和 commands。
+这是一个公开的配置仓库，统一管理日常使用的各种 AI 编码工具（Claude Code、Codex 等）的配置文件、自定义脚本、hooks、skills、agents 和 commands。
 
-如果你也在使用 Claude Code，希望这些配置能为你提供参考和灵感。
+采用 dotfiles 式的 symlink 管理：可公开的配置软链进仓库版本管理，含密钥的部分拆分为 `.example` 模板（真实文件由 `.gitignore` 保护，不入库）。新机器 clone 后跑一次 `install.sh`，再填几个敏感文件即可恢复工作环境。
+
+如果你也在用这些工具，希望这些配置能为你提供参考和灵感。
 
 ## Repository Structure
 
 ```
-my-claude-code/
-├── configs/          # 配置文件（settings.json 等）
-├── scripts/          # 自定义脚本（statusline、Telegram 通知等）
-├── hooks/            # Hook 配置与示例
-├── skills/           # Skill 定义与示例
-├── agents/           # Agent 定义与示例
-├── commands/         # Slash command 定义与示例
-├── deprecated/       # 废案归档（QQ 通信方案等）
-├── CLAUDE.md         # 本项目的 Claude Code 约定
-└── README.md         # 本文件
+StarryBei-ai-config/
+├── install.sh           # 统一安装器（symlink + .example 播种 + 自动备份）
+├── claude/              # ── Claude Code ──
+│   ├── configs/         #   settings.json / CLAUDE.md / *.example
+│   ├── hzb-skills/      #   自建 skill marketplace（hzb: 命名空间）
+│   ├── skills/          #   skill 定义与示例（含官方插件副本）
+│   ├── hooks/           #   Hook 配置与示例
+│   ├── agents/          #   Agent 定义与示例
+│   ├── commands/        #   Slash command 示例
+│   └── scripts/         #   statusline.sh
+├── codex/               # ── Codex CLI ──
+│   ├── config.toml.example
+│   └── README.md
+├── scripts/             # 共享脚本（generate-site-data.sh、export-memory.sh）
+├── site/                # GitHub Pages Dashboard
+├── docs/                # 设计文档与历史计划
+├── deprecated/          # 废案归档（QQ / Telegram 通知、旧 sync-configs）
+├── CLAUDE.md            # 本仓库的 Claude Code 约定
+├── VERIFY.md            # dev → main 验证清单
+└── README.md           # 本文件
 ```
 
-## Configs
-
-存放 Claude Code 的全局和项目级配置文件。
-
-| 文件 | 说明 |
-|------|------|
-| `configs/settings.json` | 全局配置示例（Telegram 通知），包含 hook 配置和 statusline 设置 |
-| `configs/settings.local.json` | 项目级配置示例，包含输出风格和权限设置 |
-| `configs/recommended-plugins.json` | 推荐插件列表（superpowers、commit-commands、code-review 等 10 个） |
+## Quick Start
 
 ```bash
-# 全局配置
-cp configs/settings.json ~/.claude/settings.json
+git clone https://github.com/NBStarry/StarryBei-ai-config.git
+cd StarryBei-ai-config
 
-# 项目级配置
-mkdir -p .claude
-cp configs/settings.local.json .claude/settings.local.json
+# 一键安装：把可公开配置 symlink 到 ~/.claude、~/.codex，
+# 并从 .example 播种敏感文件（已存在则不覆盖），原文件自动备份
+bash install.sh
 ```
 
-## Scripts
+安装后按提示填入敏感配置（GLM key、机器人/内网凭证等），详见各工具子目录的 `.example` 模板。
+
+## Claude Code
+
+`claude/` 下管理 Claude Code 的全局配置与扩展。
+
+### Configs
+
+| 文件 | 说明 | 入库形式 |
+|------|------|----------|
+| `claude/configs/settings.json` | 全局配置（插件、statusline、model），已移除代理与密钥 | ✅ symlink 目标 |
+| `claude/configs/CLAUDE.md` | 全局编码规则（装到 `~/.claude/CLAUDE.md`） | ✅ symlink 目标 |
+| `claude/configs/settings.glm.json.example` | GLM 后端配置模板（key 占位） | ✅ 模板 |
+| `claude/configs/settings.local.json.example` | 项目级配置示例 | ✅ 模板 |
+| `claude/configs/recommended-plugins.json` | 推荐插件列表 | ✅ |
+
+代理设置不再写进 `settings.json`，改由 shell 环境变量继承（参考 `~/.zshrc`）。
+
+### hzb-skills（自建 skill marketplace）
+
+`claude/hzb-skills/` 是以 `hzb:` 命名空间组织的自建 skill 合集，作为 directory 类型的 plugin marketplace 注册。`install.sh` 会把 `~/.claude/hzb-skills` 整目录 symlink 指向这里，因此改 skill 后只需 `claude plugin update hzb@hzb-skills` 刷新缓存。
+
+含内网/硬件凭证的运维类 skill（`g1-robot`、`wlcb-dev`、`connect-internal*`）以脱敏 `.example` 入库，真实文件由 `.gitignore` 保护并由 `install.sh` 播种到本地。
 
 ### statusline.sh
 
-自定义状态栏脚本，在 Claude Code 底部显示丰富的上下文信息：
-
-- **用户名@主机名:当前目录** - 绿色和蓝色高亮
-- **模型名称** - 青色显示（如 Claude Opus 4.6）
-- **Git 分支** - 黄色显示当前分支名
-- **上下文使用率** - 颜色编码（绿色 < 50% / 黄色 50-80% / 红色 >= 80%）
-
-**效果预览：**
+自定义状态栏，显示 `◆会话名 · 路径 · 模型 · 分支 · 上下文%`：
 
 ```
-user@mac:~/projects/myapp Claude Opus 4.6 (main) [ctx:34%]
+◆my-session · ~/AI_Projects/…/StarryBei-ai-config · opus·1M · main · 34%
 ```
 
-**安装：**
+颜色编码上下文使用率（绿 < 50% / 黄 50-80% / 红 ≥ 80%）。依赖 `jq`。
 
-```bash
-cp scripts/statusline.sh ~/.claude/statusline.sh
-chmod +x ~/.claude/statusline.sh
-```
+详见 [claude/skills/README.md](claude/skills/README.md)、[claude/hooks/README.md](claude/hooks/README.md)、[claude/agents/README.md](claude/agents/README.md)、[claude/commands/README.md](claude/commands/README.md)。
 
-**依赖：** `jq`（`brew install jq` 或 `apt-get install jq`）
+## Codex CLI
 
-### notify-telegram.sh
+`codex/` 管理 OpenAI Codex CLI 配置。Codex 与 Claude Code 共用同一套自建 skill 源（`claude/hzb-skills/`），`install.sh` 会把 `~/.codex/skills/<name>` 逐个 symlink 指向仓库内对应 skill。
 
-通过 Telegram Bot API 发送 Claude Code 格式化通知消息，配合 hooks 实现远程手机推送提醒。
+`config.toml` 因 Codex 运行时会自动改写（追加 project trust 等），不做 symlink，只提供 `config.toml.example` 模板。`auth.json`（OAuth token）绝不入库。
 
-功能：
-- 三种通知类型（权限请求、等待输入、任务完成）
-- 显示项目名、上下文使用百分比、Claude 最后回复
-- 通过官方 Telegram Bot API 发送消息（无需第三方服务）
-- 支持代理配置（HTTPS_PROXY 或 TELEGRAM_PROXY）
+详见 [codex/README.md](codex/README.md)。
 
-**效果预览：**
+## Dashboard (GitHub Pages)
 
-```
-[任务完成] my-project [ctx:34%]
+`site/` 是部署到 GitHub Pages 的单页配置看板，展示 skills / hooks / configs / scripts / commands / plugins 与验证状态，并支持通过 GitHub API 在线编辑配置。
 
-[回复] 已完成所有修改并推送到 dev 分支。
+- 数据生成：`scripts/generate-site-data.sh` 扫描仓库目录，输出 `site/data.json`
+- 部署：push 到 `main` 时由 GitHub Actions 自动构建发布
+- 地址：`https://nbstarry.github.io/StarryBei-ai-config/`
 
-[上下文] 请帮我更新文档
-```
+## 配置同步机制
 
-**安装：**
+采用 **symlink + `.example` 分离** 混合模式（取代旧的 `sync-configs.sh` 双向复制）：
 
-```bash
-cp scripts/notify-telegram.sh ~/.claude/notify-telegram.sh
-chmod +x ~/.claude/notify-telegram.sh
-# 配置 ~/.claude/telegram.conf（参考 configs/telegram.conf.example）
-```
+- **可公开配置**：`install.sh` 把它们 symlink 进 `~/.claude` / `~/.codex`，在原位编辑即等于改仓库文件，`git add/commit/push` 即同步
+- **敏感内容**：拆为 `.example` 模板入库，真实文件 `.gitignore` 保护；`install.sh` 用 `seed`（仅当本地不存在时复制）从模板播种，绝不覆盖已有真实文件
 
-**依赖：** `jq`、`curl`
-
-详见 [scripts/README.md](scripts/README.md)。
-
-### telegram-bridge.sh
-
-Telegram → Claude Code 消息桥接守护进程，与 `notify-telegram.sh` 形成**双向通信**：
-
-- **出站**（notify-telegram.sh）：Claude Code 事件 → Telegram 通知到手机
-- **入站**（telegram-bridge.sh）：手机 Telegram 消息 → 注入 Claude Code 终端
-
-功能：
-- **多终端支持**：`/list` 列出所有 Claude Code 终端，`/connect <session>` 切换目标
-- 长轮询接收 Telegram 消息，通过 `tmux send-keys` 注入到 Claude Code
-- 支持授权快速回复（1/2/3）和特殊命令（`/list`、`/connect`、`/cancel`、`/status`、`/pane` 等）
-- 目标终端关闭时自动切换到剩余终端并通知
-- Claude Code 启动时自动启动（`UserPromptSubmit` hook）
-- 守护进程模式，断线自动重连 + 重连通知
-- 架构简洁：无需 websocat、FIFO、keeper 进程
-
-**安装：**
-
-```bash
-cp scripts/telegram-bridge.sh ~/.claude/telegram-bridge.sh
-chmod +x ~/.claude/telegram-bridge.sh
-# 配置 ~/.claude/telegram.conf
-~/.claude/telegram-bridge.sh start  # 启动守护进程
-```
-
-**依赖：** `jq`、`tmux`、`curl`
-
-详见 [scripts/README.md](scripts/README.md)。
-
-## Hooks
-
-Hooks 允许你在 Claude Code 的特定事件点执行自定义逻辑。
-
-### notification.telegram.json — Telegram 推送通知
-
-当 Claude 完成任务、需要授权或等待输入时，通过 Telegram Bot API 发送格式化通知到手机：
-
-| 事件 | 通知格式 |
-|------|----------|
-| 权限请求 | `[需要授权] 项目名 [ctx:XX%]` + 工具详情 + 授权选项 |
-| 空闲等待 | `[等待输入] 项目名 [ctx:XX%]` + Claude 回复 + 上下文 |
-| 任务完成 | `[任务完成] 项目名 [ctx:XX%]` + Claude 回复 + 上下文 |
-
-**前提条件：** Telegram Bot（通过 @BotFather 创建）
-
-**安装：** 安装 `scripts/notify-telegram.sh`，将 `hooks/notification.telegram.json` 中的 hooks 合并到 `~/.claude/settings.json`。
-
-详见 [hooks/README.md](hooks/README.md)。
-
-## Skills
-
-Skills 是 Claude 根据任务上下文自动调用的能力模块，不需要用户手动触发。
-
-详见 [skills/README.md](skills/README.md)。
-
-## Agents
-
-Agents 是可由 Claude 派生的子任务执行器，用于处理特定类型的分析或操作任务。
-
-详见 [agents/README.md](agents/README.md)。
-
-## Commands
-
-Commands 是用户通过 `/command-name` 手动触发的斜杠命令。
-
-详见 [commands/README.md](commands/README.md)。
+> ⚠️ 因含密真实文件靠 `.gitignore` 保护而物理存在于工作区，**请勿在本仓库执行 `git clean -x`**，否则会删除这些本地凭证文件。
 
 ## Agent Teams / 团队协作
 
-Claude Code 实验性功能，支持多 agent 协同工作。已在本项目中实践验证。
-
-### 启用
+Claude Code 实验性功能，支持多 agent 协同。
 
 ```json
 // ~/.claude/settings.json
-{
-  "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" }
-}
+{ "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
 
 // .claude/settings.local.json
-{
-  "teammateMode": "in-process"
-}
+{ "teammateMode": "in-process" }
 ```
-
-### 推荐配置
 
 | 参数 | 推荐值 | 原因 |
 |------|--------|------|
 | `mode` | `acceptEdits` | `default` 会导致 teammate 卡在权限审批 |
-| `model` | `sonnet` | haiku idle 后反复发冗长消息浪费 token |
-| `teammateMode` | `in-process` | tmux 分 pane 太挤，Shift+上/下切换更方便 |
+| Lead `model` | `opus` | 复杂编排需要强模型 |
+| Teammate `model` | `sonnet` | 平衡能力与成本，禁用 haiku |
+| `teammateMode` | `in-process` | 比 tmux 分 pane 切换更方便 |
 
-### 踩坑经验
+踩坑：`mode: "default"` 会卡死（权限提示 lead 收不到）；在 prompt 中明确「不要自行 commit」；teammate 可能崩溃需检查进程存活。
 
-- **`mode: "default"` 会卡死** — 权限请求通过邮箱发送但 lead 收不到交互式提示，必须用 `acceptEdits`
-- **Teammate 可能崩溃** — 需要检查进程存活（`ps aux | grep 'claude.*team'`），重新生成
-- **明确 Git 规则** — 在 prompt 中写 "不要自行 commit"，否则 teammate 可能擅自提交
-- **邮箱路由** — 消息可能发到错误团队，调试看 `~/.claude/teams/{name}/inboxes/`
+## Git 工作流
 
-## Remote Access / 远程访问
-
-通过 SSH + Tailscale + tmux 实现手机远程控制 Claude Code，配合 QQ 双向通信形成完整的移动工作流：
-
-| 方式 | 适用场景 |
-|------|----------|
-| **Telegram 消息** | 快速回复授权（1/2/3）、发送简短指令 |
-| **SSH + tmux** | 完整终端界面，查看输出、复杂交互 |
-
-### 架构
-
-```
-手机
-├── Telegram → telegram-bridge.sh → tmux send-keys → Claude Code（轻量指令）
-├── SSH → tmux attach → Claude Code（完整终端）
-└── Tailscale（内网穿透，任何网络均可访问）
-```
-
-### 配置步骤
-
-1. **macOS 开启 SSH**：系统设置 → 通用 → 共享 → 远程登录
-2. **安装 Tailscale**：`brew install --cask tailscale`，登录账号
-3. **手机安装 Tailscale**：同一账号登录，获得 `100.x.x.x` 虚拟 IP
-4. **手机 SSH 客户端**（Termius / Blink Shell）连接 Mac 的 Tailscale IP
-5. **连接后**：`tmux attach -t <session>` 接管 Claude Code 会话
-
-### tmux 配置建议
-
-```bash
-# ~/.tmux.conf
-set -g mouse on  # 启用鼠标/触屏滚动
-```
-
-### 手机终端常见问题
-
-- **中文乱码**：确保 `LANG=en_US.UTF-8`（添加到 `~/.zprofile`）
-- **无法滚动**：Termius 可设置音量键翻页；或 `Ctrl+B [` 进入 tmux 复制模式
-- **Tailscale SSH 不可用**：GUI 版本（App Store/cask）是沙盒化的，不支持 `tailscale set --ssh`，需用标准 SSH
+- `main` — 稳定分支，仅含用户验证过的配置
+- `dev` — 开发分支，所有改动先进这里
+- 每个 `dev` commit 必须在 `VERIFY.md` 同步添加验证条目
+- 所有相关 `VERIFY.md` 条目勾选 `[x]` 后才合并到 `main`
 
 ## Environment
 
 | 项目 | 详情 |
 |------|------|
 | 操作系统 | macOS (Darwin) |
+| 工具 | Claude Code、Codex CLI |
 | 默认模型 | Claude Opus |
-| 输出风格 | Explanatory |
-
-## Contributing
-
-欢迎通过 Issue 或 Pull Request 贡献你的 Claude Code 配置和脚本！
 
 ## License
 

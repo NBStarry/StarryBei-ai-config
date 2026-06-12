@@ -1,0 +1,17 @@
+# Codex CLI 配置模板
+# 复制为 ~/.codex/config.toml 后按需修改。
+# 注意：auth.json（OAuth token）由 codex login 自动生成，绝不纳入版本管理。
+# Codex 会在运行时自动改写本文件（追加 project trust、model nux 等），
+# 因此本文件只作为模板，不通过 install.sh symlink。
+
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+personality = "pragmatic"
+approvals_reviewer = "guardian_subagent"
+
+# 信任的项目目录（替换为你自己的路径）
+[projects."<YOUR_PROJECT_PATH>"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["current-dir", "model-with-reasoning", "git-branch", "context-used"]
