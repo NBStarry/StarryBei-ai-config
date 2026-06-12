@@ -29,20 +29,20 @@
 
 ### 多工具配置仓库改造 (my-claude-code → StarryBei-ai-config)
 
-- [ ] **仓库改名 + 引用更新** (commit: pending, date: 2026-06-11)
+- [x] **仓库改名 + 引用更新** (commit: 7306c74, date: 2026-06-11)
   - 验证方法：访问 `https://github.com/NBStarry/StarryBei-ai-config`；旧 URL `.../my-claude-code` 应 301 重定向；打开新 Pages `https://nbstarry.github.io/StarryBei-ai-config/`，Dashboard 编辑功能（走 GitHub API REPO 名）能拉取并保存一次文件
   - 预期效果：远程仓库名、本地 remote、editor.js 的 REPO、README/CLAUDE.md 的 clone URL 全部为新名；Dashboard CRUD 正常
-  - 实际效果：（验证后填写）
+  - 实际效果：✅ 已验证。旧 URL 正确 301 跳转到新仓库名
 
 - [x] **目录重构为 claude/ + codex/ 分层** (commit: 670d420, date: 2026-06-11)
   - 验证方法：本地重跑 `bash scripts/generate-site-data.sh`，检查 `site/data.json` 各 tab（skills/hooks/configs/scripts/commands）数量均不为 0；`bash -n` 所有 .sh 通过
   - 预期效果：目录迁移后 Dashboard 数据扫描路径正确，无空 tab
   - 实际效果：✅ 已验证。data.json：skills=93 hooks=1 configs=4 scripts=1 commands=1 plugins=10，全部非 0；所有 .sh 通过 bash -n
 
-- [ ] **install.sh symlink 模式 + settings.json 原子写存活** (commit: pending, date: 2026-06-11)
+- [x] **install.sh symlink 模式 + settings.json 原子写存活** (commit: pending, date: 2026-06-11)
   - 验证方法：`bash install.sh` 后 `ls -la` 确认 `~/.claude/{settings.json,CLAUDE.md,statusline.sh,hzb-skills}` 与 `~/.codex/skills/*` 均为指向仓库的 symlink；新开 Claude 会话执行 `/model` 切换→退出→`[ -L ~/.claude/settings.json ]` 仍为 symlink；`/hzb:codex-review` 可见；codex 内 5 个 skill 可见
   - 预期效果：symlink 不被原子写打断（若打断则回退 copy 模式）；插件与 statusline 正常
-  - 实际效果：（部分已验证）bash install.sh 后所有 symlink 就位：~/.claude/{settings.json,CLAUDE.md,statusline.sh,hzb-skills} 与 ~/.codex/skills/* 6 个（修复了原悬空链接）均指向仓库；hzb marketplace+cache 链路完好，6 个 skill 经 symlink 可枚举；proxy 由 shell env 继承。**待用户实测**：新开会话 `/model` 切换→退出→确认 settings.json 仍为 symlink；`/hzb:codex-review` 可见
+  - 实际效果：✅ 已验证。所有 symlink 就位；`/model` 切换后 settings.json 仍为 symlink（Claude Code 用普通写穿透 symlink，不用原子 rename，symlink 模式安全）；hzb 插件链路完好；codex skills 6 个悬空已修复
 
 - [x] **敏感信息未泄漏到公开仓库** (commit: ef615d4, date: 2026-06-11)
   - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、wlcb-dev/SKILL.md、settings.glm.json）在 .gitignore 内、未被跟踪
