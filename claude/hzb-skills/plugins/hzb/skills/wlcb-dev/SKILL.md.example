@@ -1,0 +1,252 @@
+---
+name: wlcb-dev
+description: 4Paradigm wlcb 开发机（172.28.4.x 机房，wlcb-23 / wlcb-55）完整使用指南——SSH 连接、hzb_dev 开发容器启动与进入、conda 环境管理、/mnt/data/hanzebei 工作区导航。**任何涉及 wlcb-23、wlcb-55、172.28.4、"23 号机"、"55 号机"、"开发镜像"、hzb_dev、JuiceFS、/mnt/data/hanzebei 的任务都必须使用这个 skill**。也适用于在这些机器上做音频/ASR/TTS/LLM/VLA 相关开发的场景。依赖 connect-internal skill 建立的 Clash 代理。
+---
+
+# wlcb 开发机使用指南
+
+## 前置依赖：先起 Clash 代理
+
+wlcb-23 / wlcb-55 属于 4Paradigm 内网，必须先通过 `connect-internal` skill 建立 Clash 代理（默认 `127.0.0.1:7897`）。如果 SSH 报 `Connection refused` 或超时，先按 `/connect-internal` 检查 Clash Verge 状态。
+
+## 机器清单
+
+| Alias | Host | User | 备注 |
+|---|---|---|---|
+| `wlcb-23` | 172.28.4.23 | **hanzebei** | ucloud-wlcb-gpu-023 |
+| `wlcb-55` | 172.28.4.55 | **hanzebei** | ucloud-wlcb-gpu-055 |
+
+`~/.ssh/config` alias 已配好，直接 `ssh wlcb-23` 或 `ssh wlcb-55`。
+
+**关键约束**：只能用 `hanzebei` 用户，不能用 `root`。root 没灌本机 key，会 `Permission denied (publickey)`。
+
+## 存储层
+
+| 挂载点 | 类型 | 可见范围 | 说明 |
+|---|---|---|---|
+| `/mnt/data` | JuiceFS | **仅 172.28.4.x 机房** | 1.8 PB 共享盘，wlcb-23 和 wlcb-55 自然共享 |
+| `/mnt/ceph_contest` | Ceph | 默认未挂载 | 宿主机上不存在，**需进 dev container 后 `mount -a`** |
+
+**个人工作区**：`/mnt/data/hanzebei/`
+
+## 开发容器工作流（核心）
+
+hanzebei 的开发环境是一个自维护的 Docker 镜像，镜像本身很薄，所有可变状态通过 bind mount 外置——删容器重建不会丢任何东西。
+
+### 挂载映射
+
+| 宿主机路径 | 容器内路径 | 作用 |
+|---|---|---|
+| `/mnt/data/hanzebei/conda/` | `/opt/conda/` | conda 整套 env |
+| `/mnt/data/hanzebei/.vscode-server/` | `/root/.vscode-server/` | VSCode Remote 状态 |
+| `/mnt/data/hanzebei/.claude/` | `/root/.claude/` | Claude Code 配置 |
+| `/mnt/data/hanzebei/dev_image/.zshrc` | `/root/.zshrc` | zsh 配置 |
+| `/mnt/data/` | `/mnt/data/` | 全量挂载 |
+| `/` | `/mnt/host/` | 反向访问宿主 |
+| `/var/run/docker.sock` | `/var/run/docker.sock` | 容器内能 docker |
+
+容器以 `--privileged --gpus all` 启动。
+
+### 启动 / 进入
+
+容器名 **`hzb_dev`**，镜像 tag 以 `run.sh` 为准（当前 `harbor-contest.4pd.io/hanzebei/dev:cu121_260112`）。
+
+**第一步：SSH 到宿主机**
+```bash
+ssh wlcb-23   # 或 wlcb-55
+```
+
+**第二步：确认 / 启动容器**
+```bash
+docker ps -a --filter name=hzb_dev
+
+# 不存在 → 首次启动
+cd /mnt/data/hanzebei/dev_image && bash run.sh
+
+# Exited → 重启
+docker start hzb_dev
+
+# 重建（换镜像 tag 时）
+docker rm -f hzb_dev && cd /mnt/data/hanzebei/dev_image && bash run.sh
+```
+
+**第三步：进容器**
+
+- **exec 进去**（快速）：`docker exec -it hzb_dev zsh`
+
+- **SSH 直连容器**（VSCode Remote）：`run.sh` 映射容器 22 到宿主 **20086**。在 `~/.ssh/config` 加：
+  ```
+  Host hzb-dev-23
+      HostName 172.28.4.23
+      User root
+      Port 20086
+      ProxyCommand nc -X connect -x 127.0.0.1:7897 %h %p
+  ```
+  **容器内身份是 root**（容器是 hanzebei 的私有沙盒）。历史 README 里写过 20033，已过时——**以 `run.sh` 为准**。
+
+### 容器内初始化
+
+- 如需 `/mnt/ceph_contest`：`mount -a`
+- conda 已自动 activate base，`conda env list` 确认
+
+## 工作区导航 `/mnt/data/hanzebei/`
+
+| 路径 | 内容 | 详情 |
+|---|---|---|
+| `projects/` | 代码库 | **读 `projects/INDEX.md`** |
+| `conda/` | conda 环境（容器 `/opt/conda`） | **读 `conda/INDEX.md`** |
+| `data/` | 数据集 | **读 `data/INDEX.md`** |
+| `model/` | 模型权重 | **读 `model/INDEX.md`** |
+| `dev_image/` | 开发容器定义 | `Dockerfile` + `run.sh` + `.zshrc` |
+| `.claude/` | Claude Code 配置 | 跨容器持久化 |
+| `.vscode-server/` | VSCode Remote 状态 | 跨容器持久化 |
+| `proxy.sh` | 代理快捷设置 | `source proxy.sh` → `http_proxy=http://172.26.1.45:10022` |
+| `machines/`, `tools/`, `remote_transfer/`, `tmp/` | 杂项 | — |
+
+**查项目/env/模型/数据的具体信息时**，通过 SSH 读对应的 INDEX.md：
+```bash
+ssh wlcb-23 "cat /mnt/data/hanzebei/projects/INDEX.md"
+ssh wlcb-23 "cat /mnt/data/hanzebei/conda/INDEX.md"
+ssh wlcb-23 "cat /mnt/data/hanzebei/data/INDEX.md"
+ssh wlcb-23 "cat /mnt/data/hanzebei/model/INDEX.md"
+```
+
+进入任一项目前，先读该项目自己的 `CLAUDE.md` 或 `README.md`——本 skill 只负责让你到达工作区，不管各项目内部规范。
+
+## 宿主机上的常驻容器
+
+同一台宿主上会跑多个容器，互不干扰。hanzebei 的常驻服务（不含 `hzb_dev`）通过 `docker ps` 查看。**不要碰不认识的容器**。
+
+## 网络代理（容器内使用）
+
+wlcb-23 / wlcb-55 本身没有公网出口，所有外网请求都通过 soup-gpu13（172.26.1.45）上运行的代理服务转发。分两种场景：
+
+### 1. 国内公网（pip / apt / 国内站点）
+
+soup13 上直接运行的代理服务，端口 10022：
+
+```bash
+export http_proxy="http://172.26.1.45:10022"
+export https_proxy="http://172.26.1.45:10022"
+```
+
+快捷方式：`source /mnt/data/hanzebei/proxy.sh`（内容就是上面两行）。
+
+### 2. 境外网络（GitHub raw、Google、HuggingFace、PyPI 境外源等）
+
+soup13 上运行的 **GOST 容器**（`4pd-P-server`），通过 ss 上游出境：
+
+```bash
+# HTTP 代理（端口 226）
+export http_proxy="http://root:<REDACTED>@172.26.1.45:226"
+export https_proxy="http://root:<REDACTED>@172.26.1.45:226"
+
+# 或 SOCKS5（端口 227）
+export ALL_PROXY="socks5://root:<REDACTED>@172.26.1.45:227"
+```
+
+### 代理不通时的排查流程
+
+如果代理无法使用，**登 soup-gpu13 排查**，然后向用户报告结果：
+
+```bash
+# 从 Mac 登 soup13
+ssh -o ProxyCommand="nc -X connect -x 127.0.0.1:7897 %h %p" root@172.26.1.45
+
+# 检查国内代理（端口 10022）是否在监听
+ss -tlnp | grep 10022
+
+# 检查 GOST 容器状态
+docker ps | grep 4pd-P-server
+```
+
+**如果 GOST 容器挂了**，用以下命令重建：
+```bash
+docker rm -f 4pd-P-server 2>/dev/null
+docker run -d \
+    -e GOST_LOGGER_LEVEL=error \
+    --net host \
+    --restart always \
+    --name 4pd-P-server \
+    harbor-contest.4pd.io/zhangyiqun/public/gogost/gost:latest \
+    -L "http://root:<REDACTED>@:226" \
+    -L "socks5://root:<REDACTED>@:227" \
+    -F "ss://aes-128-gcm:<REDACTED>@lganenc9enhy.yangliq.com:36005"
+```
+
+**如果国内代理（10022）不通**，排查 soup13 上对应进程，把 `ss -tlnp | grep 10022` 和 `docker ps` 的输出报告给用户。不要自行猜测修复——先报告现状。
+
+## 踩坑记录
+
+- **root 登不上 wlcb-23/55** → 必须用 `hanzebei`
+- **`/mnt/data` 在机房外看不到** → wlcb 机房内的 JuiceFS，不跨机房
+- **`/mnt/ceph_contest` 宿主机上没有** → 进 dev container 后 `mount -a`
+- **hzb_dev SSH 端口** → 以 `run.sh` 为准（当前 20086），历史 README 的 20033 已过时
+- **容器内是 root** → 别混淆宿主 hanzebei 的 dotfiles
+- **root 目录写文件权限**：conda/data/model 目录归 root，宿主 hanzebei 用户无写权限。需要在 dev container 内（root 身份）或用 `docker run --rm -v /mnt/data:/mnt/data <image> sh -c '...'` 来写
+- **conda create 需要代理**：清华镜像源有时不通，创建 env 前先 `export http_proxy=http://172.26.1.45:10022 https_proxy=http://172.26.1.45:10022`
+- **pip install 装错位置**：base env 的 site-packages 可能和新 env 混淆。确认用 `which pip` 指向 `/opt/conda/envs/<name>/bin/pip`，如果不对就先 `conda install pip -y` 再装包
+- **git clone GitHub 报错**：容器内 git 配置了 `url.*.insteadOf` 把 `github.com` 重写为 kkgithub 等镜像站，走代理反而不通。需要先 `git config --global --unset-all url.https://kkgithub.com/.insteadof` 再 clone
+- **HF 模型 safetensors vs pytorch_model.bin**：部分库的 `from_local` 只认 `pytorch_model.bin`，需要转换：`torch.save({"state_dict": load_file("model.safetensors")}, "pytorch_model.bin")`。从 GitHub 源码安装通常能解决版本不匹配
+- **Docker build 网络不通**：Docker build 上下文内没有宿主代理。用 `ARG HTTP_PROXY` + `--build-arg HTTP_PROXY=http://172.26.1.45:10022` 传入代理；pip 源用 `ENV PIP_INDEX_URL=https://nexus.4pd.io/repository/pypi-all/simple/`（范式内部源，走国内代理可达）。阿里源 `mirrors.aliyun.com` 有时对 setuptools 等基础包不全，范式源更稳
+- **base 镜像 pip/setuptools 太旧**：`hanzebei/torch:2.3.0_cu121` 等老镜像的 pip 23.x / setuptools 很旧，装新包会报 `setuptools>=64 not found` 或 `invalid pyproject.toml`。Dockerfile 里先 `RUN pip install --upgrade pip setuptools wheel` 再装业务包
+- **setuptools-scm 找不到版本**：从 GitHub clone 的源码用 `pip install` 时，如果 `.git` 不完整会报 `LookupError: setuptools-scm was unable to detect version`。设 `ENV SETUPTOOLS_SCM_PRETEND_VERSION=x.y.z` 绕过
+- **torch.compile 需要 C 编译器**：runtime 镜像没有 gcc，warmup 时 `torch._inductor` 会报 `Failed to find C compiler`。Dockerfile 里 `apt-get install gcc g++` 或用 devel 镜像。禁用 inductor 的 env var `TORCHINDUCTOR_DISABLE=1` 对某些版本不生效
+- **Docker 服务部署惯例**：模型权重通过 `-v` 挂载而非 bake 进镜像（镜像小、模型可共享）；端口选空闲的（`docker ps` 查已用端口）；镜像推 `harbor-contest.4pd.io/hanzebei/<name>:latest`
+
+## 模型下载
+
+模型统一存放在 `/mnt/data/hanzebei/model/`，使用 `hfd.sh` 从 HuggingFace 下载。
+
+### hfd.sh 用法
+
+脚本位于 `/mnt/data/hanzebei/model/hfd.sh`，**不要修改此脚本**——镜像站（hf-mirror.com）和网络代理（172.26.1.45:10022）已内置。
+
+```bash
+cd /mnt/data/hanzebei/model/<分类目录>   # 先 cd 到合适的子目录（asr/ tts/ uvr/ 等）
+
+# 基本用法（单线程 wget）
+bash /mnt/data/hanzebei/model/hfd.sh <repo/model_name>
+
+# 推荐：aria2c 多线程，明显更快
+bash /mnt/data/hanzebei/model/hfd.sh <repo/model_name> --tool aria2c -x 8
+
+# 排除某些文件（如不需要 safetensors）
+bash /mnt/data/hanzebei/model/hfd.sh <repo/model_name> --tool aria2c -x 8 --exclude safetensors
+
+# 需要认证的模型
+bash /mnt/data/hanzebei/model/hfd.sh <repo/model_name> --hf_username <user> --hf_token <token> --tool aria2c -x 8
+
+# 下载数据集（而非模型）
+bash /mnt/data/hanzebei/model/hfd.sh <dataset_id> --dataset --tool aria2c -x 8
+```
+
+### 下载注意事项
+
+- **先 cd 到正确的分类目录**：ASR 模型放 `asr/`，TTS 模型放 `tts/`，人声分离放 `uvr/`。下载完后确认模型落在了合适的位置
+- **支持断点续传**：中断后重新运行同一命令即可从断点继续
+- **速度变慢时**：`Ctrl+C` 杀掉进程再重新运行，可以刷新下载速度
+- **默认最大重试 100 次**，基本不需要手动调整
+
+### 下载后维护
+
+下载完成后，更新 `/mnt/data/hanzebei/model/INDEX.md`，把新模型加入索引。
+
+## 环境配置
+
+在 dev container 内直接用 conda 创建新环境。关键是走国内镜像源并设好代理。
+
+```bash
+# 先设代理（或 source /mnt/data/hanzebei/proxy.sh）
+export http_proxy="http://172.26.1.45:10022"
+export https_proxy="http://172.26.1.45:10022"
+
+# 创建新环境
+conda create -n <env_name> python=3.10 -y
+
+# 激活并安装依赖
+conda activate <env_name>
+pip install -r requirements.txt
+```
+
+创建完成后，更新 `/mnt/data/hanzebei/conda/INDEX.md`，把新 env 加入分类索引。

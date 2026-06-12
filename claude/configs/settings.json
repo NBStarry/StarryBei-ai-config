@@ -1,37 +1,37 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "https_proxy": "http://127.0.0.1:7897",
-    "http_proxy": "http://127.0.0.1:7897",
-    "all_proxy": "socks5://127.0.0.1:7897"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
-    "allow": []
+    "allow": [],
+    "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "code-review@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
     "github@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": false,
+    "code-simplifier@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
-    "planning-with-files@planning-with-files": true,
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
-    "document-skills@anthropic-agent-skills": true,
-    "frontend-design@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": false,
+    "pyright-lsp@claude-plugins-official": false,
+    "security-guidance@claude-plugins-official": false,
+    "plugin-dev@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": false,
+    "ralph-loop@claude-plugins-official": false,
+    "planning-with-files@planning-with-files": false,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": false,
+    "document-skills@anthropic-agent-skills": false,
+    "frontend-design@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
-    "pua@pua-skills": true,
-    "claude-mem@thedotmack": true
+    "claude-mem@thedotmack": true,
+    "clangd-lsp@claude-plugins-official": false,
+    "hzb@hzb-skills": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "planning-with-files": {
@@ -52,12 +52,6 @@
         "repo": "anthropics/skills"
       }
     },
-    "pua-skills": {
-      "source": {
-        "source": "github",
-        "repo": "tanweai/pua"
-      }
-    },
     "thedotmack": {
       "source": {
         "source": "github",
@@ -65,6 +59,9 @@
       }
     }
   },
-  "effortLevel": "medium",
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "preferredNotifChannel": "terminal_bell",
+  "skipAutoPermissionPrompt": true,
+  "model": "opus"
 }

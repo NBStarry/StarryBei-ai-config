@@ -3,49 +3,50 @@
 # Read JSON input from stdin
 input=$(cat)
 
-# Extract basic info
-user=$(whoami)
-host=$(hostname -s)
 current_dir=$(pwd)
 
-# Get model display name
-model_name=$(echo "$input" | jq -r '.model.display_name // empty')
+# ---- Session name ----
+# Use Claude Code's own session_name (from /rename or auto-generated)
+# Fall back to basename of cwd if empty
+session_name=$(echo "$input" | jq -r '.session_name // empty')
+[ -z "$session_name" ] && session_name=$(basename "$current_dir")
 
-# Get git branch if in a git repository (skip optional locks)
+# Short path: replace $HOME with ~, keep first 2 + last 2 segments
+short_path="${current_dir/#$HOME/~}"
+IFS='/' read -ra parts <<< "$short_path"
+n=${#parts[@]}
+if [ $n -gt 5 ]; then
+    short_path="${parts[0]}/${parts[1]}/…/${parts[$((n-2))]}/${parts[$((n-1))]}"
+fi
+
+# ---- Model (shorten "X.Y (1M context)" → "X.Y·1M") ----
+model_name=$(echo "$input" | jq -r '.model.display_name // empty')
+model_name=$(echo "$model_name" | sed -E 's/ ?\(1M context\)/·1M/; s/ ?\(with 1M context\)/·1M/')
+
+# ---- Git branch ----
 git_branch=""
 if git rev-parse --git-dir > /dev/null 2>&1; then
     branch=$(git --no-optional-locks branch --show-current 2>/dev/null)
-    if [ -n "$branch" ]; then
-        git_branch=" \033[01;33m($branch)\033[00m"
-    fi
+    [ -n "$branch" ] && git_branch="$branch"
 fi
 
-# Get context usage information
+# ---- Context % ----
 ctx_info=""
-# 优先使用 Claude Code 官方提供的百分比字段（与内置警告计算方式一致）
 remaining_pct=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
-
 if [ -n "$remaining_pct" ] && [ "$remaining_pct" != "null" ]; then
-    # 使用官方剩余百分比，转换为已使用百分比
     used_pct=$(awk "BEGIN {printf \"%.0f\", 100 - $remaining_pct}")
-
-    # Color code based on usage: green < 50%, yellow < 80%, red >= 80%
-    if [ "$used_pct" -lt 50 ]; then
-        ctx_color="\033[01;32m"  # green
-    elif [ "$used_pct" -lt 80 ]; then
-        ctx_color="\033[01;33m"  # yellow
-    else
-        ctx_color="\033[01;31m"  # red
+    if [ "$used_pct" -lt 50 ]; then ctx_color="\033[01;32m"
+    elif [ "$used_pct" -lt 80 ]; then ctx_color="\033[01;33m"
+    else ctx_color="\033[01;31m"
     fi
-
-    ctx_info=" ${ctx_color}[ctx:${used_pct}%]\033[00m"
+    ctx_info="${ctx_color}${used_pct}%\033[00m"
 fi
 
-# Build model info (cyan color)
-model_info=""
-if [ -n "$model_name" ]; then
-    model_info=" \033[01;36m${model_name}\033[00m"
-fi
+# ---- Output: ◆project · path · model · branch · ctx% ----
+out="\033[01;35m◆${session_name}\033[00m"
+[ -n "$short_path" ] && out="${out} · \033[01;34m${short_path}\033[00m"
+[ -n "$model_name" ] && out="${out} · \033[01;36m${model_name}\033[00m"
+[ -n "$git_branch" ] && out="${out} · \033[01;33m${git_branch}\033[00m"
+[ -n "$ctx_info" ] && out="${out} · ${ctx_info}"
 
-# Output: user@host:directory model-name (git-branch) [ctx:X%]
-printf "\033[01;32m%s@%s\033[00m:\033[01;34m%s\033[00m%b%b%b" "$user" "$host" "$current_dir" "$model_info" "$git_branch" "$ctx_info"
+printf "%b" "$out"

@@ -1,0 +1,404 @@
+---
+name: g1-robot
+description: G1 humanoid robot (Unitree G1-Edu) connection, network, deployment, and debugging. Use this skill whenever the user mentions G1 robot, 机器人, unitree, 192.168.123.164, 39.104.81.144, deploying to robot, robot speaker/mic, or debugging robot connectivity. 团队当前有两台 G1：上海（局域网）和北京（公网穿透）。
+---
+
+# G1 Robots Connection & Deployment
+
+## ⚠️ 协作铁律：读写分离（2026-05-11 确立，2026-05-11 修订）
+
+**底层逻辑**：机器人是物理设备，会动会出事；任何会改变机器人状态的操作必须由 owner 亲手执行，确保对每个变更都有意识。
+
+### Claude 允许做（只读 / 探查 / 诊断）
+- `ssh` / `sshpass ... ssh` 到 G1 跑**只读**命令：`ls`、`find`、`grep`、`cat`、`head`、`tail`、`ps -ef`、`ip -br`、`ss -tlnp`、`systemctl status`、`journalctl --no-pager`、`docker ps`、`docker logs`（不带 -f）、`mscli listservice/listcmd`、`pip3 list` 等
+- 从 Mac 端 `curl` G1 已有服务的**只读探针**：`GET /health`、`GET /status` 等
+- `ping` / `nc -z` 等纯连通性测试
+- 读本地 repo 文件
+
+### Claude 禁止做（任何会写 / 让机器人物理动作 / 改服务状态）
+- `pkill` / `kill` 任何 G1 进程
+- `systemctl start/stop/restart`、`docker restart/run/build` 等
+- `nmcli` 网络配置改动
+- `rsync` / `scp` 向 G1 推代码、文件、配置
+- 任何 G1 上的 `Write`、`Edit`、`mv`、`rm`、`>` 重定向、`tee`
+- `POST /action/*`（含 damp、wave_hand、execute_action、move 等所有会让机器人物理动的接口）
+- `POST /config/fsm_id` 等任何会改 PC1 FSM 状态的写操作
+- 远程触发遥控器模拟、SDK 命令子进程
+
+### 协作模式
+- Claude 调研、定位代码、读日志、看状态都可以自己 ssh
+- 任何会写 / 触发动作的命令，Claude 写完整命令交给用户复制执行
+- 用户跑完贴回输出 / 物理状态描述，Claude 继续推进
+
+**协作模式**：Claude 把要执行的命令写成完整可复制的代码块（含环境变量、路径、密码占位符），用户复制到自己终端跑，再把输出贴回来。"因为信任所以简单"，Claude 不替用户按回车。
+
+> 历史教训：本规则确立前曾出现 Claude 用 sshpass 自行登录、起服务、占用端口，且端口/版本/状态没拉通给用户的情况（参见 action-service 8200 vs 8201 端口飘移事件）。
+
+---
+
+我们有 **两台 G1-Edu 机器人**。所有 ssh/rsync/curl/部署命令前都要先确认对哪一台做。
+
+| 代号 | 入口 | 用户 / 密码 | 备注 |
+|------|------|-------------|------|
+| **上海 G1** | 局域网：`192.168.123.164`（网线直连） / `10.110.12.110`（4paradigm WiFi）/ `192.168.88.102`（Yeyichuan WiFi） <br> 云控公网：`ssh -p 251 unitree@101.42.38.5`（2026-05-22 验证 OK，机器侧 gost 已注册） | `unitree` / `<G1_PASSWORD>`（**2026-05-22 起局域网密码已统一为这个，不再是旧密码**；ssh + sudo 同一密码） | Mac 端已配免密（pubkey 推过去）+ `~/.ssh/config` 别名：`g1-shanghai`（WiFi 主路径） / `g1-shanghai-cloud`（云控 251 fallback）。凭据落本地 `~/.config/voice-service/g1-shanghai.env`（chmod 600，不入 git） |
+| **北京 G1** | 云控公网：`ssh -p 252 unitree@101.42.38.5`（2026-05-13 验证 OK） | `unitree` / `<G1_PASSWORD>`（ssh + sudo 同一个密码，已实测） | 走 `gost-robot-22` 容器内 reverse-tcp 穿透到云端 relay；**旧入口 `ssh -p 20001 unitree@39.104.81.144` 已废**（2026-05-13 Connection refused）；`~/.ssh/config` 别名 `g1-beijing` |
+
+> ⚠️ **云控 relay 配置**（2026-05-13 从北京 G1 `gost-robot-22` 容器读出，**机密**——不要外传 / 不入 git）：<br>relay endpoint = `101.42.38.5:250`，relay 鉴权 = `root:<RELAY_PASSWORD>`。这是给机器人侧 gost 客户端 reverse-tcp 注册用的，**不是给你 ssh 用的**。日常 ssh 走 251/252 即可。
+
+> ⚠️ **上海云控 251 当前不通的修法**：要让 251 通，需要在上海 G1 局域网入口（`192.168.123.164` 等）登进去启 gost client 容器，对照北京：`gost -L rtcp://:251/127.0.0.1:22 -F relay+tcp://root:<RELAY_PASSWORD>@101.42.38.5:250`。owner 在机器侧执行。
+
+## SSH 连接
+
+### 上海 G1（按稳定性排序）
+
+```bash
+# 主入口 A：局域网网线直连（最稳，走 eth0 内网）
+sshpass -p '<G1_PASSWORD>' ssh -o StrictHostKeyChecking=no unitree@192.168.123.164
+
+# 主入口 B：公司网 4paradigm WiFi
+sshpass -p '<G1_PASSWORD>' ssh unitree@10.110.12.110
+
+# 备入口：Yeyichuan WiFi（手动切过去才有；autoconnect=no）
+sshpass -p '<G1_PASSWORD>' ssh unitree@192.168.88.102
+
+# 公网入口（云控 251）—— 当前 refused，等机器侧 gost 上线后才能用
+sshpass -p '<G1_PASSWORD>' ssh -o StrictHostKeyChecking=no -p 251 unitree@101.42.38.5
+```
+
+- **Mac 走网线连 G1 需要手动加子网路由**（见下方"网线入口"）
+
+### 北京 G1（云控公网穿透，2026-05-13 验证）
+
+```bash
+sshpass -p '<G1_PASSWORD>' ssh -o StrictHostKeyChecking=no -p 252 unitree@101.42.38.5
+
+# sudo 同密码
+echo '<G1_PASSWORD>' | sudo -S docker ps
+```
+
+- 公网入口走 `gost-robot-22` 容器 reverse-tcp 注册到云端 relay（`101.42.38.5:250`），云端把 `:252` 转回机内 22。**不要 stop 这个容器**，停了 SSH 就断
+- 机内 IP：eth0 = `192.168.123.164/24`、docker0 = `172.17.0.1/16`
+- WiFi 接入：wlan0 = `192.168.8.4/24`（2026-05-13 实测，**不再是之前的 10.100.x 北京机房网段**，可能搬到了不同物理位置）
+- 容器现状（2026-05-13 实测）：`voice-service-v1.5.0` / `core-v1.3` / `gost-robot-22` / `embodied-vision-console1.2` 四个 Up；audio_srv 8005 + voice-service 8100 listen
+- **rsync / 部署命令需要按这台调整**：把 `unitree@192.168.123.164` 替换为 `-p 252 unitree@101.42.38.5`，密码改成 `<G1_PASSWORD>`
+
+> ⚠️ 北京 G1 的密码（同时也是上海云控 251 的密码）是公网可达的强密码，**不要写进任何 git 仓库或会被 commit 的文档**（项目 CLAUDE.md、README 等）。要引用就指向本 skill 文件。
+
+## 网络拓扑（2026-04-14 验证）
+
+```
+          ┌─── usb1 (手机USB共享)  192.168.174.44 ── 手机 → v4 公网 [metric=100, 主出口]
+G1 ───────┼─── wlan0 (4paradigm)   10.110.12.110/21 (静态) ─ 公司网 → v4 公网 [metric=300/600, fallback]
+          ├─── wlan0 (Yeyichuan)   192.168.88.102 ── 2.4G 不稳 [autoconnect=no, 手动连]
+          ├─── wlan0 (mz20pro)     192.168.197.169 ── 仅 v6 公网 [autoconnect=no, 已废]
+          └─── eth0 (网线)          192.168.123.164 ── 机器人内部 [never-default, 只做内网]
+```
+
+### 路由优先级（NM 持久化，重启不丢）
+
+| 连接名 | 接口 | metric | 角色 | autoconnect |
+|--------|------|--------|------|-------------|
+| `usb-tether` | usb1 | 100 | **v4 主出口** | yes |
+| `4paradigm` | wlan0 | 600（NM WiFi 默认偏移）| **v4 fallback** | yes |
+| `Yeyichuan` | wlan0 | 300（配置值）| 备用 WiFi，手动切 | **no** |
+| `mz20pro` | wlan0 | — | v6-only 已废 | no |
+| `unitree1` | eth0 | -1 | 只做 `192.168.123.0/24` 内网 | — |
+
+**wlan0 同时只能连一个 WiFi**。默认走 4paradigm（5G 5200 MHz，稳），Yeyichuan/mz20pro 保留配置手动切换。
+
+### 验证当前出口
+```bash
+curl -4 -s --connect-timeout 5 http://httpbin.org/ip
+# usb1 在位 → 101.82.99.82（手机运营商）
+# usb1 断开 → 210.22.91.198（公司公网 NAT，4paradigm）
+```
+
+### 切换 WiFi（手动连 Yeyichuan / 切回 4paradigm）
+```bash
+# 连 Yeyichuan（会顶掉 4paradigm）
+sudo nmcli con up Yeyichuan
+
+# 切回 4paradigm
+sudo nmcli con up 4paradigm
+```
+
+### 调整优先级（切换主备）
+```bash
+# 让 X 做主、Y 做备：metric 小的赢
+sudo nmcli con modify Yeyichuan  ipv4.route-metric 100
+sudo nmcli con modify usb-tether ipv4.route-metric 300
+sudo nmcli con up Yeyichuan && sudo nmcli con up usb-tether
+```
+
+### WiFi 凭据
+- `Yeyichuan` / `yyc62785290`（主 WiFi，v4 OK）
+- `mz20pro` / （纯 v6 上游，不要 autoconnect）
+
+### 已废弃
+- `fix-default-route.service`：失败状态（开机时 eth0 路由还没建立就跑了）。已改用 NM 持久化，可 `systemctl disable --now fix-default-route.service`。
+
+## 网线入口（Mac 端配置）
+
+Mac 网线口（en11 等）拿到的是 `192.168.123.222/32`，**掩码是 /32 不是 /24**，直接 ping `192.168.123.164` 不通。需要手动加子网路由：
+
+```bash
+# 查接口
+ifconfig | grep -B 2 "192.168.123"
+
+# 加子网路由（替换 en11）
+sudo route -n add -net 192.168.123.0/24 -interface en11
+
+# 验证
+ping -c 2 192.168.123.164
+```
+
+## 机器人网络 IP 速查
+
+| 接口 | IP | 说明 |
+|------|-----|------|
+| eth0 | `192.168.123.164` | 静态，机器人内部网 |
+| wlan0 (4paradigm) | `10.110.12.110/21` | **静态**（nmcli 绑定），网关 `10.110.8.1` |
+| wlan0 (Yeyichuan) | `192.168.88.102` | DHCP（autoconnect=no） |
+| usb1 (手机共享) | `192.168.174.44` | DHCP，手机网关 `.33` |
+
+## 开机自启动（2026-05-22 双 G1 拉通对齐后的真相）
+
+**两台 G1 的 host 服务启动机制不同，docker 容器拉起统一走 crontab**：
+
+| 机制 | 上海 G1 | 北京 G1 |
+|---|---|---|
+| host 服务 (audio_srv / slam / video) | systemd `unitree-start.service` → `/home/unitree/start.sh` | crontab `@reboot sleep 15 && /home/unitree/ws/src/start.sh` |
+| docker 容器拉起 | **crontab `@reboot sleep 30 && docker restart ...` 链**（2026-05-22 起新加，对齐北京）| **crontab `@reboot sleep 30 && docker restart ...` 链**（凯哥原设计） |
+
+→ **升级版本只改 crontab 一行，systemd 不动**（之前曾把 systemd ExecStart 末尾 sed 加 `docker start voice-service-v1.6.0`，每升 minor 都要改，烦；2026-05-22 起清掉了，systemd 只管 host 服务）。
+
+### 关键配置（已踩坑验证）
+
+1. **Docker `--restart` 必须是 `no`**（不能用 `unless-stopped`）
+   - `unless-stopped` 让 docker daemon 开机自动拉起容器
+   - voice-service 在 audio_srv 就绪前连 `/mic`，创建 stale UDP socket
+   - 后续 audio_srv 启动后新 socket 收不到 multicast 数据 → ASR 失败
+   - 正确做法：crontab `sleep 30` 等 host 服务起完再 `docker restart`
+
+2. **systemd ≠ 交互式 shell**（仅上海机制涉及）
+   - SSH 登录时自动加载 ROS foxy（`.bashrc` 里的 fishros 提示）
+   - systemd 不走 login shell，必须在 service 文件里显式设置：
+     - `Environment=HOME=/home/unitree`（否则 `~` 展开成 `/root`）
+     - `Environment=LD_LIBRARY_PATH=...unitree_sdk2/thirdparty/lib/aarch64:...`
+     - `Environment=CYCLONEDDS_URI=file:///etc/cyclonedds.xml`
+     - `ExecStart` 里 `source /opt/ros/foxy/setup.bash`
+   - 缺 LD_LIBRARY_PATH → `g1_audio_api` returncode 127（找不到 libddsc.so）
+
+3. **`|| true` 容错 + 链式重启**（crontab 设计核心）
+   - 单个容器不存在不应阻塞其他容器重启 → 每条 `docker restart` 后接 `|| true`
+   - `sleep 5` 串行: 一个 restart 完了再下一个，避免抢 cgroup/网络资源
+
+4. **验证方式**
+   - `cat /home/unitree/docker_restart.log` — 看 crontab docker restart 日志（双机通用）
+   - `ss -ulnp | grep 5555 | wc -l` — socket 数应为 1-2 个（不是 17+）
+   - `journalctl -u unitree-start.service` — 看上海启动日志（北京没此服务）
+   - `cat /proc/<PID>/environ | tr '\0' '\n' | grep LD_LIBRARY` — 检查进程环境
+
+### 上海 systemd service 文件（最终态，仅启 host 服务）
+```ini
+# /etc/systemd/system/unitree-start.service (2026-05-22 起)
+[Unit]
+Description=Unitree Start Script
+After=network-online.target docker.service
+Wants=network-online.target docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=HOME=/home/unitree
+Environment=LD_LIBRARY_PATH=/home/unitree/unitree_sdk2/thirdparty/lib/aarch64:/opt/ros/foxy/lib/aarch64-linux-gnu:/opt/ros/foxy/lib
+Environment=CYCLONEDDS_URI=file:///etc/cyclonedds.xml
+ExecStart=/bin/bash -c "source /opt/ros/foxy/setup.bash && export LD_LIBRARY_PATH=/home/unitree/unitree_sdk2/thirdparty/lib/aarch64:$LD_LIBRARY_PATH && export CYCLONEDDS_URI=file:///etc/cyclonedds.xml && cd /home/unitree && sudo -u unitree bash /home/unitree/start.sh"
+TimeoutStartSec=120
+
+[Install]
+WantedBy=multi-user.target
+```
+
+注: 没 `User=unitree`, ExecStart 用 root 跑然后 `sudo -u unitree bash` 切回去 — 这是为了拿到 root 的 docker 权限同时让 start.sh 跑在 unitree 上下文.
+
+### 上海 / 北京 crontab 最终态对照
+
+**上海** (`crontab -l`, 2026-05-22):
+```
+@reboot /home/unitree/start.sh
+@reboot sleep 30 && (docker restart voice-service-v1.6.0 || true; sleep 5; docker restart core-v1.3 || true; sleep 5; docker restart embodied-vision-console-v1.5 || true) >> /home/unitree/docker_restart.log 2>&1 &
+```
+注: `@reboot /home/unitree/start.sh` 一行跟 systemd `unitree-start.service` 启动路径冗余 (双重保险), 历史包袱, 没坏不动.
+
+**北京** (`crontab -l`, 凯哥原设计):
+```
+@reboot sleep 15 && /home/unitree/ws/src/start.sh >> /home/unitree/ws/src/start.log 2>&1 &
+@reboot sleep 30 && (docker restart voice-service-v1.6.0 || true; sleep 5; docker restart core-v1.3 || true; sleep 5; docker restart embodied-vision-console-v1.5 || true) >> /home/unitree/docker_restart.log 2>&1 &
+@reboot sleep 60 && cd /home/unitree/action-service && bash docker-run.sh --clean >> /home/unitree/action-service.log 2>&1 &
+```
+注: 北京 start.sh 路径在 `~/ws/src/start.sh` (上海是 `~/start.sh`), 历史差异, 不强求对齐.
+
+### 升 voice-service 版本时怎么改
+
+```bash
+# 双机器人通用
+crontab -e
+# 把 docker restart voice-service-v<旧> 改成 voice-service-v<新>
+# 保留旧行注释作为回滚抓手, 例如:
+#   #@reboot sleep 30 && (docker restart voice-service-v1.5.0 || true; ...)
+#   @reboot sleep 30 && (docker restart voice-service-v1.6.0 || true; ...)
+crontab -l | grep voice-service     # 验证
+```
+
+### 随身 WiFi 与网口命名
+- 内置网口 MAC `4c:bb:47:b0:fa:82` = eth0（头↔身体 DDS 通信）
+- 随身 WiFi MAC `34:4b:50:00:00:00` = eth1（备用网络）
+- 已配 udev 规则 `/etc/udev/rules.d/70-persistent-net.rules` 固定命名
+- **不需要拔插 WiFi**，开机带着就行
+- 如果 DDS 不通，先检查 `ip -br link | grep eth` 确认 eth0 是内置网口
+
+## Docker 部署 (voice-service)
+
+> 以下命令模板默认是 **上海 G1**（局域网 `192.168.123.164` / 密码 `<G1_PASSWORD>`）。**北京 G1** 把 SSH/rsync 入口换成 `-p 20001 unitree@39.104.81.144` + 密码 `<G1_PASSWORD>`，其他逻辑一致（容器内 IP 也是 `192.168.123.164`，但走 host network 直接用机内服务）。
+
+### 首次启动（bind-mount 方式，代码在宿主机）
+```bash
+cd ~/voice-service
+echo '<G1_PASSWORD>' | sudo -S docker build -f Dockerfile.g1 -t voice-service:g1 .
+
+# 注意：--restart=no，由 start.sh 控制启动顺序
+echo '<G1_PASSWORD>' | sudo -S docker run -d \
+  --name voice-service \
+  --network host \
+  --env-file ~/voice-service/.env \
+  -v ~/voice-service:/app \
+  --restart=no \
+  voice-service:g1
+```
+
+### 更新代码（从 Mac）
+```bash
+# 1. rsync 代码（走网线入口最快）
+rsync -avz --exclude='.venv' --exclude='__pycache__' --exclude='debug' \
+  --exclude='.env' --exclude='.claude' --exclude='.git' \
+  -e "sshpass -p '<G1_PASSWORD>' ssh -o StrictHostKeyChecking=no" \
+  <YOUR_PROJECT_PATH>/voice-service/ \
+  unitree@192.168.123.164:~/voice-service/
+
+# 2. 重启容器
+sshpass -p '<G1_PASSWORD>' ssh unitree@192.168.123.164 "echo '<G1_PASSWORD>' | sudo -S docker restart voice-service"
+```
+
+### 关键 .env 配置（机器人端）
+```env
+MODE=g1
+TTS_PROVIDER=gengkai_g1
+G1_SYNTH_BACKEND=edge
+GENGKAI_G1_URL=http://127.0.0.1:8005
+ASR_PROVIDER=sensevoice
+WAKE_WORD_ENABLED=1
+```
+
+### 耿凯音频服务 (audio_srv)
+- 端口: **8005**（v3 版本改了端口，不是 8002）
+- 路径: `~/ws/src/audio/audio_srv_v3.py`
+- 启动: 由 `~/start.sh` → `start-audio.sh` 自动启动，不需要单独启动
+- 提供: `/mic`（PCM 流）、`/playstream`（推送 PCM 播放）、`/playstop`（打断）、`/builtin_asr/latest`（内置 ASR 降级）
+- **已知问题**: `/mic` 每个 HTTP 请求创建独立 multicast socket，断开不释放。确保只有一个客户端连 `/mic`
+
+### Silero VAD 离线缓存
+- Dockerfile.g1 通过 `COPY silero-cache` 把 VAD 模型 bake 进镜像
+- 不依赖运行时网络下载
+- 如果看到 `[vad] load failed: no internet and repo not in cache`，说明镜像没包含缓存，需要重建
+
+## 常用调试
+
+```bash
+# 查看容器日志
+sshpass -p '<G1_PASSWORD>' ssh unitree@192.168.123.164 "echo '<G1_PASSWORD>' | sudo -S docker logs voice-service --tail 30"
+
+# 测试 TTS（从 Mac）
+curl -s http://192.168.123.164:8100/tts -X POST -H "Content-Type: application/json" -d '{"text":"你好","blocking":true}'
+
+# 测试 health
+curl -s http://192.168.123.164:8100/health
+
+# 进入容器
+sshpass -p '<G1_PASSWORD>' ssh unitree@192.168.123.164 "echo '<G1_PASSWORD>' | sudo -S docker exec -it voice-service bash"
+```
+
+## 硬件信息
+- 机型: Unitree G1-Edu
+- 计算: NVIDIA Jetson Orin NX (16GB VRAM)
+- 传感器: LIVOX-MID360 LiDAR, D435i 深度相机, 4-mic 阵列, 5W 喇叭
+
+## 遥控器模式（关键）
+
+| 模式 | 按键 | 解锁什么 |
+|------|------|----------|
+| **唤醒模式** | `L1 + L2` | **mic 多播发布**（239.168.123.161:5555）、audio_srv /mic 数据流 |
+| **主运控** | **不是开机默认！** 必须遥控器序列：`L2+B`（零力矩→阻尼）→ `L2+UP`（阻尼→预备，等 5 秒）→ **`R1+X`**（预备→主运控）| 内置高层运控运行；`LocoClient` / `sport` RPC、`MotionSwitcherClient` 等高层接口 |
+| 调试模式 / 诊断动作 | `L2+R2`（阻尼→调试阻尼）→ `L2+A`（→诊断动作）| **释放**内置运控，让开发者用 unitree_sdk2 的**底层** example（关节级控制 `low_level/g1_ankle_swing_example` 这类）；**进入此模式后高层 LocoClient 会失效**。这条独立于主运控状态机 |
+
+### ⚠️ 高阶 vs 低阶 SDK 的"调试模式"方向是反的（2026-05-11 踩坑复盘）
+
+**官方原文**（`https://support.unitree.com/home/zh/G1_developer/sport_services_interface`）：
+> 高层运动服务依赖于内置运控，**进入调试模式后内置运控完全退出，高层运动服务失效**。
+
+**官方原文**（`https://support.unitree.com/home/zh/G1_developer/rpc_routine`）：
+> 运行方式与《快速开发》类似，**但无需进入调试模式**。
+
+| 你要做什么 | 用什么接口 | 该不该进调试模式 |
+|---|---|---|
+| 让机器人挥手 / 走 / 坐（高阶动作） | `LocoClient` / `g1_loco_client_example.py` | **❌ 不要进，要保持主运控** |
+| 直接发关节角度 / 力矩（低阶） | `unitree_sdk2/example/g1/low_level/*` | **✅ 必须进调试模式** |
+
+**踩坑表现**（2026-05-11）：用 LocoClient 调 wave_hand，HTTP 看似成功但机器人不动 — 出现过两层根因：
+1. **进了调试模式**（按了 L2+R2 → L2+A）→ 高层运控关闭 → RPC 报 `[ClientStub] send request error` / elapsed ≈ DDS_TIMEOUT
+2. **没进主运控**（停在开机默认的零力矩 / 阻尼 / 预备）→ RPC ack 1ms 但机器人不动（因为 PC1 状态机不接受高层任务）
+
+**官方状态机图**（来自 G1 文档 remote_control 页面）：
+```
+开机 → 零力矩
+零力矩 ⇄ 阻尼            (L2+B / L2+Y)
+阻尼   → 预备             (L2+UP)
+预备   → 主运控           (R1+X)  ★ LocoClient 真正生效的状态
+主运控 ⇄ 预备 / 下蹲 / 落座  (L2+UP/DOWN/LEFT)
+主运控 → 阻尼             (L2+B，等于"软关"高层)
+阻尼   → 调试阻尼          (L2+R2)   ← 独立分支，跟主运控并列
+```
+
+**激活 LocoClient 完整路径**（开机后必须按全这 3 键，等够每步时延）：
+1. `L2 + B`  → 零力矩 → 阻尼
+2. `L2 + UP` → 阻尼 → 预备（**等 5 秒**让机器人摆出准备姿势）
+3. `R1 + X`  → 预备 → **主运控**（电机激活、能接受高层任务）
+
+**恢复**：整机断电重启（最稳），或重做上面的 3 键序列。`MotionSwitcherClient.SelectMode("ai")` 只切换主运控 ↔ 自定义运控，不替代物理状态机激活。
+
+**G1-Edu 双计算单元**：PC1 = 运控单元（跑内置运动服务，**不开放**） + PC2 = 开发单元（Jetson Orin，`192.168.123.164`，我们 SSH 的就是这台）。运动 service 永远在 PC1。PC2 上 `ps`/`mscli` 找不到运动服务是**正常**的，不代表服务没起。
+
+**⚠️ ASR 无结果排查第一条**：机器人是否在唤醒模式？
+- 症状：audio_srv /mic HTTP 200 但永远 0 字节；eth0 raw 抓包 0 个 239.168.123.x multicast；voice-service `latest_seq=0`
+- 验证：`sudo python3 -c "import socket;s=socket.socket(socket.AF_PACKET,socket.SOCK_RAW,socket.ntohs(0x0800));s.bind(('eth0',0));s.settimeout(3);c=0;import time;t0=time.time()
+while time.time()-t0<3:
+ try: p,_=s.recvfrom(65535); d='.'.join(str(b) for b in p[30:34])
+ except: continue
+ if d.startswith('239.168.123'): c+=1
+print(c)"`
+- 处置：遥控器按 `L1 + L2` 切到唤醒模式，立即恢复推流
+- **不是调试模式**。调试模式解锁低阶 SDK + 释放内置运控（同时关掉高层 LocoClient）；唤醒模式解锁 mic——两条独立 gate
+
+**⚠️ 更隐蔽的 case：唤醒模式下 mic 仍然全零**（2026-04-24 踩坑复盘）
+- 症状：遥控器已切唤醒模式 ✓，multicast 5555 **有字节流（~31 KB/s）但内容全是 0**（`abs_max=0, non_zero=0%`）
+- 检测：`import socket,numpy as np; ...; arr=np.frombuffer(data,dtype=np.int16); print(arr.max(), (arr!=0).mean())`
+- 根因：body mic 子系统挂了（非软件层 bug），唤醒模式切换也不能让它重新采样
+- **解法：整机电源关机→开机**（不是 docker restart，不是 SSH 重启，是**机器人身体的总电源**）
+  - 软件侧 docker / audio_srv / voice-service 重启都无效
+  - 重启后 multicast 立刻有真实 PCM（rms > 0 可被 VAD 检出）
+- Skill 里 `_debug/runtime` 端点可加 vad_voiced_frames 计数协助定位: 软件工作正常 → 只能是 body 侧
+- 诊断顺序：
+  1. `curl /_debug/runtime` 看 `vad_frames_seen` 是否在涨（Segmenter 消费正常）
+  2. `vad_voiced_frames=0` + `mic_rms_avg=0` → mic 有数据但全静音
+  3. multicast 5555 内容快照确认是"zero-filled 占位流"
+  4. → body mic 挂了 → 整机重启

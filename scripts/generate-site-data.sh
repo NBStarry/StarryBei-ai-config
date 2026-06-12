@@ -236,6 +236,9 @@ for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/claude/hzb-sk
   filename=$(basename "$cmd_file")
   [ "$filename" = "README.md" ] && continue
 
+  # 跳过含密真身（有对应 .example 的文件被 .gitignore 保护，不应进 data.json）
+  [ -f "${cmd_file}.example" ] && continue
+
   rel_path="${cmd_file#${REPO_ROOT}/}"
   cmd_name="${filename%.md}"
 
