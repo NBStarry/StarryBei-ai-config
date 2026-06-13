@@ -17,15 +17,16 @@ StarryBei-ai-config/
 ├── install.sh           # 统一安装器（symlink + .example 播种 + 自动备份）
 ├── claude/              # ── Claude Code ──
 │   ├── configs/         #   settings.json / CLAUDE.md / *.example
-│   ├── hzb-skills/      #   自建 skill marketplace（hzb: 命名空间）
-│   ├── skills/          #   skill 定义与示例（含官方插件副本）
+│   ├── skills/          #   Claude 专属 skill（官方插件副本 + merge-verified）
 │   ├── hooks/           #   Hook 配置与示例
-│   ├── agents/          #   Agent 定义与示例
+│   ├── agents/          #   Agent（subagent）定义与示例
 │   ├── commands/        #   Slash command 示例
 │   └── scripts/         #   statusline.sh
 ├── codex/               # ── Codex CLI ──
 │   ├── config.toml.example
 │   └── README.md
+├── skills/              # ── 跨工具共享 ──
+│   └── hzb-skills/      #   自建 skill marketplace（hzb: 命名空间，Claude + Codex 共用）
 ├── scripts/             # 共享脚本（generate-site-data.sh、export-memory.sh）
 ├── site/                # GitHub Pages Dashboard
 ├── docs/                # 设计文档与历史计划
@@ -66,7 +67,7 @@ bash install.sh
 
 ### hzb-skills（自建 skill marketplace）
 
-`claude/hzb-skills/` 是以 `hzb:` 命名空间组织的自建 skill 合集，作为 directory 类型的 plugin marketplace 注册。`install.sh` 会把 `~/.claude/hzb-skills` 整目录 symlink 指向这里，因此改 skill 后只需 `claude plugin update hzb@hzb-skills` 刷新缓存。
+`skills/hzb-skills/` 是以 `hzb:` 命名空间组织的自建 skill 合集，作为 directory 类型的 plugin marketplace 注册。`install.sh` 会把 `~/.skills/hzb-skills` 整目录 symlink 指向这里，因此改 skill 后只需 `claude plugin update hzb@hzb-skills` 刷新缓存。
 
 含内网/硬件凭证的运维类 skill（`g1-robot`、`wlcb-dev`、`connect-internal*`）以脱敏 `.example` 入库，真实文件由 `.gitignore` 保护并由 `install.sh` 播种到本地。
 
@@ -84,7 +85,7 @@ bash install.sh
 
 ## Codex CLI
 
-`codex/` 管理 OpenAI Codex CLI 配置。Codex 与 Claude Code 共用同一套自建 skill 源（`claude/hzb-skills/`），`install.sh` 会把 `~/.codex/skills/<name>` 逐个 symlink 指向仓库内对应 skill。
+`codex/` 管理 OpenAI Codex CLI 配置。Codex 与 Claude Code 共用同一套自建 skill 源（`skills/hzb-skills/`），`install.sh` 会把 `~/.codex/skills/<name>` 逐个 symlink 指向仓库内对应 skill。
 
 `config.toml` 因 Codex 运行时会自动改写（追加 project trust 等），不做 symlink，只提供 `config.toml.example` 模板。`auth.json`（OAuth token）绝不入库。
 

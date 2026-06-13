@@ -80,10 +80,10 @@ link "$REPO_DIR/claude/scripts/statusline.sh" "$HOME/.claude/statusline.sh"
 # hzb-skills marketplace: directory-level symlink. Plugin loads from
 # ~/.claude/plugins/cache, so this is safe; run `claude plugin update
 # hzb@hzb-skills` after editing skills to refresh the cache.
-link "$REPO_DIR/claude/hzb-skills" "$HOME/.claude/hzb-skills"
+link "$REPO_DIR/skills/hzb-skills" "$HOME/.claude/hzb-skills"
 
 # Seed sensitive real files from sanitized templates (edit afterwards).
-HZB="$REPO_DIR/claude/hzb-skills/plugins/hzb"
+HZB="$REPO_DIR/skills/hzb-skills/plugins/hzb"
 seed "$HZB/commands/connect-internal.md.example"        "$HZB/commands/connect-internal.md"
 seed "$HZB/commands/connect-internal-backup.md.example" "$HZB/commands/connect-internal-backup.md"
 seed "$HZB/skills/g1-robot/SKILL.md.example"            "$HZB/skills/g1-robot/SKILL.md"
