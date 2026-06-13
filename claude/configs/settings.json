@@ -6,7 +6,6 @@
     "allow": [],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
   "hooks": {},
   "statusLine": {
     "type": "command",
@@ -63,5 +62,6 @@
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
   "preferredNotifChannel": "terminal_bell",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "model": "sonnet"
 }
