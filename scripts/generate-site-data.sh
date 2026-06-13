@@ -231,7 +231,7 @@ commands_dir_data="$TMPDIR_DATA/commands"
 mkdir -p "$commands_dir_data"
 cmd_idx=0
 
-for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/claude/hzb-skills/plugins/hzb/commands/*.md; do
+for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/skills/hzb-skills/plugins/hzb/commands/*.md; do
   [ -f "$cmd_file" ] || continue
   filename=$(basename "$cmd_file")
   [ "$filename" = "README.md" ] && continue
