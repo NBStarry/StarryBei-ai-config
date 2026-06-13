@@ -12,7 +12,7 @@
 
 ## Skills
 
-Codex 与 Claude Code 共用同一套自建 skill 源——`claude/hzb-skills/plugins/hzb/skills/`。
+Codex 与 Claude Code 共用同一套自建 skill 源——`skills/hzb-skills/plugins/hzb/skills/`。
 `install.sh` 会把 `~/.codex/skills/<name>` 逐个 symlink 指向仓库内的对应 skill，
 避免两套工具各维护一份副本。
 
