@@ -27,6 +27,13 @@
   - 实际效果：（验证后填写）
 -->
 
+### Dashboard 扫描 hzb-skills (generate-site-data.sh)
+
+- [ ] **generate-site-data.sh 纳入 skills/hzb-skills 扫描** (date: 2026-06-14)
+  - 验证方法：本地跑 `bash scripts/generate-site-data.sh`，检查 `site/data.json` 中 source 为 `hzb` 的 skill 条目（codex-review、conference-meeting-summary、web-access、save-memory-before-compact 等）已出现
+  - 预期效果：自建 hzb-skills 出现在 Dashboard skills 列表，标记来源 `hzb`，不重复、不遗漏
+  - 实际效果：（验证后填写）
+
 ### Windows 适配 (install.ps1 / settings.windows.json / statusline.ps1)
 
 - [ ] **statusline.ps1：jq-free PowerShell 状态栏** (date: 2026-06-14)

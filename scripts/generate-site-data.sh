@@ -94,6 +94,12 @@ while IFS= read -r skill_file; do
   scan_skill "$skill_file" "$source_label" "$rel_path"
 done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
+# 2b) 仓库 skills/hzb-skills/ — 自建跨工具 skill marketplace（source 标 hzb）
+while IFS= read -r skill_file; do
+  rel_path="${skill_file#${REPO_ROOT}/}"
+  scan_skill "$skill_file" "hzb" "$rel_path"
+done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
+
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
 if [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
