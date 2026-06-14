@@ -52,7 +52,7 @@ git pull && bash scripts/sync-configs.sh pull
 
 跨机器盘点的 **全量** Claude Code 插件 / skill 清单。结构为 `marketplaces[]`（所有需注册的源）+ `plugins[]`（各源下的插件，每项带 `marketplace` 与携带的 `skills`）。完整内容见 [`recommended-plugins.json`](recommended-plugins.json)。
 
-**Marketplaces（7 个）**
+**Marketplaces（6 个）**
 
 | Marketplace | 源 | 说明 |
 |-------------|-----|------|
@@ -60,7 +60,6 @@ git pull && bash scripts/sync-configs.sh pull
 | `planning-with-files` | OthmanAdi/planning-with-files | 文件式计划管理 |
 | `ui-ux-pro-max-skill` | nextlevelbuilder/ui-ux-pro-max-skill | UI/UX 设计套件 |
 | `anthropic-agent-skills` | anthropics/skills | 官方文档/创作技能集 |
-| `pua-skills` | tanweai/pua | pua 话术 skill 合集 |
 | `thedotmack` | thedotmack/claude-mem | 记忆/知识库 |
 | `hzb-skills` | 本地 `skills/hzb-skills/` | 自建（install 脚本注册） |
 

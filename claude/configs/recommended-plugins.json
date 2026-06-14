@@ -26,12 +26,6 @@
       "add": "/plugin marketplace add anthropics/skills"
     },
     {
-      "id": "pua-skills",
-      "source": "github",
-      "repo": "tanweai/pua",
-      "add": "/plugin marketplace add tanweai/pua"
-    },
-    {
       "id": "thedotmack",
       "source": "github",
       "repo": "thedotmack/claude-mem",
@@ -186,14 +180,6 @@
       "author": "Anthropic",
       "skills": ["algorithmic-art", "brand-guidelines", "canvas-design", "claude-api", "doc-coauthoring", "docx", "frontend-design", "internal-comms", "mcp-builder", "pdf", "pptx", "skill-creator", "slack-gif-creator", "theme-factory", "web-artifacts-builder", "webapp-testing", "xlsx"],
       "install": "/plugin install document-skills@anthropic-agent-skills"
-    },
-    {
-      "name": "pua",
-      "marketplace": "pua-skills",
-      "description": "pua skill 合集：职场/沟通话术（p7/p9/p10/pro/mama/shot/yes/loop，含 en/ja）",
-      "author": "tanweai",
-      "skills": ["pua", "pua-en", "pua-ja", "pua-loop", "p7", "p9", "p10", "pro", "mama", "shot", "yes"],
-      "install": "/plugin install pua@pua-skills"
     },
     {
       "name": "claude-mem",

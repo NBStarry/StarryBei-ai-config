@@ -30,8 +30,8 @@
 ### 插件/skill 全量盘点 (recommended-plugins.json)
 
 - [ ] **recommended-plugins.json 改为多 marketplace 全量清单** (date: 2026-06-15)
-  - 验证方法：`jq '.marketplaces|length, (.plugins|length)' claude/configs/recommended-plugins.json` → 7 / 22；`jq '.plugins[0]' …` 仍是带 name/description/install 的对象（Dashboard 靠 `jq '.plugins'` 读取，不应回归）；跑 `bash scripts/generate-site-data.sh` 后 data.json 的 plugins tab 数量更新
-  - 预期效果：含 longxiabei Mac 上盘点到的全部源（新增 `pua-skills`、`telegram`、`pua` 等），每插件标注所属 marketplace 与携带 skill；Dashboard 不报错
+  - 验证方法：`jq '.marketplaces|length, (.plugins|length)' claude/configs/recommended-plugins.json` → 6 / 21；`jq '.plugins[0]' …` 仍是带 name/description/install 的对象（Dashboard 靠 `jq '.plugins'` 读取，不应回归）；跑 `bash scripts/generate-site-data.sh` 后 data.json 的 plugins tab 数量更新
+  - 预期效果：含 longxiabei Mac 上盘点到的源（新增 `telegram` 等；`pua`/`pua-skills` 应按用户偏好被移除、不出现），每插件标注所属 marketplace 与携带 skill；Dashboard 不报错
   - 实际效果：（验证后填写）
 
 ### Dashboard 扫描 hzb-skills (generate-site-data.sh)
