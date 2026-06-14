@@ -27,6 +27,25 @@
   - 实际效果：（验证后填写）
 -->
 
+### Windows 适配 (install.ps1 / settings.windows.json / statusline.ps1)
+
+- [ ] **statusline.ps1：jq-free PowerShell 状态栏** (date: 2026-06-14)
+  - 验证方法：Windows 上启动 Claude Code，观察状态栏；或手动喂样例 JSON：
+    `'{"session_name":"t","model":{"display_name":"Opus 4.8 (1M context)"},"workspace":{"current_dir":"C:\\a\\b\\c\\d\\e"},"context_window":{"remaining_percentage":66}}' | powershell -NoProfile -File ~/.claude/statusline.ps1`
+  - 预期效果：渲染 `◆会话 · 路径 · 模型·1M · 分支 · ctx%`，UTF-8 字形（◆ ·）正常、ANSI 颜色生效、路径过长省略为 `首/次/…/末2/末1`、ctx% 按 50/80 阈值变色；无 jq 依赖
+  - 额外验证：**中文会话名**（如 `配置测试Claude`）不乱码——stdin 按 UTF-8 字节读取（`OpenStandardInput`），规避 PS 5.1 用 OEM 代码页(GBK)解码管道导致的乱码；脚本本身以 UTF-8 BOM 保存，规避 PS 5.1 把无 BOM .ps1 当 GBK 读
+  - 实际效果：（验证后填写）
+
+- [ ] **settings.windows.json：Windows 专属配置** (date: 2026-06-14)
+  - 验证方法：`install.ps1` symlink 后，`~/.claude/settings.json` 指向本文件；启动 Claude Code 检查 statusline 生效、代理 env 生效、插件按 enabledPlugins 加载
+  - 预期效果：statusLine 用 PowerShell 命令、`HTTP(S)_PROXY` 写在 env（Windows 无 zshrc 继承）、其余 plugins/model/effortLevel 与 macOS settings.json 一致
+  - 实际效果：（验证后填写）
+
+- [ ] **install.ps1：Windows 安装器** (date: 2026-06-14)
+  - 验证方法：`powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1`；检查 `~/.claude` 下 settings.json/CLAUDE.md/statusline.ps1 为 symlink、hzb-skills 为 junction、`~/.codex/skills/*` 为 junction、敏感文件已 seed、hzb marketplace 已注册
+  - 预期效果：文件用 symlink（需开发者模式/管理员）、目录用 junction（免提权、跨盘）、已有文件先备份到 `~/.ai-config-backup-*`；缺开发者模式时给出明确提示并继续创建 junction
+  - 实际效果：（验证后填写）
+
 ### 多工具配置仓库改造 (my-claude-code → StarryBei-ai-config)
 
 - [x] **仓库改名 + 引用更新** (commit: 7306c74, date: 2026-06-11)
