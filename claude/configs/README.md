@@ -50,20 +50,22 @@ git pull && bash scripts/sync-configs.sh pull
 
 ### recommended-plugins.json
 
-推荐的 Claude Code 插件列表。在 Claude Code 中运行 `/plugin` 安装。
+跨机器盘点的 **全量** Claude Code 插件 / skill 清单。结构为 `marketplaces[]`（所有需注册的源）+ `plugins[]`（各源下的插件，每项带 `marketplace` 与携带的 `skills`）。完整内容见 [`recommended-plugins.json`](recommended-plugins.json)。
 
-| Plugin | Description | Author |
-|--------|-------------|--------|
-| **superpowers** | 核心技能库：TDD、系统化调试、并行 Agent、计划执行等 | Jesse Vincent |
-| **commit-commands** | Git 工作流：/commit、/push、/pr | Anthropic |
-| **code-review** | 自动化代码审查，多 Agent 协作 + 置信度评分 | Anthropic |
-| **feature-dev** | 功能开发工作流：探索 → 架构 → 审查 | Anthropic |
-| **code-simplifier** | 代码简化 Agent，提升可读性 | Anthropic |
-| **security-guidance** | 安全提醒 Hook，警告注入/XSS 等隐患 | Anthropic |
-| **claude-md-management** | CLAUDE.md 维护：审计、学习捕获、记忆更新 | Anthropic |
-| **plugin-dev** | 插件开发工具包 | Anthropic |
-| **github** | GitHub MCP 服务器：Issue、PR、搜索 | GitHub |
-| **pyright-lsp** | Python Pyright LSP 类型检查 | Anthropic |
+**Marketplaces（6 个）**
+
+| Marketplace | 源 | 说明 |
+|-------------|-----|------|
+| `claude-plugins-official` | anthropics/claude-plugins-official | 官方插件源 |
+| `planning-with-files` | OthmanAdi/planning-with-files | 文件式计划管理 |
+| `ui-ux-pro-max-skill` | nextlevelbuilder/ui-ux-pro-max-skill | UI/UX 设计套件 |
+| `anthropic-agent-skills` | anthropics/skills | 官方文档/创作技能集 |
+| `thedotmack` | thedotmack/claude-mem | 记忆/知识库 |
+| `hzb-skills` | 本地 `skills/hzb-skills/` | 自建（install 脚本注册） |
+
+官方源含 superpowers / commit-commands / code-review / feature-dev / code-simplifier / security-guidance / claude-md-management / plugin-dev / skill-creator / frontend-design / github / pyright-lsp / swift-lsp / clangd-lsp / ralph-loop / telegram 等；第三方源各插件携带的 skill 名见 JSON。
+
+> 注：本文件是「记录/可恢复清单」，与各机实际 **启用** 的插件（`settings*.json` 的 `enabledPlugins`）相互独立——不同机器可只启用其中一部分。
 
 ## Usage / 使用方式
 

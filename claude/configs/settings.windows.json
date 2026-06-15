@@ -1,17 +1,18 @@
 {
   "env": {
-    "https_proxy": "http://127.0.0.1:7897",
-    "http_proxy": "http://127.0.0.1:7897",
-    "all_proxy": "socks5://127.0.0.1:7897"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "HTTP_PROXY": "http://127.0.0.1:7890",
+    "HTTPS_PROXY": "http://127.0.0.1:7890"
   },
   "permissions": {
     "allow": [],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "hooks": {},
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File C:/Users/StarryBei/.claude/statusline.ps1"
   },
   "enabledPlugins": {
     "code-review@claude-plugins-official": false,
@@ -59,10 +60,18 @@
         "source": "github",
         "repo": "thedotmack/claude-mem"
       }
+    },
+    "hzb-skills": {
+      "source": {
+        "source": "directory",
+        "path": "C:\\Users\\StarryBei\\.claude\\hzb-skills"
+      }
     }
   },
   "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
   "preferredNotifChannel": "terminal_bell",
   "skipAutoPermissionPrompt": true
 }

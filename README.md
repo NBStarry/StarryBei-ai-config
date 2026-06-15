@@ -14,7 +14,8 @@
 
 ```
 StarryBei-ai-config/
-├── install.sh           # 统一安装器（symlink + .example 播种 + 自动备份）
+├── install.sh           # 统一安装器（macOS：symlink + .example 播种 + 自动备份）
+├── install.ps1          # Windows 安装器（symlink 文件 + junction 目录 + 播种）
 ├── claude/              # ── Claude Code ──
 │   ├── configs/         #   settings.json / CLAUDE.md / *.example
 │   ├── skills/          #   Claude 专属 skill（官方插件副本 + merge-verified）
@@ -49,6 +50,24 @@ bash install.sh
 
 安装后按提示填入敏感配置（GLM key、机器人/内网凭证等），详见各工具子目录的 `.example` 模板。
 
+### Windows
+
+Windows 用 `install.ps1`（`install.sh` 的 PowerShell 移植）。与 macOS 的差异：
+
+- **配置文件**：用 `settings.windows.json`（PowerShell 状态栏 + 代理写在 `env`，因 Windows 无 zshrc 继承），而非 macOS 的 `settings.json`（bash/jq 状态栏）
+- **状态栏**：`claude/scripts/statusline.ps1`，无 `jq` 依赖（用 PowerShell 原生 `ConvertFrom-Json`），格式与配色同 macOS 版
+- **链接方式**：文件用 **符号链接**（需开启 *开发者模式* 或以管理员运行），目录用 **junction**（免提权、可跨盘）
+
+```powershell
+git clone https://github.com/NBStarry/StarryBei-ai-config.git
+cd StarryBei-ai-config
+
+# 开启开发者模式后（设置 > 系统 > 开发者选项 > 开发人员模式），运行：
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+> ⚠️ 符号链接需要 *开发者模式* 或管理员权限。若未开启，`install.ps1` 仍会创建目录 junction，并在结尾提示开启开发者模式后重跑以补齐文件符号链接。
+
 ## Claude Code
 
 `claude/` 下管理 Claude Code 的全局配置与扩展。
@@ -57,7 +76,8 @@ bash install.sh
 
 | 文件 | 说明 | 入库形式 |
 |------|------|----------|
-| `claude/configs/settings.json` | 全局配置（插件、statusline、model），已移除代理与密钥 | ✅ symlink 目标 |
+| `claude/configs/settings.json` | macOS 全局配置（插件、statusline、model），已移除代理与密钥 | ✅ symlink 目标 |
+| `claude/configs/settings.windows.json` | Windows 全局配置（PowerShell statusline + 代理 env） | ✅ symlink 目标 |
 | `claude/configs/CLAUDE.md` | 全局编码规则（装到 `~/.claude/CLAUDE.md`） | ✅ symlink 目标 |
 | `claude/configs/settings.glm.json.example` | GLM 后端配置模板（key 占位） | ✅ 模板 |
 | `claude/configs/settings.local.json.example` | 项目级配置示例 | ✅ 模板 |
@@ -79,7 +99,7 @@ bash install.sh
 ◆my-session · ~/AI_Projects/…/StarryBei-ai-config · opus·1M · main · 34%
 ```
 
-颜色编码上下文使用率（绿 < 50% / 黄 50-80% / 红 ≥ 80%）。依赖 `jq`。
+颜色编码上下文使用率（绿 < 50% / 黄 50-80% / 红 ≥ 80%）。macOS 版 `statusline.sh` 依赖 `jq`；Windows 版 `statusline.ps1` 用 PowerShell 原生 JSON 解析，无需 `jq`。
 
 详见 [claude/skills/README.md](claude/skills/README.md)、[claude/hooks/README.md](claude/hooks/README.md)、[claude/agents/README.md](claude/agents/README.md)、[claude/commands/README.md](claude/commands/README.md)。
 
@@ -140,7 +160,7 @@ Claude Code 实验性功能，支持多 agent 协同。
 
 | 项目 | 详情 |
 |------|------|
-| 操作系统 | macOS (Darwin) |
+| 操作系统 | macOS (Darwin) `install.sh` · Windows `install.ps1` |
 | 工具 | Claude Code、Codex CLI |
 | 默认模型 | Claude Opus |
 
