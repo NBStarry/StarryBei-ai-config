@@ -74,9 +74,14 @@ scan_skill() {
 }
 
 # 1) 本地自定义 skills (~/.claude/skills/)
+# 注意：跳过 lark-* 等第三方 skill（npx skills 装的，symlink 到 ~/.agents，CI 环境没有，
+# 会导致线上/本地数据不一致）。第三方清单改由 claude/configs/recommended-skills.json 记录。
 if [ -d "${CLAUDE_HOME}/skills" ]; then
   while IFS= read -r skill_file; do
     local_name=$(get_frontmatter_field "$skill_file" "name")
+    case "$local_name" in
+      lark-*) continue ;;
+    esac
     scan_skill "$skill_file" "local" "~/.claude/skills/${local_name}/SKILL.md"
   done < <(find -L "${CLAUDE_HOME}/skills" -name "SKILL.md" 2>/dev/null)
 fi
@@ -95,10 +100,19 @@ while IFS= read -r skill_file; do
 done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
 # 2b) 仓库 skills/hzb-skills/ — 自建跨工具 skill marketplace（source 标 hzb）
+# 含密 skill（g1-robot/wlcb-dev）的真身 SKILL.md 被 .gitignore 保护、正文含真实凭证，
+# 扫描其脱敏版 SKILL.md.example 代替，保证 dashboard 能展示但不泄漏。
 while IFS= read -r skill_file; do
+  [ -f "${skill_file}.example" ] && continue   # 有脱敏兄弟文件的真身 → 跳过，改扫 .example
   rel_path="${skill_file#${REPO_ROOT}/}"
   scan_skill "$skill_file" "hzb" "$rel_path"
 done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
+# 脱敏版 SKILL.md.example（含密 skill 的可公开版本）
+while IFS= read -r example_file; do
+  skill_file="${example_file%.example}"
+  rel_path="${skill_file#${REPO_ROOT}/}"
+  scan_skill "$example_file" "hzb" "$rel_path"
+done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md.example" -not -path "*/examples/*" 2>/dev/null)
 
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
@@ -279,6 +293,14 @@ if [ -f "$plugins_file" ]; then
   plugins_json=$(jq '.plugins' "$plugins_file" 2>/dev/null || echo '[]')
 fi
 
+# ─── Recommended Skills 清单（第三方 / 官方 skill 安装清单）───
+
+recommended_skills_json="[]"
+rec_skills_file="${REPO_ROOT}/claude/configs/recommended-skills.json"
+if [ -f "$rec_skills_file" ]; then
+  recommended_skills_json=$(jq '.skills' "$rec_skills_file" 2>/dev/null || echo '[]')
+fi
+
 # ─── VERIFY.md 解析 ───
 
 verify_pending="[]"
@@ -429,6 +451,7 @@ total_hooks=$(echo "$hooks_json" | jq 'length')
 total_configs=$(echo "$configs_json" | jq 'length')
 total_scripts=$(echo "$scripts_json" | jq 'length')
 total_plugins=$(echo "$plugins_json" | jq 'length')
+total_recommended_skills=$(echo "$recommended_skills_json" | jq 'length')
 total_commands=$(echo "$commands_json" | jq 'length')
 total_verified=$(echo "$verify_verified" | jq 'length')
 total_pending=$(echo "$verify_pending" | jq 'length')
@@ -449,6 +472,7 @@ echo "$hooks_json" > "$TMPDIR_DATA/hooks.json"
 echo "$configs_json" > "$TMPDIR_DATA/configs.json"
 echo "$scripts_json" > "$TMPDIR_DATA/scripts.json"
 echo "$plugins_json" > "$TMPDIR_DATA/plugins.json"
+echo "$recommended_skills_json" > "$TMPDIR_DATA/recommended_skills.json"
 echo "$commands_json" > "$TMPDIR_DATA/commands.json"
 echo "$verify_pending" > "$TMPDIR_DATA/verify_pending.json"
 echo "$verify_verified" > "$TMPDIR_DATA/verify_verified.json"
@@ -460,6 +484,7 @@ jq -n \
   --slurpfile configs "$TMPDIR_DATA/configs.json" \
   --slurpfile scripts_arr "$TMPDIR_DATA/scripts.json" \
   --slurpfile plugins "$TMPDIR_DATA/plugins.json" \
+  --slurpfile recommended_skills "$TMPDIR_DATA/recommended_skills.json" \
   --slurpfile commands "$TMPDIR_DATA/commands.json" \
   --slurpfile vp "$TMPDIR_DATA/verify_pending.json" \
   --slurpfile vv "$TMPDIR_DATA/verify_verified.json" \
@@ -469,6 +494,7 @@ jq -n \
   --argjson total_configs "$total_configs" \
   --argjson total_scripts "$total_scripts" \
   --argjson total_plugins "$total_plugins" \
+  --argjson total_recommended_skills "$total_recommended_skills" \
   --argjson total_commands "$total_commands" \
   --argjson total_scripts_lines "$total_scripts_lines" \
   --argjson total_verified "$total_verified" \
@@ -484,6 +510,7 @@ jq -n \
       total_configs: $total_configs,
       total_scripts: $total_scripts,
       total_plugins: $total_plugins,
+      total_recommended_skills: $total_recommended_skills,
       total_commands: $total_commands,
       total_scripts_lines: $total_scripts_lines,
       total_verified: $total_verified,
@@ -500,6 +527,7 @@ jq -n \
     configs: $configs[0],
     scripts: $scripts_arr[0],
     plugins: $plugins[0],
+    recommended_skills: $recommended_skills[0],
     commands: $commands[0],
     verify: {
       pending: $vp[0],

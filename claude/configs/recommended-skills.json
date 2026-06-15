@@ -1,0 +1,162 @@
+{
+  "description": "第三方 / 官方 skill 安装清单，供新机器参考。lark-* 系列通过 npx skills 从 open.feishu.cn well-known 端点安装。",
+  "install_tool": "npx skills add <name>  （或 npx skills sync 按 lock 全量安装）",
+  "skills": [
+    {
+      "name": "lark-approval",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-approval/SKILL.md",
+      "install": "npx skills add lark-approval"
+    },
+    {
+      "name": "lark-apps",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-apps/SKILL.md",
+      "install": "npx skills add lark-apps"
+    },
+    {
+      "name": "lark-attendance",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-attendance/SKILL.md",
+      "install": "npx skills add lark-attendance"
+    },
+    {
+      "name": "lark-base",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-base/SKILL.md",
+      "install": "npx skills add lark-base"
+    },
+    {
+      "name": "lark-calendar",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-calendar/SKILL.md",
+      "install": "npx skills add lark-calendar"
+    },
+    {
+      "name": "lark-contact",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-contact/SKILL.md",
+      "install": "npx skills add lark-contact"
+    },
+    {
+      "name": "lark-doc",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-doc/SKILL.md",
+      "install": "npx skills add lark-doc"
+    },
+    {
+      "name": "lark-drive",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-drive/SKILL.md",
+      "install": "npx skills add lark-drive"
+    },
+    {
+      "name": "lark-event",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-event/SKILL.md",
+      "install": "npx skills add lark-event"
+    },
+    {
+      "name": "lark-im",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-im/SKILL.md",
+      "install": "npx skills add lark-im"
+    },
+    {
+      "name": "lark-mail",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-mail/SKILL.md",
+      "install": "npx skills add lark-mail"
+    },
+    {
+      "name": "lark-markdown",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-markdown/SKILL.md",
+      "install": "npx skills add lark-markdown"
+    },
+    {
+      "name": "lark-minutes",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-minutes/SKILL.md",
+      "install": "npx skills add lark-minutes"
+    },
+    {
+      "name": "lark-okr",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-okr/SKILL.md",
+      "install": "npx skills add lark-okr"
+    },
+    {
+      "name": "lark-openapi-explorer",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-openapi-explorer/SKILL.md",
+      "install": "npx skills add lark-openapi-explorer"
+    },
+    {
+      "name": "lark-shared",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-shared/SKILL.md",
+      "install": "npx skills add lark-shared"
+    },
+    {
+      "name": "lark-sheets",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-sheets/SKILL.md",
+      "install": "npx skills add lark-sheets"
+    },
+    {
+      "name": "lark-skill-maker",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-skill-maker/SKILL.md",
+      "install": "npx skills add lark-skill-maker"
+    },
+    {
+      "name": "lark-slides",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-slides/SKILL.md",
+      "install": "npx skills add lark-slides"
+    },
+    {
+      "name": "lark-task",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-task/SKILL.md",
+      "install": "npx skills add lark-task"
+    },
+    {
+      "name": "lark-vc",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-vc/SKILL.md",
+      "install": "npx skills add lark-vc"
+    },
+    {
+      "name": "lark-vc-agent",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-vc-agent/SKILL.md",
+      "install": "npx skills add lark-vc-agent"
+    },
+    {
+      "name": "lark-whiteboard",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-whiteboard/SKILL.md",
+      "install": "npx skills add lark-whiteboard"
+    },
+    {
+      "name": "lark-wiki",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-wiki/SKILL.md",
+      "install": "npx skills add lark-wiki"
+    },
+    {
+      "name": "lark-workflow-meeting-summary",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-workflow-meeting-summary/SKILL.md",
+      "install": "npx skills add lark-workflow-meeting-summary"
+    },
+    {
+      "name": "lark-workflow-standup-report",
+      "source": "open.feishu.cn",
+      "sourceUrl": "https://open.feishu.cn/.well-known/skills/lark-workflow-standup-report/SKILL.md",
+      "install": "npx skills add lark-workflow-standup-report"
+    }
+  ]
+}
