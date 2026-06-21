@@ -27,6 +27,13 @@
   - 实际效果：（验证后填写）
 -->
 
+### Karpathy guidelines skill
+
+- [ ] **新增 karpathy-guidelines skill** (commit: pending, date: 2026-06-16)
+  - 验证方法：`test -f claude/skills/karpathy-guidelines/SKILL.md`；运行 `bash scripts/generate-site-data.sh` 后执行 `jq -e '.skills[] | select(.name=="karpathy-guidelines" and .source=="custom")' site/data.json`
+  - 预期效果：Dashboard skills 列表出现 karpathy-guidelines；内容包含 Think Before Coding、Simplicity First、Surgical Changes、Goal-Driven Execution 四条原则
+  - 实际效果：（验证后填写）
+
 ### 插件/skill 全量盘点 (recommended-plugins.json)
 
 - [ ] **recommended-plugins.json 改为多 marketplace 全量清单** (date: 2026-06-15)
