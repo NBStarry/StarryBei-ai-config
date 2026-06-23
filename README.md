@@ -28,6 +28,7 @@ StarryBei-ai-config/
 │   └── README.md
 ├── skills/              # ── 跨工具共享 ──
 │   └── hzb-skills/      #   自建 skill marketplace（hzb: 命名空间，Claude + Codex 共用）
+├── knowledge/           # OKF-style 知识包（跨工具/跨主机概念与 playbook）
 ├── scripts/             # 共享脚本（generate-site-data.sh、export-memory.sh）
 ├── site/                # GitHub Pages Dashboard
 ├── docs/                # 设计文档与历史计划

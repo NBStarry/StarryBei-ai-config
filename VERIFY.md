@@ -27,6 +27,13 @@
   - 实际效果：（验证后填写）
 -->
 
+### OKF-style knowledge bundle
+
+- [ ] **新增 knowledge/ OKF-style 知识包试点** (commit: pending, date: 2026-06-23)
+  - 验证方法：`test -f knowledge/index.md && test -f knowledge/playbooks/unified-proxy-config.md`；运行 `python3 -c 'from pathlib import Path; import re; files=list(Path("knowledge").rglob("*.md")); assert files and all(re.match(r"^---\\n.*?\\n---", p.read_text(), re.S) and "\ntype:" in p.read_text() for p in files)'`；阅读 `knowledge/index.md` 确认链接能覆盖 Hermes、Clash、统一代理、SSH TUI proxy 四个概念
+  - 预期效果：仓库新增可被人和 agent 共同读取的 OKF-style 知识包；不包含订阅 URL、API key、OAuth token、节点密码等敏感信息；README 展示 `knowledge/` 目录
+  - 实际效果：（验证后填写）
+
 ### Karpathy guidelines skill
 
 - [ ] **新增 karpathy-guidelines skill** (commit: pending, date: 2026-06-16)
