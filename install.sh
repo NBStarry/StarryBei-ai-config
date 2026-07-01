@@ -69,11 +69,20 @@ echo "Installing AI coding tool configs from $REPO_DIR"
 echo
 
 # ── Claude Code ───────────────────────────────────────────────────────────
-# settings.json / CLAUDE.md are rewritten by Claude Code at runtime (/model,
-# memory writes). If that uses atomic temp+rename, a symlink gets replaced by a
-# plain file and drift stops syncing. We start with symlink and VERIFY this in
-# Phase 4; if it breaks, switch these two `link` calls to `copy`.
-link "$REPO_DIR/claude/configs/settings.json" "$HOME/.claude/settings.json"
+# settings.local.json is gitignored and may contain the real production backend
+# token. If it exists, use it as the local runtime settings source; otherwise
+# fall back to the shareable public settings.json. The old settings.glm.json
+# name remains as a legacy fallback so existing machines do not break.
+CLAUDE_SETTINGS_SRC="$REPO_DIR/claude/configs/settings.json"
+if [ -e "$REPO_DIR/claude/configs/settings.local.json" ]; then
+  CLAUDE_SETTINGS_SRC="$REPO_DIR/claude/configs/settings.local.json"
+  echo "using private Claude settings: $CLAUDE_SETTINGS_SRC"
+elif [ -e "$REPO_DIR/claude/configs/settings.glm.json" ]; then
+  CLAUDE_SETTINGS_SRC="$REPO_DIR/claude/configs/settings.glm.json"
+  echo "using legacy private Claude settings: $CLAUDE_SETTINGS_SRC"
+  echo "      consider renaming it to claude/configs/settings.local.json"
+fi
+link "$CLAUDE_SETTINGS_SRC" "$HOME/.claude/settings.json"
 link "$REPO_DIR/claude/configs/CLAUDE.md"     "$HOME/.claude/CLAUDE.md"
 link "$REPO_DIR/claude/scripts/statusline.sh" "$HOME/.claude/statusline.sh"
 
@@ -91,8 +100,9 @@ seed "$HZB/skills/wlcb-dev/SKILL.md.example"            "$HZB/skills/wlcb-dev/SK
 
 echo
 echo "NOTE: GLM backend config is not seeded (API key not in repo)."
-echo "      To use it:  cp $REPO_DIR/claude/configs/settings.glm.json.example ~/.claude/settings.glm.json"
-echo "      then fill in ANTHROPIC_AUTH_TOKEN."
+echo "      To use it: create $REPO_DIR/claude/configs/settings.local.json from"
+echo "      claude/configs/settings.glm.json.example, then fill in the real token."
+echo "      This file is gitignored and will be linked as ~/.claude/settings.json."
 
 # ── Codex CLI ───────────────────────────────────────────────────────────────
 # Codex shares the same self-authored skills as Claude Code. Symlink each into

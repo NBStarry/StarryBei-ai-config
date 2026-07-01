@@ -24,7 +24,9 @@ secrets.json
 
 # Real config/skill files containing credentials — committed as .example only.
 # install.sh seeds these from the .example templates on fresh machines.
+claude/configs/settings.local.json
 claude/configs/settings.glm.json
+claude/configs/settings.windows.local.json
 skills/hzb-skills/plugins/hzb/commands/connect-internal.md
 skills/hzb-skills/plugins/hzb/commands/connect-internal-backup.md
 skills/hzb-skills/plugins/hzb/skills/g1-robot/SKILL.md

@@ -93,8 +93,15 @@ Write-Host ""
 
 # -- Claude Code: files (symlinks) ------------------------------------------
 # Windows uses settings.windows.json (PowerShell statusline + proxy in env)
-# instead of the macOS settings.json (bash/jq statusline).
-Link-File (Join-Path $Repo 'claude\configs\settings.windows.json') (Join-Path $ClaudeHome 'settings.json')
+# instead of the macOS settings.json (bash/jq statusline). A gitignored
+# settings.windows.local.json can hold private production credentials.
+$SettingsSource = Join-Path $Repo 'claude\configs\settings.windows.json'
+$PrivateSettingsSource = Join-Path $Repo 'claude\configs\settings.windows.local.json'
+if (Test-Path -LiteralPath $PrivateSettingsSource) {
+  $SettingsSource = $PrivateSettingsSource
+  Write-Host "using private Claude settings: $SettingsSource"
+}
+Link-File $SettingsSource (Join-Path $ClaudeHome 'settings.json')
 Link-File (Join-Path $Repo 'claude\configs\CLAUDE.md')             (Join-Path $ClaudeHome 'CLAUDE.md')
 Link-File (Join-Path $Repo 'claude\scripts\statusline.ps1')        (Join-Path $ClaudeHome 'statusline.ps1')
 
@@ -124,8 +131,8 @@ if ($claudeCli) {
 
 Write-Host ""
 Write-Host "NOTE: GLM backend config is not seeded (API key not in repo)."
-Write-Host "      To use it:  Copy-Item '$Repo\claude\configs\settings.glm.json.example' '$ClaudeHome\settings.glm.json'"
-Write-Host "      then fill in ANTHROPIC_AUTH_TOKEN."
+Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.windows.local.json'"
+Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
 
 # -- Codex CLI: shared skills (directory junctions) --------------------------
 foreach ($s in 'codex-review','conference-meeting-summary','g1-robot','web-access','wlcb-dev','save-memory-before-compact') {

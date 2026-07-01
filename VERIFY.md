@@ -29,6 +29,11 @@
 
 ### OKF-style knowledge bundle
 
+- [ ] **整理根 README 并纳入 web-access npm 依赖元数据** (commit: pending, date: 2026-07-01)
+  - 验证方法：阅读 `README.md`，确认快速开始、目录结构、Claude/Codex/hzb-skills/Dashboard/Knowledge 说明准确；运行 `jq empty claude/configs/settings.json claude/configs/settings.windows.json skills/hzb-skills/plugins/hzb/skills/web-access/scripts/package.json skills/hzb-skills/plugins/hzb/skills/web-access/scripts/package-lock.json`；确认 staged diff 不含真实认证 token；若 `claude/configs/settings.local.json` 存在，重跑 `bash install.sh` 后 `~/.claude/settings.json` 应指向该 gitignored 私有文件
+  - 预期效果：README 结构清晰且不再保留旧同步机制描述；web-access scripts 的 `ws` 依赖可通过 package 元数据恢复；公开 settings 不包含真实 API token；生产 Claude settings 可继续使用本地私有后端配置
+  - 实际效果：（验证后填写）
+
 - [ ] **新增 knowledge/ OKF-style 知识包试点** (commit: pending, date: 2026-06-23)
   - 验证方法：`test -f knowledge/index.md && test -f knowledge/playbooks/unified-proxy-config.md`；运行 `python3 -c 'from pathlib import Path; import re; files=list(Path("knowledge").rglob("*.md")); assert files and all(re.match(r"^---\\n.*?\\n---", p.read_text(), re.S) and "\ntype:" in p.read_text() for p in files)'`；阅读 `knowledge/index.md` 确认链接能覆盖 Hermes、Clash、统一代理、SSH TUI proxy 四个概念
   - 预期效果：仓库新增可被人和 agent 共同读取的 OKF-style 知识包；不包含订阅 URL、API key、OAuth token、节点密码等敏感信息；README 展示 `knowledge/` 目录
@@ -92,7 +97,7 @@
   - 实际效果：✅ 已验证。所有 symlink 就位；`/model` 切换后 settings.json 仍为 symlink（Claude Code 用普通写穿透 symlink，不用原子 rename，symlink 模式安全）；hzb 插件链路完好；codex skills 6 个悬空已修复
 
 - [x] **敏感信息未泄漏到公开仓库** (commit: ef615d4, date: 2026-06-11)
-  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、wlcb-dev/SKILL.md、settings.glm.json）在 .gitignore 内、未被跟踪
+  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、wlcb-dev/SKILL.md、settings.local.json / legacy settings.glm.json）在 .gitignore 内、未被跟踪
   - 预期效果：仓库内只有脱敏 .example 模板，无任何真实密钥
   - 实际效果：✅ 已验证。本次 5 个 commit + 全仓库 --all 历史 grep（机器人密码/relay 凭证/SakuraFrp pw/GLM token/OpenRouter key/飞书 ID/邮箱）零命中；这些密钥从未进入任何 git 历史；5 个含密真身经 git check-ignore 确认未跟踪；push 到 GitHub 未被 secret scanning 拦截
 

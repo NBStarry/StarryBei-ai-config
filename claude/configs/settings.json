@@ -35,7 +35,9 @@
     "clangd-lsp@claude-plugins-official": false,
     "hzb@hzb-skills": true,
     "swift-lsp@claude-plugins-official": true,
-    "andrej-karpathy-skills@karpathy-skills": true
+    "andrej-karpathy-skills@karpathy-skills": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "android-skills@android-skills": true
   },
   "extraKnownMarketplaces": {
     "planning-with-files": {
@@ -67,11 +69,18 @@
         "source": "github",
         "repo": "forrestchang/andrej-karpathy-skills"
       }
+    },
+    "android-skills": {
+      "source": {
+        "source": "github",
+        "repo": "rcosteira79/android-skills"
+      }
     }
   },
   "effortLevel": "high",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "preferredNotifChannel": "terminal_bell",
-  "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true
 }
