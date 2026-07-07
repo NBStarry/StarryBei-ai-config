@@ -29,6 +29,16 @@
 
 ### OKF-style knowledge bundle
 
+- [ ] **Dashboard 配置扫描跳过本地敏感文件** (commit: pending, date: 2026-07-07)
+  - 验证方法：本地存在 `claude/configs/settings.local.json` / `settings.windows.local.json` 或 `.bak-*` 文件时运行 `bash scripts/generate-site-data.sh`，再执行 `rg 'ANTHROPIC_AUTH_TOKEN|sk-|cloud\\.phanthy' site/data.json claude/configs/settings.windows.json`。
+  - 预期效果：`site/data.json` 和 tracked public settings 不包含真实 token、私有后端 URL 或本地备份文件内容；Dashboard 仍能正常显示公开 configs。
+  - 实际效果：（验证后填写）
+
+- [ ] **web-access skill 兼容 Codex 路径解析** (commit: pending, date: 2026-07-07)
+  - 验证方法：在 Codex 会话中输入“用 web-access 查一下 https://example.com 的标题”；或手动运行 `WEB_ACCESS_SKILL_DIR="$HOME/.codex/skills/web-access"; bash "$WEB_ACCESS_SKILL_DIR/scripts/check-deps.sh"`。若普通沙箱提示 `local TCP blocked by sandbox`，允许本地 `127.0.0.1` 访问后重试；若提示 Chrome 未连接，先在 Chrome 打开 `chrome://inspect/#remote-debugging` 并勾选 Allow remote debugging。
+  - 预期效果：Codex 不再尝试访问不存在的 `~/.claude/skills/web-access`；路径解析到 `~/.codex/skills/web-access` 或 `~/.agents/skills/web-access`；普通沙箱能明确提示本地 TCP 被挡；允许本地端口访问后显示 `chrome: ok (port 9222)` 和 `proxy: ready`，联网任务可继续使用 CDP API。
+  - 实际效果：（验证后填写）
+
 - [ ] **整理根 README 并纳入 web-access npm 依赖元数据** (commit: pending, date: 2026-07-01)
   - 验证方法：阅读 `README.md`，确认快速开始、目录结构、Claude/Codex/hzb-skills/Dashboard/Knowledge 说明准确；运行 `jq empty claude/configs/settings.json claude/configs/settings.windows.json skills/hzb-skills/plugins/hzb/skills/web-access/scripts/package.json skills/hzb-skills/plugins/hzb/skills/web-access/scripts/package-lock.json`；确认 staged diff 不含真实认证 token；若 `claude/configs/settings.local.json` 存在，重跑 `bash install.sh` 后 `~/.claude/settings.json` 应指向该 gitignored 私有文件
   - 预期效果：README 结构清晰且不再保留旧同步机制描述；web-access scripts 的 `ws` 依赖可通过 package 元数据恢复；公开 settings 不包含真实 API token；生产 Claude settings 可继续使用本地私有后端配置

@@ -22,12 +22,25 @@ const path = require('path');
 const os = require('os');
 const net = require('net');
 
+let localTcpBlocked = false;
+
 function checkPort(port) {
   return new Promise((resolve) => {
     const socket = net.createConnection(port, '127.0.0.1');
-    const timer = setTimeout(() => { socket.destroy(); resolve(false); }, 2000);
-    socket.once('connect', () => { clearTimeout(timer); socket.destroy(); resolve(true); });
-    socket.once('error', () => { clearTimeout(timer); resolve(false); });
+    let settled = false;
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      socket.destroy();
+      resolve(value);
+    };
+    const timer = setTimeout(() => finish(false), 2000);
+    socket.once('connect', () => finish(true));
+    socket.once('error', (err) => {
+      if (err?.code === 'EPERM' || err?.code === 'EACCES') localTcpBlocked = true;
+      finish(false);
+    });
   });
 }
 
@@ -75,16 +88,25 @@ function activePortFiles() {
     }
   }
 
+  if (localTcpBlocked) {
+    console.log('__LOCAL_TCP_BLOCKED__');
+    process.exit(2);
+  }
+
   process.exit(1);
 })();
 " 2>/dev/null); then
+  if [ "$CHROME_PORT" = "__LOCAL_TCP_BLOCKED__" ]; then
+    echo "chrome: local TCP blocked by sandbox — 请在允许访问 127.0.0.1 的环境中重跑本检查"
+    exit 2
+  fi
   echo "chrome: not connected — 请打开 chrome://inspect/#remote-debugging 并勾选 Allow remote debugging"
   exit 1
 fi
 echo "chrome: ok (port $CHROME_PORT)"
 
 # CDP Proxy — 用 /targets 统一判断：返回 JSON 数组即 ready，失败则启动并重试
-TARGETS=$(curl -s --connect-timeout 3 "http://127.0.0.1:3456/targets" 2>/dev/null)
+TARGETS=$(curl --noproxy '*' -s --connect-timeout 3 "http://127.0.0.1:3456/targets" 2>/dev/null)
 if echo "$TARGETS" | grep -q '^\['; then
   echo "proxy: ready"
 else
@@ -95,7 +117,7 @@ else
   sleep 2  # 等 proxy 进程就绪
   for i in $(seq 1 15); do
     # connect-timeout 5s：给 Chrome 授权弹窗留够响应时间，避免超时后重复触发连接
-    curl -s --connect-timeout 5 --max-time 8 http://localhost:3456/targets 2>/dev/null | grep -q '^\[' && echo "proxy: ready" && exit 0
+    curl --noproxy '*' -s --connect-timeout 5 --max-time 8 http://localhost:3456/targets 2>/dev/null | grep -q '^\[' && echo "proxy: ready" && exit 0
     [ $i -eq 1 ] && echo "⚠️  Chrome 可能有授权弹窗，请点击「允许」后等待连接..."
   done
   echo "❌ 连接超时，请检查 Chrome 调试设置"

@@ -179,6 +179,14 @@ for config_file in "${REPO_ROOT}"/claude/configs/*.json "${REPO_ROOT}"/claude/co
   [ -f "$config_file" ] || continue
   rel_path="${config_file#${REPO_ROOT}/}"
   filename=$(basename "$config_file")
+  case "$filename" in
+    *.bak|*.bak-*|*.local.json|settings.local.json|settings.glm.json|settings.windows.local.json)
+      continue
+      ;;
+  esac
+  if git -C "$REPO_ROOT" check-ignore -q "$rel_path" 2>/dev/null; then
+    continue
+  fi
   cat "$config_file" > "$TMPDIR_DATA/tmp_content"
 
   # 提取 JSON 配置文件的元数据摘要

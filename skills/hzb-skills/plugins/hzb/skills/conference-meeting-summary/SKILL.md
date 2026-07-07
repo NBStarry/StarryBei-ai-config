@@ -64,7 +64,34 @@ D-VLASE2026-武汉-2026.05-原始资料/
 
 ```bash
 # 启 CDP
-bash ~/.claude/skills/web-access/scripts/check-deps.sh
+WEB_ACCESS_SKILL_DIR="$(
+  for d in \
+    "${CODEX_HOME:-$HOME/.codex}/skills/web-access" \
+    "$HOME/.agents/skills/web-access" \
+    "$HOME/.claude/skills/web-access"
+  do
+    if [ -f "$d/scripts/check-deps.sh" ]; then
+      printf '%s\n' "$d"
+      break
+    fi
+  done
+)"
+test -n "$WEB_ACCESS_SKILL_DIR" || { echo "web-access skill directory not found" >&2; exit 1; }
+bash "$WEB_ACCESS_SKILL_DIR/scripts/check-deps.sh"
+
+CONFERENCE_SKILL_DIR="$(
+  for d in \
+    "${CODEX_HOME:-$HOME/.codex}/skills/conference-meeting-summary" \
+    "$HOME/.agents/skills/conference-meeting-summary" \
+    "$HOME/.claude/skills/conference-meeting-summary"
+  do
+    if [ -f "$d/scripts/extract_shanji.js" ]; then
+      printf '%s\n' "$d"
+      break
+    fi
+  done
+)"
+test -n "$CONFERENCE_SKILL_DIR" || { echo "conference-meeting-summary skill directory not found" >&2; exit 1; }
 
 # 打开钉钉闪记 URL
 TARGET=$(curl -s "http://localhost:3456/new?url=<钉钉闪记 URL>" | jq -r .targetId)
@@ -72,7 +99,7 @@ sleep 3  # 等页面渲染
 
 # 抽数据
 curl -s -X POST "http://localhost:3456/eval?target=$TARGET" \
-  --data-binary @~/.claude/skills/conference-meeting-summary/scripts/extract_shanji.js
+  --data-binary @"$CONFERENCE_SKILL_DIR/scripts/extract_shanji.js"
 ```
 
 返回的 JSON 含 `transcript`（带时间戳和说话人）+ `aiSummary` + 元数据。

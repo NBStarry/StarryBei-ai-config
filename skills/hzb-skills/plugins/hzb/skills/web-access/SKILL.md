@@ -14,16 +14,30 @@ metadata:
 
 ## 前置检查
 
-在开始联网操作前，先检查 CDP 模式可用性：
+在开始联网操作前，先确定当前 `web-access` skill 所在目录，并检查 CDP 模式可用性。优先使用当前加载的 `SKILL.md` 所在目录；如果无法直接确定，则按标准安装位置探测：
 
 ```bash
-bash ~/.claude/skills/web-access/scripts/check-deps.sh
+WEB_ACCESS_SKILL_DIR="$(
+  for d in \
+    "${CODEX_HOME:-$HOME/.codex}/skills/web-access" \
+    "$HOME/.agents/skills/web-access" \
+    "$HOME/.claude/skills/web-access"
+  do
+    if [ -f "$d/scripts/check-deps.sh" ]; then
+      printf '%s\n' "$d"
+      break
+    fi
+  done
+)"
+test -n "$WEB_ACCESS_SKILL_DIR" || { echo "web-access skill directory not found" >&2; exit 1; }
+bash "$WEB_ACCESS_SKILL_DIR/scripts/check-deps.sh"
 ```
 
 - **Node.js 22+**：必需（使用原生 WebSocket）。版本低于 22 可用但需安装 `ws` 模块。
 - **Chrome remote-debugging**：在 Chrome 地址栏打开 `chrome://inspect/#remote-debugging`，勾选 **"Allow remote debugging for this browser instance"** 即可，可能需要重启浏览器。
+- **Codex 沙箱提示**：如果检查输出 `chrome: local TCP blocked by sandbox`，说明 Chrome 可能已经正常开启，但当前命令沙箱禁止访问 `127.0.0.1`。此时应按当前 Codex 环境的审批流程，在允许本地 TCP 访问的环境中重跑同一条检查命令；不要让用户反复重开 Chrome。
 
-检查通过后再启动 CDP Proxy 执行操作，未通过则引导用户完成设置。
+检查通过后再启动 CDP Proxy 执行操作，未通过则引导用户完成设置。后续所有 `scripts/` 和 `references/` 路径都从 `$WEB_ACCESS_SKILL_DIR` 解析，不要写死 `~/.claude/skills/web-access`。
 
 ## 浏览哲学
 
@@ -82,7 +96,7 @@ bash ~/.claude/skills/web-access/scripts/check-deps.sh
 ### 启动
 
 ```bash
-bash ~/.claude/skills/web-access/scripts/check-deps.sh
+bash "$WEB_ACCESS_SKILL_DIR/scripts/check-deps.sh"
 ```
 
 脚本会依次检查 Node.js、Chrome 端口，并确保 Proxy 已连接（未运行则自动启动并等待）。Proxy 启动后持续运行。
@@ -211,7 +225,11 @@ Proxy 持续运行，不建议主动停止——重启后需要在 Chrome 中重
 
 操作中积累的特定网站经验，按域名存储在 `references/site-patterns/` 下。
 
-已有经验的站点：!`ls ${CLAUDE_SKILL_DIR}/references/site-patterns/ 2>/dev/null | sed 's/\.md$//' || echo "暂无"`
+已有经验的站点存放在 `references/site-patterns/`。确定 `WEB_ACCESS_SKILL_DIR` 后可用以下命令查看：
+
+```bash
+ls "$WEB_ACCESS_SKILL_DIR/references/site-patterns/" 2>/dev/null | sed 's/\.md$//' || echo "暂无"
+```
 
 确定目标网站后，如果上方列表中有匹配的站点，必须读取对应文件获取先验知识（平台特征、有效模式、已知陷阱）。经验内容标注了发现日期，当作可能有效的提示而非保证——如果按经验操作失败，回退通用模式并更新经验文件。
 

@@ -4,7 +4,7 @@
 //   TARGET=$(curl -s "http://localhost:3456/new?url=<SHANJI_URL>" | jq -r .targetId)
 //   sleep 3-4  # 等 React fiber 挂载
 //   curl -s -X POST "http://localhost:3456/eval?target=$TARGET" \
-//     --data-binary @~/.claude/skills/conference-meeting-summary/scripts/extract_shanji.js
+//     --data-binary @"$CONFERENCE_SKILL_DIR/scripts/extract_shanji.js"
 //
 // 返回 JSON:
 //   {
