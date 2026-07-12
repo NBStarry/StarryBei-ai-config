@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This public repository manages AI coding tool configuration in a dotfiles style. It contains Claude Code and Codex configuration, shared custom skills, maintenance scripts, reusable knowledge, and a GitHub Pages dashboard. The main technologies are Bash, PowerShell, Markdown, JSON, HTML, CSS, and JavaScript; there is no application build system or conventional test suite.
+This public repository manages AI coding tool configuration in a dotfiles style. It contains Claude Code and Codex configuration, shared custom skills, maintenance scripts, and a GitHub Pages dashboard. The main technologies are Bash, PowerShell, Markdown, JSON, HTML, CSS, and JavaScript; there is no application build system or conventional test suite.
 
 Documentation is generally written in Chinese with English section headings. Keep machine-readable paths, commands, APIs, and JSON keys in their original form.
 
@@ -14,7 +14,6 @@ Documentation is generally written in Chinese with English section headings. Kee
 - `scripts/` contains repository maintenance scripts, including dashboard data generation.
 - `config/manifest.json` is the canonical desired-state inventory consumed by the PowerShell manager and both Dashboard modes.
 - `site/` contains the public GitHub Pages dashboard.
-- `knowledge/` contains reusable knowledge packages, system notes, and playbooks.
 - `docs/` contains design documents, historical plans, and TODOs.
 - `deprecated/` archives retired approaches; do not extend archived implementations.
 - `VERIFY.md` tracks user validation before changes reach `main`.

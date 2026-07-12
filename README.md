@@ -95,7 +95,6 @@ StarryBei-ai-config/
 ├── codex/                     # Codex CLI 配置模板与说明
 ├── config/                    # 跨工具目标状态 manifest 与 JSON Schema
 ├── skills/hzb-skills/         # 自建 hzb skill marketplace，Claude 和 Codex 共用
-├── knowledge/                 # OKF-style 知识包、系统说明和 playbook
 ├── scripts/                   # 仓库维护脚本，例如 Dashboard 数据生成
 ├── site/                      # GitHub Pages Dashboard
 ├── docs/                      # 设计文档、历史计划和 TODO
@@ -192,17 +191,6 @@ pwsh -File .\scripts\start-local-dashboard.ps1
 ```
 
 它只监听 `127.0.0.1`，在内存中合并 repo-only 数据、Claude 已安装插件、`~/.claude` / `~/.codex` / `~/.agents` skills，以及 Claude/Codex 本地配置。认证文件不会读取，配置中的 token、secret、password、API key 等字段会脱敏；本机快照不会写入 `site/data.json` 或提交到 Git。
-
-## Knowledge
-
-`knowledge/` 保存现有的跨工具、跨主机说明和 playbook。新的可移植 agent-readable 知识包规范由 `hzb:okf` skill 提供，不要求知识包固定存放在本仓库。
-
-- Hermes Agent
-- Clash Verge
-- 统一代理配置
-- SSH / TUI proxy 环境变量
-
-入口见 [knowledge/index.md](knowledge/index.md)。
 
 ## 日常维护
 

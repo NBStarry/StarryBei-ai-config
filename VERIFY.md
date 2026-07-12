@@ -69,9 +69,6 @@
   - 预期效果：README 对 Windows 用户可直接执行，文档与实际安装行为一致。
   - 实际效果：（验证后填写）
 
-- [-] **新增 knowledge/ OKF-style 知识包试点** (commit: pending, date: 2026-06-23)
-  - 原因：知识包不需要固定放在本仓库中；规范改由 `hzb:okf` skill 提供，在创建 agent-readable 知识文档时按需触发。
-
 - [ ] **hzb:okf skill 创建与触发** (commit: pending, date: 2026-07-12)
   - 验证方法：更新 hzb 插件并重启 Claude/Codex 后，分别提出“按 OKF 整理这个数据目录”和普通“写一篇 Markdown 说明”；观察前者是否触发 `hzb:okf` 并遵循官方 v0.1，后者是否避免误触发。
   - 预期效果：skill 能创建或审查可移植 OKF bundle，引用官方文章/spec，且不会对普通单篇文档强制套用 OKF。
