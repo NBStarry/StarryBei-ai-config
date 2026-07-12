@@ -15,9 +15,9 @@
   },
   "git": {
     "branch": "dev",
-    "commit": "9917b0c"
+    "commit": "4d9f9fe"
   },
-  "generated_at": "2026-07-12T06:45:55Z",
+  "generated_at": "2026-07-12T06:57:48Z",
   "skills": [
     {
       "name": "karpathy-guidelines",
@@ -190,7 +190,7 @@
     },
     {
       "name": "save-memory-before-compact",
-      "description": ">-",
+      "description": "把本次会话的跨会话稳定事实写入 memory 文件，避免上下文压缩冲掉关键知识。当用户准备 compact、要求保存或归档重要事实、同步 memory，或完成库选型、根因定位、部署变化、用户偏好更新等稳定里程碑时使用。该流程只能手动触发或由 agent 在里程碑后主动执行，不能依赖 PreCompact hook 自动完成。",
       "version": "",
       "source": "hzb",
       "file": "plugins/hzb/skills/save-memory-before-compact/SKILL.md",
@@ -201,7 +201,7 @@
     },
     {
       "name": "web-access",
-      "description": "",
+      "description": "所有联网操作必须通过此 skill 处理，包括搜索、网页抓取、登录后操作和网络交互。用于用户要求搜索或核实信息、查看网页内容、访问需要登录的网站、操作网页界面、抓取社交媒体内容、读取动态渲染页面，以及任何需要真实浏览器环境的网络任务。",
       "version": "",
       "source": "hzb",
       "file": "plugins/hzb/skills/web-access/SKILL.md",
@@ -841,7 +841,7 @@
         "date": "2026-07-12",
         "status": "pending",
         "method": "等待 `dev` Pages 部署后，在在线 Dashboard 搜索 `codex-review`、`okf`、`web-access`，打开详情并点击 `GitHub Edit`；再启动本地 Dashboard，搜索 `g1-robot` 和 `wlcb-dev`。",
-        "expected": "在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。",
+        "expected": "在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；`save-memory-before-compact` 和 `web-access` 显示可读 description，不出现 `>-` 或空白；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。",
         "actual": "（验证后填写）",
         "reason": ""
       },
