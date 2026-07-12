@@ -28,10 +28,10 @@
   - 实际效果：（验证后填写）
 -->
 
-- [ ] **安装器只配置本机已有工具** (commit: pending, date: 2026-07-12)
+- [x] **安装器只配置本机已有工具** (commit: 0bdc7cd, date: 2026-07-12)
   - 验证方法：在只安装 Claude Code 的 Mac 上运行 `bash install.sh`，再在同时安装 Claude Code 与 Codex 的 Mac 上运行同一命令；观察备份、链接和插件安装结果。
   - 预期效果：Claude-only 机器只更新 `~/.claude` 并明确跳过 Codex，不创建新的 Codex 配置；双工具机器分别更新两套配置和对应插件；两者均保留原配置备份。
-  - 实际效果：（验证后填写）
+  - 实际效果：已在两台 Tailscale Mac 验证。`longxiabei` 只链接三项 Claude 配置、补齐 Claude plugins，并明确跳过 Codex，未创建 checkpoint prompt；`Paradigm+M2` 保留私有 settings 后同时配置 Claude/Codex，安装 Codex 原生 hzb 与 superpowers plugins，Claude 最小调用返回 `OK`。两机原配置和旧仓库均有时间戳备份。
 
 ### Dashboard CI/CD and branch viewer
 
