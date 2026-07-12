@@ -8,7 +8,7 @@ var Editor = (function () {
   var REPO = 'StarryBei-ai-config';
   var EDIT_BRANCH = 'dev';
   var viewBranch = EDIT_BRANCH;
-  var WEB_BASE = 'https://github.com/' + OWNER + '/' + REPO;
+  var DEFAULT_REPOSITORY = OWNER + '/' + REPO;
 
   function setViewBranch(branch) {
     viewBranch = branch || EDIT_BRANCH;
@@ -26,12 +26,21 @@ var Editor = (function () {
       .join('/');
   }
 
+  function getTarget(repository, branch) {
+    return {
+      webBase: 'https://github.com/' + (repository || DEFAULT_REPOSITORY),
+      branch: branch || EDIT_BRANCH
+    };
+  }
+
   function edit(filePath) {
-    window.location.assign(WEB_BASE + '/edit/' + EDIT_BRANCH + '/' + encodePath(filePath));
+    var target = getTarget();
+    window.location.assign(target.webBase + '/edit/' + target.branch + '/' + encodePath(filePath));
   }
 
   function remove(filePath) {
-    window.location.assign(WEB_BASE + '/delete/' + EDIT_BRANCH + '/' + encodePath(filePath));
+    var target = getTarget();
+    window.location.assign(target.webBase + '/delete/' + target.branch + '/' + encodePath(filePath));
   }
 
   function create(directory, template, defaultName) {
@@ -40,13 +49,15 @@ var Editor = (function () {
     var params = new URLSearchParams();
     params.set('filename', name.trim());
     if (template) params.set('value', template);
-    window.location.assign(WEB_BASE + '/new/' + EDIT_BRANCH + '/' + encodePath(directory) + '?' + params.toString());
+    var target = getTarget();
+    window.location.assign(target.webBase + '/new/' + target.branch + '/' + encodePath(directory) + '?' + params.toString());
   }
 
-  function createEditBtn(filePath) {
+  function createEditBtn(filePath, repository, branch) {
+    var target = getTarget(repository, branch);
     var btn = document.createElement('a');
     btn.className = 'btn-edit';
-    btn.href = WEB_BASE + '/edit/' + EDIT_BRANCH + '/' + encodePath(filePath);
+    btn.href = target.webBase + '/edit/' + target.branch + '/' + encodePath(filePath);
     btn.target = '_blank';
     btn.rel = 'noopener noreferrer';
     btn.textContent = 'GitHub Edit';
@@ -57,10 +68,11 @@ var Editor = (function () {
     return btn;
   }
 
-  function createDeleteBtn(filePath) {
+  function createDeleteBtn(filePath, repository, branch) {
+    var target = getTarget(repository, branch);
     var btn = document.createElement('a');
     btn.className = 'btn-delete';
-    btn.href = WEB_BASE + '/delete/' + EDIT_BRANCH + '/' + encodePath(filePath);
+    btn.href = target.webBase + '/delete/' + target.branch + '/' + encodePath(filePath);
     btn.target = '_blank';
     btn.rel = 'noopener noreferrer';
     btn.textContent = 'GitHub Delete';

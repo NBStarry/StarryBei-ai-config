@@ -1,0 +1,13 @@
+{
+  "$schema": "./external-skill-sources.schema.json",
+  "version": 1,
+  "sources": [
+    {
+      "id": "hzb",
+      "repository": "NBStarry/hzb-skills",
+      "branch": "main",
+      "path": "plugins/hzb/skills",
+      "source": "hzb"
+    }
+  ]
+}

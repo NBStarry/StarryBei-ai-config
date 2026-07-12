@@ -59,8 +59,10 @@ try {
   Assert-True (-not (Test-Path -LiteralPath (Join-Path $RepoRoot 'CLAUDE.md'))) 'root CLAUDE.md is removed'
   Assert-True (Test-Path -LiteralPath (Join-Path $RepoRoot 'codex/prompts/checkpoint.md')) 'checkpoint prompt adapter exists'
   $manifestPath = Join-Path $RepoRoot 'config/manifest.json'
+  $externalSkillSourcesPath = Join-Path $RepoRoot 'config/external-skill-sources.json'
   $configManager = Join-Path $RepoRoot 'scripts/config.ps1'
   Assert-True (Test-Path -LiteralPath $manifestPath) 'configuration manifest exists'
+  Assert-True (Test-Path -LiteralPath $externalSkillSourcesPath) 'external Dashboard skill source registry exists'
   Assert-True (Test-Path -LiteralPath $configManager) 'PowerShell configuration manager exists'
   $localDashboardServer = Join-Path $RepoRoot 'scripts/local-dashboard-server.mjs'
   Assert-True (Test-Path -LiteralPath $localDashboardServer) 'local Dashboard server exists'
@@ -129,7 +131,26 @@ try {
   })
   Assert-True ($privateConfigs.Count -eq 0) 'public Dashboard data excludes local and backup configs'
 
-  Assert-True (@($data.skills | Where-Object { $_.source -eq 'hzb' }).Count -eq 0) 'Dashboard excludes externally managed hzb skills'
+  $externalSkillSources = Read-Json 'config/external-skill-sources.json'
+  Assert-True ($externalSkillSources.version -eq 1) 'external skill source registry version is supported'
+  $hzbSource = @($externalSkillSources.sources | Where-Object id -eq 'hzb')
+  Assert-True ($hzbSource.Count -eq 1 -and $hzbSource[0].repository -eq 'NBStarry/hzb-skills' -and $hzbSource[0].branch -eq 'main') 'hzb Dashboard source targets the standalone repository'
+
+  $expectedPublicHzbSkills = @(
+    'codex-review',
+    'conference-meeting-summary',
+    'okf',
+    'save-memory-before-compact',
+    'web-access'
+  )
+  $dashboardHzbSkills = @($data.skills | Where-Object { $_.source -eq 'hzb' })
+  Assert-True ($dashboardHzbSkills.Count -eq $expectedPublicHzbSkills.Count) 'Dashboard aggregates every public hzb skill'
+  foreach ($skillName in $expectedPublicHzbSkills) {
+    $skill = @($dashboardHzbSkills | Where-Object name -eq $skillName)
+    Assert-True ($skill.Count -eq 1) "Dashboard contains public hzb skill: $skillName"
+    Assert-True ($skill[0].repository -eq 'NBStarry/hzb-skills' -and $skill[0].branch -eq 'main' -and $skill[0].external -eq $true) "Dashboard records source repository for: $skillName"
+  }
+  Assert-True (@($data.skills | Where-Object { $_.name -in @('g1-robot', 'wlcb-dev') }).Count -eq 0) 'public Dashboard excludes private hzb overlay skills'
   Assert-True (@($data.skills | Where-Object { $_.name -eq 'karpathy-guidelines' }).Count -eq 1) 'Dashboard contains karpathy-guidelines'
 
   $plugins = Read-Json 'claude/configs/recommended-plugins.json'
@@ -149,6 +170,7 @@ try {
   $editorSource = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'site/js/editor.js')
   Assert-True ($editorSource -notmatch '(sessionStorage|github_token|api\.github\.com|Authorization)') 'Dashboard editor does not handle GitHub tokens'
   Assert-True ($editorSource -match '/edit/' -and $editorSource -match '/new/' -and $editorSource -match '/delete/') 'Dashboard editor delegates mutations to GitHub-native pages'
+  Assert-True ($editorSource -match 'repository' -and $editorSource -match 'branch') 'Dashboard editor supports per-skill source repositories'
 
   $sensitiveTrackedPaths = @(
     'claude/configs/settings.local.json',

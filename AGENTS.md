@@ -11,6 +11,7 @@ Documentation is generally written in Chinese with English section headings. Kee
 - `claude/` contains Claude Code configs, hooks, commands, agents, skills, and statusline scripts.
 - `codex/` contains Codex CLI templates, prompts, and documentation.
 - Shared custom hzb skills live in the separate `NBStarry/hzb-skills` repository; do not vendor them here.
+- `config/external-skill-sources.json` registers public external skill sources aggregated into the Dashboard.
 - `scripts/` contains repository maintenance scripts, including dashboard data generation.
 - `config/manifest.json` is the canonical desired-state inventory consumed by the PowerShell manager and both Dashboard modes.
 - `site/` contains the public GitHub Pages dashboard.
@@ -52,11 +53,11 @@ Both installers link shareable configuration into the relevant user directories 
 
 ### Dashboard
 
-`site/` is a single-page dashboard deployed through `.github/workflows/deploy-dashboard.yml`. It presents skills, hooks, configs, scripts, plugins, and verification status.
+`site/` is a single-page dashboard deployed through `.github/workflows/deploy-dashboard.yml`. It presents the configuration actually in use across this repository, registered public external skill repositories, and local-only overlays.
 
-- `scripts/generate-site-data.sh` writes the public repository-only `site/data.json` used by GitHub Pages and CI.
+- `scripts/generate-site-data.sh` writes the public `site/data.json` used by GitHub Pages and CI from this repository plus sources registered in `config/external-skill-sources.json`. It must only read Git-tracked files from external repositories.
 - `scripts/start-local-dashboard.ps1` launches the private loopback Dashboard. Its Node server overlays installed Claude/Codex skills, plugins, and redacted local configs in memory without changing `site/data.json`.
-- `site/js/editor.js` opens GitHub-native edit/new/delete pages on `dev`; authentication stays on github.com and no GitHub token is handled by the Dashboard.
+- `site/js/editor.js` opens GitHub-native edit/new/delete pages in the owning repository and branch; authentication stays on github.com and no GitHub token is handled by the Dashboard.
 - The workflow validates pull requests and pushes to `dev` / `main`. Both branches deploy GitHub Pages: `dev` provides the pre-merge preview, and the later `main` deployment restores the verified stable version.
 
 ### Extension Formats
@@ -78,7 +79,7 @@ Both installers link shareable configuration into the relevant user directories 
 - `pwsh -File .\scripts\validate-repo.ps1` runs the portable Windows/CI repository checks without Bash or `jq`.
 - `pwsh -File .\scripts\config.ps1 plan` shows desired-vs-actual configuration state; use `apply`, `verify`, and `rollback` for the managed migration loop.
 - `pwsh -File .\scripts\start-local-dashboard.ps1` opens the complete local-only Dashboard on `127.0.0.1`; use `-NoBrowser` when running it headlessly.
-- `bash scripts/generate-site-data.sh` rebuilds public/CI `site/data.json` from repository sources only.
+- `bash scripts/generate-site-data.sh` rebuilds public/CI `site/data.json` from this repository and registered public external sources.
 - `bash -n install.sh scripts/*.sh claude/scripts/*.sh` checks shell syntax for maintained scripts.
 - `jq empty claude/configs/*.json site/data.json` validates JSON files after edits.
 

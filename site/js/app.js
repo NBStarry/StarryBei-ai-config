@@ -492,7 +492,11 @@
         style: show ? '' : 'display:none'
       });
       row.appendChild(el('span', { className: 'sr-name', textContent: skill.name }));
-      row.appendChild(el('span', { className: 'sr-source', textContent: skill.source }));
+      row.appendChild(el('span', {
+        className: 'sr-source',
+        textContent: skill.source,
+        title: skill.repository ? skill.repository + '@' + skill.branch : skill.source
+      }));
       // Truncate description for display
       var desc = skill.description || '';
       if (desc.length > 100) desc = desc.substring(0, 100) + '...';
@@ -500,8 +504,8 @@
       row.appendChild(el('span', { className: 'sr-version', textContent: skill.version ? 'v' + skill.version : '' }));
       if (canEditSelectedBranch() && skill.file) {
         var actions = el('span', { className: 'crud-actions' });
-        actions.appendChild(Editor.createEditBtn(skill.file));
-        actions.appendChild(Editor.createDeleteBtn(skill.file));
+        actions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
+        actions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
         row.appendChild(actions);
       }
       listContainer.appendChild(row);
@@ -538,14 +542,22 @@
     header.appendChild(el('div', { className: 'sd-title', textContent: skill.name }));
     var meta = el('div', { className: 'sd-meta' });
     meta.appendChild(el('span', { textContent: '\uD83D\uDCE6 ' + skill.source }));
+    if (skill.repository) {
+      meta.appendChild(el('a', {
+        href: 'https://github.com/' + skill.repository + '/tree/' + encodeURIComponent(skill.branch || 'main'),
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        textContent: '\uD83D\uDD17 ' + skill.repository + '@' + (skill.branch || 'main')
+      }));
+    }
     if (skill.version) {
       meta.appendChild(el('span', { textContent: '\uD83C\uDFF7 v' + skill.version }));
     }
     meta.appendChild(el('span', { textContent: '\uD83D\uDCC4 ' + (skill.file || '') }));
     if (canEditSelectedBranch() && skill.file) {
       var detailActions = el('span', { className: 'crud-actions' });
-      detailActions.appendChild(Editor.createEditBtn(skill.file));
-      detailActions.appendChild(Editor.createDeleteBtn(skill.file));
+      detailActions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
+      detailActions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
       meta.appendChild(detailActions);
     }
     header.appendChild(meta);

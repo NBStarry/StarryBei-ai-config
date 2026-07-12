@@ -27,7 +27,7 @@ jobs:
       - name: Validate committed JSON
         run: jq empty claude/configs/*.json config/*.json site/data.json
 
-      - name: Build repository-only Dashboard data
+      - name: Build public Dashboard data
         run: |
           cp site/data.json "$RUNNER_TEMP/site-data.committed.json"
           bash scripts/generate-site-data.sh --repo-only

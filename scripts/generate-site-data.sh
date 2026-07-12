@@ -1,8 +1,8 @@
 #!/bin/bash
 # Generate Site Data for Dashboard
-# 默认只扫描仓库内公开内容；显式传 --include-local 才附加本机 Claude skills/plugins
+# 默认扫描仓库及登记的公开外部来源；显式传 --include-local 才附加本机 Claude skills/plugins
 # 输出统一的 JSON 数据到 site/data.json，供前端 Dashboard 使用
-# site/data.json 会被 Git 跟踪，因此默认模式必须可复现且不读取本机私有目录
+# site/data.json 会被 Git 跟踪，因此默认模式只读取 Git 已跟踪的公开内容
 
 set -euo pipefail
 
@@ -17,7 +17,7 @@ case "${1:-}" in
   --include-local) INCLUDE_LOCAL=1 ;;
   --help)
     echo "Usage: $0 [--repo-only|--include-local]"
-    echo "  --repo-only     Scan only repository sources (default; safe for CI/public data)."
+    echo "  --repo-only     Scan repository and registered public sources (default; safe for CI/public data)."
     echo "  --include-local Also include local Claude skills and plugins for private inspection."
     exit 0
     ;;
@@ -53,7 +53,7 @@ json_escape() {
 }
 
 # ─── Skills 扫描 ───
-# 扫描三个来源：仓库 skills/、本地 ~/.claude/skills/、已安装插件 skills
+# 扫描四类来源：仓库 skills、登记的公开外部仓库、本地 skills、已安装插件 skills
 
 skills_dir="$TMPDIR_DATA/skills"
 mkdir -p "$skills_dir"
@@ -65,6 +65,8 @@ scan_skill() {
   local skill_file="$1"
   local source_label="$2"
   local display_path="$3"
+  local source_repository="${4:-}"
+  local source_branch="${5:-}"
 
   local name description version
   name=$(get_frontmatter_field "$skill_file" "name")
@@ -86,8 +88,11 @@ scan_skill() {
     --arg version "$version" \
     --arg source "$source_label" \
     --arg file "$display_path" \
+    --arg repository "$source_repository" \
+    --arg branch "$source_branch" \
     --rawfile content "$TMPDIR_DATA/tmp_content" \
-    '{name: $name, description: $description, version: $version, source: $source, file: $file, content: $content}' \
+    '{name: $name, description: $description, version: $version, source: $source, file: $file, content: $content}
+      + if $repository != "" then {repository: $repository, branch: $branch, external: true} else {} end' \
     > "$skills_dir/$skill_idx.json"
   skill_idx=$((skill_idx + 1))
 }
@@ -118,7 +123,35 @@ while IFS= read -r skill_file; do
   scan_skill "$skill_file" "$source_label" "$rel_path"
 done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
-# 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
+# 3) Dashboard 登记的公开外部 skill 仓库
+# 优先复用同级 clone，但始终通过 git ls-files 只读取已跟踪文件，避免私有 overlay 进入公开数据。
+external_sources_file="${REPO_ROOT}/config/external-skill-sources.json"
+if [ -f "$external_sources_file" ]; then
+  while IFS=$'\t' read -r source_id repository branch source_path source_label; do
+    [ -z "$source_id" ] && continue
+    repo_name="${repository##*/}"
+    sibling_checkout="$(dirname "$REPO_ROOT")/${repo_name}"
+    if [ -d "${sibling_checkout}/.git" ]; then
+      external_checkout="$sibling_checkout"
+    else
+      external_checkout="${TMPDIR_DATA}/external/${source_id}"
+      mkdir -p "$(dirname "$external_checkout")"
+      git clone --quiet --depth 1 --branch "$branch" "https://github.com/${repository}.git" "$external_checkout"
+    fi
+
+    while IFS= read -r rel_path; do
+      [ -z "$rel_path" ] && continue
+      scan_skill \
+        "${external_checkout}/${rel_path}" \
+        "$source_label" \
+        "$rel_path" \
+        "$repository" \
+        "$branch"
+    done < <(git -C "$external_checkout" ls-files "${source_path}/*/SKILL.md")
+  done < <(jq -r '.sources[] | [.id, .repository, .branch, .path, .source] | @tsv' "$external_sources_file")
+fi
+
+# 4) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
 if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
   while IFS= read -r skill_file; do
