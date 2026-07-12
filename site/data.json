@@ -8,16 +8,16 @@
     "total_recommended_skills": 26,
     "total_commands": 0,
     "total_scripts_lines": 172,
-    "total_verified": 35,
-    "total_pending": 1,
+    "total_verified": 36,
+    "total_pending": 0,
     "total_deprecated": 8,
     "total_resources": 5
   },
   "git": {
     "branch": "dev",
-    "commit": "5b88cf7"
+    "commit": "7d6d74c"
   },
-  "generated_at": "2026-07-12T07:56:28Z",
+  "generated_at": "2026-07-12T08:00:42Z",
   "skills": [
     {
       "name": "claude-md-improver",
@@ -912,19 +912,18 @@
     ]
   },
   "verify": {
-    "pending": [
+    "pending": [],
+    "verified": [
       {
         "title": "安装器只配置本机已有工具",
-        "commit": "pending",
+        "commit": "0bdc7cd",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "在只安装 Claude Code 的 Mac 上运行 `bash install.sh`，再在同时安装 Claude Code 与 Codex 的 Mac 上运行同一命令；观察备份、链接和插件安装结果。",
         "expected": "Claude-only 机器只更新 `~/.claude` 并明确跳过 Codex，不创建新的 Codex 配置；双工具机器分别更新两套配置和对应插件；两者均保留原配置备份。",
-        "actual": "（验证后填写）",
+        "actual": "已在两台 Tailscale Mac 验证。`longxiabei` 只链接三项 Claude 配置、补齐 Claude plugins，并明确跳过 Codex，未创建 checkpoint prompt；`Paradigm+M2` 保留私有 settings 后同时配置 Claude/Codex，安装 Codex 原生 hzb 与 superpowers plugins，Claude 最小调用返回 `OK`。两机原配置和旧仓库均有时间戳备份。",
         "reason": ""
-      }
-    ],
-    "verified": [
+      },
       {
         "title": "原生 marketplace/plugin 安装恢复",
         "commit": "pending",
