@@ -80,6 +80,30 @@ get_frontmatter_field() {
   ' "$file" || true
 }
 
+# 读取 metadata.<field>；用于兼容标准 Skill metadata 中的 version 等 UI 字段。
+get_frontmatter_metadata_field() {
+  local file="$1"
+  local field="$2"
+  awk -v field="$field" '
+    /^---[[:space:]]*$/ { boundaries++; next }
+    boundaries != 1 { next }
+    /^metadata:[[:space:]]*$/ { in_metadata = 1; next }
+    in_metadata && $0 !~ /^[[:space:]]+/ { exit }
+    in_metadata {
+      line = $0
+      sub(/^[[:space:]]+/, "", line)
+      if (index(line, field ":") == 1) {
+        value = substr(line, length(field) + 2)
+        sub(/^[[:space:]]+/, "", value)
+        sub(/[[:space:]]+$/, "", value)
+        gsub(/^"|"$/, "", value)
+        print value
+        exit
+      }
+    }
+  ' "$file" || true
+}
+
 # 读取 frontmatter 之后的正文
 get_content_after_frontmatter() {
   local file="$1"
@@ -93,7 +117,7 @@ json_escape() {
 }
 
 # ─── Skills 扫描 ───
-# 扫描四类来源：仓库 skills、登记的公开外部仓库、本地 skills、已安装插件 skills
+# 扫描三类来源：登记的公开外部仓库、本地 skills、已安装插件 skills
 
 skills_dir="$TMPDIR_DATA/skills"
 mkdir -p "$skills_dir"
@@ -113,6 +137,9 @@ scan_skill() {
   [ -z "$name" ] && return
   description=$(get_frontmatter_field "$skill_file" "description")
   version=$(get_frontmatter_field "$skill_file" "version")
+  if [ -z "$version" ]; then
+    version=$(get_frontmatter_metadata_field "$skill_file" "version")
+  fi
 
   # 去重：同名 skill 只保留第一个
   if grep -qFx "$name" "$seen_skills_file" 2>/dev/null; then
@@ -150,20 +177,7 @@ if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/skills" ]; then
   done < <(find -L "${CLAUDE_HOME}/skills" -name "SKILL.md" 2>/dev/null)
 fi
 
-# 2) 仓库 claude/skills/
-while IFS= read -r skill_file; do
-  rel_path="${skill_file#${REPO_ROOT}/}"
-  slash_count=$(echo "$rel_path" | tr -cd '/' | wc -c | tr -d ' ')
-  # rel_path 形如 claude/skills/<marketplace>/<name>/SKILL.md（≥4 个斜杠）
-  if [ "$slash_count" -ge 4 ]; then
-    source_label=$(echo "$rel_path" | cut -d'/' -f3)
-  else
-    source_label="custom"
-  fi
-  scan_skill "$skill_file" "$source_label" "$rel_path"
-done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
-
-# 3) Dashboard 登记的公开外部 skill 仓库
+# 2) Dashboard 登记的公开外部 skill 仓库
 # 优先复用同级 clone，但始终通过 git ls-files 只读取已跟踪文件，避免私有 overlay 进入公开数据。
 external_sources_file="${REPO_ROOT}/config/external-skill-sources.json"
 if [ -f "$external_sources_file" ]; then
@@ -174,9 +188,12 @@ if [ -f "$external_sources_file" ]; then
     if [ -d "${sibling_checkout}/.git" ]; then
       external_checkout="$sibling_checkout"
     else
-      external_checkout="${TMPDIR_DATA}/external/${source_id}"
+      checkout_key=$(printf '%s-%s' "$repository" "$branch" | tr '/:@' '----')
+      external_checkout="${TMPDIR_DATA}/external/${checkout_key}"
       mkdir -p "$(dirname "$external_checkout")"
-      git clone --quiet --depth 1 --branch "$branch" "https://github.com/${repository}.git" "$external_checkout"
+      if [ ! -d "${external_checkout}/.git" ]; then
+        git clone --quiet --depth 1 --branch "$branch" "https://github.com/${repository}.git" "$external_checkout"
+      fi
     fi
 
     while IFS= read -r rel_path; do
@@ -191,7 +208,7 @@ if [ -f "$external_sources_file" ]; then
   done < <(jq -r '.sources[] | [.id, .repository, .branch, .path, .source] | @tsv' "$external_sources_file")
 fi
 
-# 4) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
+# 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
 if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
   while IFS= read -r skill_file; do

@@ -8,10 +8,11 @@ Documentation is generally written in Chinese with English section headings. Kee
 
 ## Project Structure & Module Organization
 
-- `claude/` contains Claude Code configs, hooks, commands, agents, skills, and statusline scripts.
+- `claude/` contains Claude Code configs, hooks, commands, agents, external-skill documentation, and statusline scripts.
 - `codex/` contains Codex CLI templates, prompts, and documentation.
 - Shared custom hzb skills live in the separate `NBStarry/hzb-skills` repository; do not vendor them here.
 - `config/external-skill-sources.json` registers public external skill sources aggregated into the Dashboard.
+- `config/skill-plugins.json` declares the Claude/Codex marketplaces and plugins installed by both repository installers.
 - `scripts/` contains repository maintenance scripts, including dashboard data generation.
 - `config/manifest.json` is the canonical desired-state inventory consumed by the PowerShell manager and both Dashboard modes.
 - `site/` contains the public GitHub Pages dashboard.
@@ -64,8 +65,8 @@ Both installers link shareable configuration into the relevant user directories 
 
 | Type | Location | Format |
 | --- | --- | --- |
-| Claude skills | `claude/skills/<collection>/<name>/SKILL.md` | Markdown with YAML frontmatter |
-| External hzb skills | `https://github.com/NBStarry/hzb-skills` | Separate cross-tool marketplace repository |
+| External skills | `config/external-skill-sources.json` | Public source repositories and skill roots; never vendor snapshots here |
+| Installed skill plugins | `config/skill-plugins.json` | Tool-specific marketplaces and plugin selectors |
 | Agents | `claude/agents/<name>.md` | Markdown with YAML frontmatter |
 | Commands | `claude/commands/<name>.md` | Markdown with YAML frontmatter |
 | Hooks | `claude/hooks/<name>.json` | JSON with a `hooks` object keyed by event type |
@@ -74,8 +75,8 @@ Both installers link shareable configuration into the relevant user directories 
 
 ## Build, Test, and Development Commands
 
-- `bash install.sh` links shareable configs into `~/.claude` and `~/.codex`, backing up existing targets first.
-- `pwsh -File .\install.ps1` performs the corresponding Windows installation using file symlinks and directory junctions.
+- `bash install.sh` links shareable configs and installs declared external skill plugins, backing up existing targets first.
+- `pwsh -File .\install.ps1` performs the corresponding Windows installation and native plugin setup.
 - `pwsh -File .\scripts\validate-repo.ps1` runs the portable Windows/CI repository checks without Bash or `jq`.
 - `pwsh -File .\scripts\config.ps1 plan` shows desired-vs-actual configuration state; use `apply`, `verify`, and `rollback` for the managed migration loop.
 - `pwsh -File .\scripts\start-local-dashboard.ps1` opens the complete local-only Dashboard on `127.0.0.1`; use `-NoBrowser` when running it headlessly.
@@ -109,7 +110,7 @@ Configuration examples must use placeholder values anywhere credentials or machi
 
 ## Testing Guidelines
 
-Run `pwsh -File .\scripts\validate-repo.ps1` for portable checks. CI additionally runs Bash syntax and repo-only generation on Ubuntu, then automatically syncs changed `site/data.json` on `dev`. Add or update `VERIFY.md` only for behavior that requires a person to observe a real UI, tool session, account, symlink, notification, or machine integration.
+Run `pwsh -File .\scripts\validate-repo.ps1` for portable checks. CI additionally runs Bash syntax and public external-source generation on Ubuntu, then automatically syncs changed `site/data.json` on `dev`. Add or update `VERIFY.md` only for behavior that requires a person to observe a real UI, tool session, account, symlink, notification, or machine integration.
 
 ## Commit & Pull Request Guidelines
 

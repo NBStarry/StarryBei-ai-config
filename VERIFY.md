@@ -30,6 +30,11 @@
 
 ### Dashboard CI/CD and branch viewer
 
+- [ ] **原生 marketplace/plugin 安装恢复** (commit: pending, date: 2026-07-12)
+  - 验证方法：在一台已配置 Claude/Codex 的 Windows 机器先运行 `pwsh -File .\scripts\install-skill-plugins.ps1 -Plan`，确认计划只包含声明的外部源；再运行 `pwsh -File .\install.ps1`，重启两个工具并查看 plugin/skill 列表。
+  - 预期效果：已有 marketplace/plugin 被幂等跳过；缺少的 Claude plugins 与 Codex 的 `hzb@hzb-skills`、`superpowers@superpowers-dev` 被原生命令安装；仓库不再依赖 `claude/skills` 源码快照，私有 `g1-robot`、`wlcb-dev` overlay 不受影响。
+  - 实际效果：（验证后填写）
+
 - [ ] **独立 hzb-skills 仓库的 Dashboard 聚合** (commit: pending, date: 2026-07-12)
   - 验证方法：等待 `dev` Pages 部署后，在在线 Dashboard 搜索 `codex-review`、`okf`、`web-access`，打开详情并点击 `GitHub Edit`；再启动本地 Dashboard，搜索 `g1-robot` 和 `wlcb-dev`。
   - 预期效果：在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；`save-memory-before-compact` 和 `web-access` 显示可读 description，不出现 `>-` 或空白；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。
@@ -66,7 +71,7 @@
 
 - [ ] **web-access skill 兼容 Codex 路径解析** (commit: pending, date: 2026-07-07)
   - 验证方法：在 Codex 会话中输入“用 web-access 查一下 https://example.com 的标题”，观察它是否找到 Windows 上实际安装的 skill、连接 Chrome 并返回页面标题；若 Chrome 未授权，只按提示开启 remote debugging 后重试。
-  - 预期效果：Codex 不再尝试访问不存在的 `~/.claude/skills/web-access`；路径解析到 `~/.codex/skills/web-access` 或 `~/.agents/skills/web-access`；普通沙箱能明确提示本地 TCP 被挡；允许本地端口访问后显示 `chrome: ok (port 9222)` 和 `proxy: ready`，联网任务可继续使用 CDP API。
+  - 预期效果：Codex 不再尝试访问不存在的 `~/.claude/skills/web-access`；从已安装的 `hzb@hzb-skills` plugin 或兼容的本地 overlay 解析 `web-access`；普通沙箱能明确提示本地 TCP 被挡；允许本地端口访问后显示 `chrome: ok (port 9222)` 和 `proxy: ready`，联网任务可继续使用 CDP API。
   - 实际效果：（验证后填写）
 
 - [ ] **整理根 README 并纳入 web-access npm 依赖元数据** (commit: pending, date: 2026-07-01)

@@ -31,5 +31,5 @@ claude/configs/settings.windows.local.json
 # Node modules
 node_modules/
 
-# Dashboard data is tracked and generated in repository-only mode for public branch viewing.
+# Dashboard data is tracked and generated from declared public sources for branch viewing.
 # site/data.json

@@ -1,5 +1,5 @@
 {
-  "_comment": "Claude Code 插件 / skill 全量清单（跨机器盘点）。marketplaces 列出所有需注册的源，plugins 列出各源下的插件及其携带的 skill。新机器：先 /plugin marketplace add 各源，再 /plugin install 各插件（或由 install.sh / install.ps1 据本文件自动注册+启用）。",
+  "_comment": "Claude Code 可选插件 / skill 全量盘点。默认恢复集合由 config/skill-plugins.json 管理；本文件保留更广泛的推荐项和人工安装参考。",
   "marketplaces": [
     {
       "id": "claude-plugins-official",
@@ -30,6 +30,12 @@
       "source": "github",
       "repo": "thedotmack/claude-mem",
       "add": "/plugin marketplace add thedotmack/claude-mem"
+    },
+    {
+      "id": "karpathy-skills",
+      "source": "github",
+      "repo": "forrestchang/andrej-karpathy-skills",
+      "add": "claude plugin marketplace add forrestchang/andrej-karpathy-skills"
     },
     {
       "id": "hzb-skills",
@@ -188,6 +194,14 @@
       "author": "thedotmack",
       "skills": ["do", "knowledge-agent", "make-plan", "mem-search", "smart-explore", "timeline-report", "version-bump"],
       "install": "/plugin install claude-mem@thedotmack"
+    },
+    {
+      "name": "andrej-karpathy-skills",
+      "marketplace": "karpathy-skills",
+      "description": "Karpathy coding guidelines：先澄清、保持简单、外科式修改、定义可验证目标",
+      "author": "forrestchang",
+      "skills": ["karpathy-guidelines"],
+      "install": "claude plugin install andrej-karpathy-skills@karpathy-skills --scope user"
     },
     {
       "name": "hzb",

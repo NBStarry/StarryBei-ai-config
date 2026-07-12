@@ -60,16 +60,33 @@ try {
   Assert-True (Test-Path -LiteralPath (Join-Path $RepoRoot 'codex/prompts/checkpoint.md')) 'checkpoint prompt adapter exists'
   $manifestPath = Join-Path $RepoRoot 'config/manifest.json'
   $externalSkillSourcesPath = Join-Path $RepoRoot 'config/external-skill-sources.json'
+  $skillPluginsPath = Join-Path $RepoRoot 'config/skill-plugins.json'
   $configManager = Join-Path $RepoRoot 'scripts/config.ps1'
+  $skillPluginInstaller = Join-Path $RepoRoot 'scripts/install-skill-plugins.ps1'
   Assert-True (Test-Path -LiteralPath $manifestPath) 'configuration manifest exists'
   Assert-True (Test-Path -LiteralPath $externalSkillSourcesPath) 'external Dashboard skill source registry exists'
+  Assert-True (Test-Path -LiteralPath $skillPluginsPath) 'managed skill plugin manifest exists'
   Assert-True (Test-Path -LiteralPath $configManager) 'PowerShell configuration manager exists'
+  Assert-True (Test-Path -LiteralPath $skillPluginInstaller) 'PowerShell skill plugin installer exists'
   $localDashboardServer = Join-Path $RepoRoot 'scripts/local-dashboard-server.mjs'
   Assert-True (Test-Path -LiteralPath $localDashboardServer) 'local Dashboard server exists'
   Assert-True (Test-Path -LiteralPath (Join-Path $RepoRoot 'scripts/start-local-dashboard.ps1')) 'local Dashboard PowerShell launcher exists'
 
   $installPs1 = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'install.ps1')
   Assert-True ($installPs1 -match "codex\\prompts") 'install.ps1 links Codex prompt adapters'
+  Assert-True ($installPs1 -match 'install-skill-plugins\.ps1') 'install.ps1 installs declared external skill plugins'
+
+  $skillPluginPlan = @(& pwsh -NoProfile -File $skillPluginInstaller -Plan)
+  Assert-True ($LASTEXITCODE -eq 0) 'skill plugin installer plan runs without external writes'
+  foreach ($command in @(
+    'claude plugin marketplace add NBStarry/hzb-skills',
+    'claude plugin install hzb@hzb-skills --scope user',
+    'codex plugin marketplace add NBStarry/hzb-skills --ref main --json',
+    'codex plugin add hzb@hzb-skills --json',
+    'codex plugin add superpowers@superpowers-dev --json'
+  )) {
+    Assert-True ($skillPluginPlan -contains $command) "skill plugin plan contains: $command"
+  }
 
   $manifest = Read-Json 'config/manifest.json'
   $resourceIds = @($manifest.resources | ForEach-Object { [string]$_.id })
@@ -133,8 +150,12 @@ try {
 
   $externalSkillSources = Read-Json 'config/external-skill-sources.json'
   Assert-True ($externalSkillSources.version -eq 1) 'external skill source registry version is supported'
+  Assert-True (@($externalSkillSources.sources).Count -eq 5) 'Dashboard declares every external skill source root'
   $hzbSource = @($externalSkillSources.sources | Where-Object id -eq 'hzb')
   Assert-True ($hzbSource.Count -eq 1 -and $hzbSource[0].repository -eq 'NBStarry/hzb-skills' -and $hzbSource[0].branch -eq 'main') 'hzb Dashboard source targets the standalone repository'
+  foreach ($repository in @('anthropics/claude-plugins-official', 'obra/superpowers', 'forrestchang/andrej-karpathy-skills', 'NBStarry/hzb-skills')) {
+    Assert-True (@($externalSkillSources.sources | Where-Object repository -eq $repository).Count -gt 0) "Dashboard declares external source: $repository"
+  }
 
   $expectedPublicHzbSkills = @(
     'codex-review',
@@ -153,10 +174,20 @@ try {
   }
   Assert-True (@($data.skills | Where-Object { $_.name -in @('g1-robot', 'wlcb-dev') }).Count -eq 0) 'public Dashboard excludes private hzb overlay skills'
   Assert-True (@($data.skills | Where-Object { $_.name -eq 'karpathy-guidelines' }).Count -eq 1) 'Dashboard contains karpathy-guidelines'
+  Assert-True (@($data.skills | Where-Object {
+    -not $_.ContainsKey('external') -or $_.external -ne $true -or
+    -not $_.ContainsKey('repository') -or [string]::IsNullOrWhiteSpace([string]$_.repository)
+  }).Count -eq 0) 'every public Dashboard skill has an external source repository'
+  Assert-True (@($data.skills | Where-Object name -eq 'merge-verified').Count -eq 0) 'repository-specific merge-verified skill is retired'
+
+  $skillPlugins = Read-Json 'config/skill-plugins.json'
+  Assert-True ($skillPlugins.version -eq 1) 'managed skill plugin manifest version is supported'
+  Assert-True (@($skillPlugins.marketplaces | Where-Object { $_.tools -contains 'claude' }).Count -eq 3) 'Claude skill marketplace plan has three sources'
+  Assert-True (@($skillPlugins.marketplaces | Where-Object { $_.tools -contains 'codex' }).Count -eq 2) 'Codex skill marketplace plan has two sources'
 
   $plugins = Read-Json 'claude/configs/recommended-plugins.json'
-  Assert-True (@($plugins.marketplaces).Count -eq 6) 'recommended plugin marketplace count is 6'
-  Assert-True (@($plugins.plugins).Count -eq 21) 'recommended plugin count is 21'
+  Assert-True (@($plugins.marketplaces).Count -eq 7) 'recommended plugin marketplace count is 7'
+  Assert-True (@($plugins.plugins).Count -eq 22) 'recommended plugin count is 22'
   Assert-True (@($plugins.plugins | Where-Object { [string]$_.name -match '(?i)pua' }).Count -eq 0) 'removed pua plugins stay absent'
 
   & $node.Source --check $localDashboardServer
@@ -169,9 +200,12 @@ try {
   Assert-True ($localDashboardSource -notmatch 'listen\([^\r\n]*0\.0\.0\.0') 'local Dashboard does not bind to all interfaces'
 
   $editorSource = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'site/js/editor.js')
+  $appSource = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'site/js/app.js')
   Assert-True ($editorSource -notmatch '(sessionStorage|github_token|api\.github\.com|Authorization)') 'Dashboard editor does not handle GitHub tokens'
   Assert-True ($editorSource -match '/edit/' -and $editorSource -match '/new/' -and $editorSource -match '/delete/') 'Dashboard editor delegates mutations to GitHub-native pages'
   Assert-True ($editorSource -match 'repository' -and $editorSource -match 'branch') 'Dashboard editor supports per-skill source repositories'
+  Assert-True ($appSource -match 'NBStarry/hzb-skills' -and $appSource -match 'plugins/hzb/skills') 'Dashboard creates custom skills in the hzb source repository'
+  Assert-True ($appSource -match 'canDeleteSkill') 'Dashboard limits delete actions for third-party skill sources'
 
   $sensitiveTrackedPaths = @(
     'claude/configs/settings.local.json',
@@ -182,6 +216,7 @@ try {
     Assert-True ($trackedFiles -notcontains $path) "sensitive local file is not tracked: $path"
   }
   Assert-True (@($trackedFiles | Where-Object { $_ -like 'skills/hzb-skills/*' }).Count -eq 0) 'external hzb-skills source is not vendored'
+  Assert-True (@($trackedFiles | Where-Object { $_ -match '^claude/skills/.+/SKILL\.md$' }).Count -eq 0) 'external skill snapshots are not vendored under claude/skills'
 
   Write-Host "All $script:CheckCount automated repository checks passed."
 } finally {

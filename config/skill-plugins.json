@@ -1,0 +1,63 @@
+{
+  "$schema": "./skill-plugins.schema.json",
+  "version": 1,
+  "description": "External plugin sources that replace vendored skill snapshots and are installed by the repository installers.",
+  "marketplaces": [
+    {
+      "id": "claude-plugins-official",
+      "repository": "anthropics/claude-plugins-official",
+      "branch": "main",
+      "tools": ["claude"]
+    },
+    {
+      "id": "karpathy-skills",
+      "repository": "forrestchang/andrej-karpathy-skills",
+      "branch": "main",
+      "tools": ["claude"]
+    },
+    {
+      "id": "hzb-skills",
+      "repository": "NBStarry/hzb-skills",
+      "branch": "main",
+      "tools": ["claude", "codex"]
+    },
+    {
+      "id": "superpowers-dev",
+      "repository": "obra/superpowers",
+      "branch": "main",
+      "tools": ["codex"]
+    }
+  ],
+  "plugins": [
+    {
+      "name": "superpowers",
+      "marketplace": "claude-plugins-official",
+      "tools": ["claude"]
+    },
+    {
+      "name": "plugin-dev",
+      "marketplace": "claude-plugins-official",
+      "tools": ["claude"]
+    },
+    {
+      "name": "claude-md-management",
+      "marketplace": "claude-plugins-official",
+      "tools": ["claude"]
+    },
+    {
+      "name": "andrej-karpathy-skills",
+      "marketplace": "karpathy-skills",
+      "tools": ["claude"]
+    },
+    {
+      "name": "hzb",
+      "marketplace": "hzb-skills",
+      "tools": ["claude", "codex"]
+    },
+    {
+      "name": "superpowers",
+      "marketplace": "superpowers-dev",
+      "tools": ["codex"]
+    }
+  ]
+}

@@ -3,6 +3,34 @@
   "version": 1,
   "sources": [
     {
+      "id": "claude-md-management",
+      "repository": "anthropics/claude-plugins-official",
+      "branch": "main",
+      "path": "plugins/claude-md-management/skills",
+      "source": "claude-plugins-official"
+    },
+    {
+      "id": "plugin-dev",
+      "repository": "anthropics/claude-plugins-official",
+      "branch": "main",
+      "path": "plugins/plugin-dev/skills",
+      "source": "claude-plugins-official"
+    },
+    {
+      "id": "superpowers",
+      "repository": "obra/superpowers",
+      "branch": "main",
+      "path": "skills",
+      "source": "superpowers"
+    },
+    {
+      "id": "karpathy-skills",
+      "repository": "forrestchang/andrej-karpathy-skills",
+      "branch": "main",
+      "path": "skills",
+      "source": "karpathy-skills"
+    },
+    {
       "id": "hzb",
       "repository": "NBStarry/hzb-skills",
       "branch": "main",

@@ -43,13 +43,13 @@ var Editor = (function () {
     window.location.assign(target.webBase + '/delete/' + target.branch + '/' + encodePath(filePath));
   }
 
-  function create(directory, template, defaultName) {
+  function create(directory, template, defaultName, repository, branch) {
     var name = window.prompt('New file path under ' + directory + '/', defaultName || '');
     if (!name || !name.trim()) return;
     var params = new URLSearchParams();
     params.set('filename', name.trim());
     if (template) params.set('value', template);
-    var target = getTarget();
+    var target = getTarget(repository, branch);
     window.location.assign(target.webBase + '/new/' + target.branch + '/' + encodePath(directory) + '?' + params.toString());
   }
 
@@ -83,7 +83,7 @@ var Editor = (function () {
     return btn;
   }
 
-  function createCreateBtn(directory, template, defaultName) {
+  function createCreateBtn(directory, template, defaultName, repository, branch) {
     var btn = document.createElement('button');
     btn.className = 'btn-create';
     btn.type = 'button';
@@ -91,7 +91,7 @@ var Editor = (function () {
     btn.title = 'Create on GitHub with your GitHub login';
     btn.addEventListener('click', function (event) {
       event.stopPropagation();
-      create(directory, template, defaultName);
+      create(directory, template, defaultName, repository, branch);
     });
     return btn;
   }

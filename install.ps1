@@ -3,10 +3,15 @@
 # Links repo files into %USERPROFILE%\.claude and %USERPROFILE%\.codex.
 #   - Files   -> symbolic links (New-Item SymbolicLink). Needs Windows
 #               Developer Mode ON, or an elevated (Run as administrator) shell.
-# Existing targets are backed up first. hzb skills are installed separately
-# from https://github.com/NBStarry/hzb-skills.
+# Existing targets are backed up first. Skills are installed from their
+# declared external marketplaces instead of copied from this repository.
 #
-# Usage:  powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+# Usage:  pwsh -NoProfile -File .\install.ps1 [-SkipSkillPlugins]
+
+[CmdletBinding()]
+param(
+  [switch]$SkipSkillPlugins
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -104,6 +109,15 @@ if (-not (Test-Path -LiteralPath (Join-Path $CodexHome 'config.toml'))) {
   Write-Host "      Copy-Item '$Repo\codex\config.toml.example' '$CodexHome\config.toml'   # then set trusted project paths"
 }
 
+# -- External skill plugins --------------------------------------------------
+if ($SkipSkillPlugins) {
+  Write-Host "SKIP     external skill plugins"
+} else {
+  Write-Host ""
+  Write-Host "Installing external skill plugins from config\skill-plugins.json"
+  & (Join-Path $Repo 'scripts\install-skill-plugins.ps1')
+}
+
 # -- done --------------------------------------------------------------------
 Write-Host ""
 Write-Host "Done."
@@ -118,7 +132,7 @@ if ($SymlinkFailed) {
 Write-Host "Next:"
 Write-Host "  - Restart your Claude Code session to pick up settings/plugins."
 Write-Host "  - Restart Codex or start a new Codex chat to pick up linked prompts."
-Write-Host "  - Install hzb skills separately from https://github.com/NBStarry/hzb-skills"
+Write-Host "  - External skills are managed by config\skill-plugins.json."
 Write-Host ""
 Write-Host "WARNING: gitignored real config files (credentials) may live in the working tree."
 Write-Host "         Do NOT run 'git clean -x' in this repo or they will be deleted."

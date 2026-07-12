@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 # Install AI coding tool configs by symlinking repo files into ~/.claude and
-# ~/.codex. Existing files are backed up first. hzb skills are installed
-# separately from https://github.com/NBStarry/hzb-skills.
+# ~/.codex. Existing files are backed up first. Skills are installed from their
+# declared external marketplaces instead of copied from this repository.
 #
-# Usage: bash install.sh
+# Usage: bash install.sh [--skip-skill-plugins]
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.ai-config-backup-$(date +%Y%m%d-%H%M%S)"
+SKIP_SKILL_PLUGINS=0
+
+case "${1:-}" in
+  "") ;;
+  --skip-skill-plugins) SKIP_SKILL_PLUGINS=1 ;;
+  *) echo "Usage: $0 [--skip-skill-plugins]" >&2; exit 2 ;;
+esac
 
 # ── helpers ───────────────────────────────────────────────────────────────
 
@@ -71,6 +78,15 @@ if [ ! -e "$HOME/.codex/config.toml" ]; then
   echo "      cp $REPO_DIR/codex/config.toml.example ~/.codex/config.toml   # then set trusted project paths"
 fi
 
+# ── External skill plugins ────────────────────────────────────────────────
+if [ "$SKIP_SKILL_PLUGINS" -eq 1 ]; then
+  echo "SKIP     external skill plugins"
+else
+  echo
+  echo "Installing external skill plugins from config/skill-plugins.json"
+  bash "$REPO_DIR/scripts/install-skill-plugins.sh"
+fi
+
 # ── done ────────────────────────────────────────────────────────────────────
 echo
 echo "Done."
@@ -78,7 +94,7 @@ echo "Done."
 echo "Next:"
 echo "  - Restart your Claude Code session to pick up settings/plugins."
 echo "  - Restart Codex or start a new Codex chat to pick up linked prompts."
-echo "  - Install hzb skills separately from https://github.com/NBStarry/hzb-skills"
+echo "  - External skills are managed by config/skill-plugins.json."
 echo
 echo "WARNING: gitignored real config files (credentials) may live in the working tree."
 echo "         Do NOT run 'git clean -x' in this repo or they will be deleted."

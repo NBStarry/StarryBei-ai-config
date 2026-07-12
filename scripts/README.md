@@ -16,6 +16,20 @@ pwsh -File .\scripts\config.ps1 rollback
 
 `plan` 不写文件；`apply` 只处理 `missing` / `drifted` 资源并写事务日志；`seed` 目标一旦存在就不覆盖。自动化场景可加 `-Json`，测试或迁移其他 Home 可加 `-HomePath <path>`。
 
+## 外部 Skill Plugins
+
+`install-skill-plugins.ps1` / `install-skill-plugins.sh` 读取 `config/skill-plugins.json`，用 Claude Code 和 Codex 的原生 marketplace/plugin 命令补齐外部 skills。它们会跳过已存在的 marketplace 和已安装 plugin，不改变现有启用状态。
+
+只查看计划、不访问网络或修改工具状态：
+
+```powershell
+pwsh -File .\scripts\install-skill-plugins.ps1 -Plan
+```
+
+```bash
+bash scripts/install-skill-plugins.sh --plan
+```
+
 ## 本地完整 Dashboard
 
 从仓库根目录执行：
@@ -33,7 +47,7 @@ pwsh -File .\scripts\start-local-dashboard.ps1
 
 服务只监听 `127.0.0.1:4173`，数据仅保存在进程内存。`.credentials.json`、`auth.json` 等认证文件不会读取，敏感配置字段会显示为 `[REDACTED]`。按 Ctrl+C 停止；可用 `-Port 4180` 更换端口，或用 `-NoBrowser` 禁止自动打开浏览器。
 
-在线 GitHub Pages 继续只使用 repo-only `site/data.json`，不会包含上述本机数据。
+在线 GitHub Pages 使用登记的公开外部来源生成 `site/data.json`，不会包含上述本机数据。
 
 ## statusline.sh
 

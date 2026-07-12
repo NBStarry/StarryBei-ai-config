@@ -142,6 +142,10 @@
     return typeof Editor !== 'undefined' && Editor.canEdit();
   }
 
+  function canDeleteSkill(skill) {
+    return !skill.external || skill.repository === 'NBStarry/hzb-skills';
+  }
+
   function applyBranchData(branch, branchData, updateUrl) {
     selectedBranch = branch;
     data = branchData;
@@ -453,8 +457,14 @@
     var titleRow = el('div', { className: 'page-title-row' });
     titleRow.appendChild(el('div', { className: 'page-title', textContent: 'Skills' }));
     if (canEditSelectedBranch()) {
-      var skillTemplate = '---\nname: \ndescription: \nversion: 1.0.0\n---\n\n# Skill Name\n';
-      titleRow.appendChild(Editor.createCreateBtn('claude/skills/custom', skillTemplate, 'my-skill/SKILL.md'));
+      var skillTemplate = '---\nname: \ndescription: \nmetadata:\n  author: NBStarry\n  version: "1.0.0"\n---\n\n# Skill Name\n';
+      titleRow.appendChild(Editor.createCreateBtn(
+        'plugins/hzb/skills',
+        skillTemplate,
+        'my-skill/SKILL.md',
+        'NBStarry/hzb-skills',
+        'main'
+      ));
     }
     content.appendChild(titleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -505,7 +515,9 @@
       if (canEditSelectedBranch() && skill.file) {
         var actions = el('span', { className: 'crud-actions' });
         actions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
-        actions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+        if (canDeleteSkill(skill)) {
+          actions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+        }
         row.appendChild(actions);
       }
       listContainer.appendChild(row);
@@ -557,7 +569,9 @@
     if (canEditSelectedBranch() && skill.file) {
       var detailActions = el('span', { className: 'crud-actions' });
       detailActions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
-      detailActions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+      if (canDeleteSkill(skill)) {
+        detailActions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+      }
       meta.appendChild(detailActions);
     }
     header.appendChild(meta);
