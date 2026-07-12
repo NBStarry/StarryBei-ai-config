@@ -32,7 +32,7 @@
 
 - [ ] **独立 hzb-skills 仓库的 Dashboard 聚合** (commit: pending, date: 2026-07-12)
   - 验证方法：等待 `dev` Pages 部署后，在在线 Dashboard 搜索 `codex-review`、`okf`、`web-access`，打开详情并点击 `GitHub Edit`；再启动本地 Dashboard，搜索 `g1-robot` 和 `wlcb-dev`。
-  - 预期效果：在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。
+  - 预期效果：在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；`save-memory-before-compact` 和 `web-access` 显示可读 description，不出现 `>-` 或空白；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。
   - 实际效果：（验证后填写）
 
 - [ ] **Dashboard 分支查看 + public-source CI/CD** (commit: pending, date: 2026-07-12)

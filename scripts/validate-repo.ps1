@@ -149,6 +149,7 @@ try {
     $skill = @($dashboardHzbSkills | Where-Object name -eq $skillName)
     Assert-True ($skill.Count -eq 1) "Dashboard contains public hzb skill: $skillName"
     Assert-True ($skill[0].repository -eq 'NBStarry/hzb-skills' -and $skill[0].branch -eq 'main' -and $skill[0].external -eq $true) "Dashboard records source repository for: $skillName"
+    Assert-True (-not [string]::IsNullOrWhiteSpace([string]$skill[0].description) -and [string]$skill[0].description -notmatch '^[>|][+-]?$') "Dashboard contains readable metadata for: $skillName"
   }
   Assert-True (@($data.skills | Where-Object { $_.name -in @('g1-robot', 'wlcb-dev') }).Count -eq 0) 'public Dashboard excludes private hzb overlay skills'
   Assert-True (@($data.skills | Where-Object { $_.name -eq 'karpathy-guidelines' }).Count -eq 1) 'Dashboard contains karpathy-guidelines'

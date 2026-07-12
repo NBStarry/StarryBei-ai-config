@@ -37,7 +37,47 @@ trap 'rm -rf "$TMPDIR_DATA"' EXIT
 get_frontmatter_field() {
   local file="$1"
   local field="$2"
-  sed -n '/^---$/,/^---$/p' "$file" | grep "^${field}:" | head -1 | sed "s/^${field}:[[:space:]]*//" || true
+  awk -v field="$field" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      return value
+    }
+    function emit() {
+      if (result != "") print result
+      emitted = 1
+      exit
+    }
+    /^---[[:space:]]*$/ {
+      boundaries++
+      if (boundaries == 2) {
+        if (collecting) emit()
+        exit
+      }
+      next
+    }
+    boundaries != 1 { next }
+    collecting {
+      if ($0 ~ /^[[:space:]]+/) {
+        continuation = trim($0)
+        if (continuation != "") result = result (result == "" ? "" : " ") continuation
+        next
+      }
+      emit()
+    }
+    index($0, field ":") == 1 {
+      result = trim(substr($0, length(field) + 2))
+      if (result == "" || result ~ /^[>|][+-]?$/) {
+        result = ""
+        collecting = 1
+        next
+      }
+      emit()
+    }
+    END {
+      if (collecting && !emitted && result != "") print result
+    }
+  ' "$file" || true
 }
 
 # 读取 frontmatter 之后的正文
