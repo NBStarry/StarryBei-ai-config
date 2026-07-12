@@ -192,9 +192,9 @@
     {
       "name": "hzb",
       "marketplace": "hzb-skills",
-      "description": "自建跨工具 skill：codex-review、conference-meeting-summary、g1-robot、web-access、wlcb-dev、save-memory-before-compact",
+      "description": "自建跨工具 skill：codex-review、conference-meeting-summary、web-access、save-memory-before-compact",
       "author": "hanzebei",
-      "skills": ["codex-review", "conference-meeting-summary", "g1-robot", "web-access", "wlcb-dev", "save-memory-before-compact"],
+      "skills": ["codex-review", "conference-meeting-summary", "web-access", "save-memory-before-compact"],
       "install": "claude plugin install hzb@hzb-skills"
     }
   ]

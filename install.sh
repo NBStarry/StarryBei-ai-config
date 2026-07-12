@@ -86,8 +86,6 @@ link "$REPO_DIR/skills/hzb-skills" "$HOME/.claude/hzb-skills"
 HZB="$REPO_DIR/skills/hzb-skills/plugins/hzb"
 seed "$HZB/commands/connect-internal.md.example"        "$HZB/commands/connect-internal.md"
 seed "$HZB/commands/connect-internal-backup.md.example" "$HZB/commands/connect-internal-backup.md"
-seed "$HZB/skills/g1-robot/SKILL.md.example"            "$HZB/skills/g1-robot/SKILL.md"
-seed "$HZB/skills/wlcb-dev/SKILL.md.example"            "$HZB/skills/wlcb-dev/SKILL.md"
 
 echo
 echo "NOTE: GLM backend config is not seeded (API key not in repo)."
@@ -97,7 +95,7 @@ echo "      then fill in ANTHROPIC_AUTH_TOKEN."
 # ── Codex CLI ───────────────────────────────────────────────────────────────
 # Codex shares the same self-authored skills as Claude Code. Symlink each into
 # ~/.codex/skills (repairs the previously dangling links).
-for s in codex-review conference-meeting-summary g1-robot web-access wlcb-dev save-memory-before-compact; do
+for s in codex-review conference-meeting-summary web-access save-memory-before-compact; do
   if [ -d "$HZB/skills/$s" ]; then
     link "$HZB/skills/$s" "$HOME/.codex/skills/$s"
   fi

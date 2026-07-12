@@ -89,7 +89,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 
 `skills/hzb-skills/` 是以 `hzb:` 命名空间组织的自建 skill 合集，作为 directory 类型的 plugin marketplace 注册。`install.sh` 会把 `~/.skills/hzb-skills` 整目录 symlink 指向这里，因此改 skill 后只需 `claude plugin update hzb@hzb-skills` 刷新缓存。
 
-含内网/硬件凭证的运维类 skill（`g1-robot`、`wlcb-dev`、`connect-internal*`）以脱敏 `.example` 入库，真实文件由 `.gitignore` 保护并由 `install.sh` 播种到本地。
+含内网凭证的 `connect-internal*` 命令以脱敏 `.example` 入库，真实文件由 `.gitignore` 保护并由 `install.sh` 播种到本地。机器专属运维 skill 不进入公开仓库。
 
 ### statusline.sh
 
