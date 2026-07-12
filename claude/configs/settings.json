@@ -75,6 +75,12 @@
         "source": "github",
         "repo": "rcosteira79/android-skills"
       }
+    },
+    "hzb-skills": {
+      "source": {
+        "source": "github",
+        "repo": "NBStarry/hzb-skills"
+      }
     }
   },
   "effortLevel": "high",

@@ -75,6 +75,12 @@
         "source": "github",
         "repo": "forrestchang/andrej-karpathy-skills"
       }
+    },
+    "hzb-skills": {
+      "source": {
+        "source": "github",
+        "repo": "NBStarry/hzb-skills"
+      }
     }
   },
   "effortLevel": "high",
