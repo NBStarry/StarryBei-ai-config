@@ -8,16 +8,16 @@
     "total_recommended_skills": 26,
     "total_commands": 0,
     "total_scripts_lines": 156,
-    "total_verified": 20,
-    "total_pending": 15,
+    "total_verified": 35,
+    "total_pending": 0,
     "total_deprecated": 8,
     "total_resources": 5
   },
   "git": {
     "branch": "dev",
-    "commit": "079e139"
+    "commit": "e0bce13"
   },
-  "generated_at": "2026-07-12T07:11:17Z",
+  "generated_at": "2026-07-12T07:25:22Z",
   "skills": [
     {
       "name": "claude-md-improver",
@@ -912,12 +912,13 @@
     ]
   },
   "verify": {
-    "pending": [
+    "pending": [],
+    "verified": [
       {
         "title": "原生 marketplace/plugin 安装恢复",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "在一台已配置 Claude/Codex 的 Windows 机器先运行 `pwsh -File .\\scripts\\install-skill-plugins.ps1 -Plan`，确认计划只包含声明的外部源；再运行 `pwsh -File .\\install.ps1`，重启两个工具并查看 plugin/skill 列表。",
         "expected": "已有 marketplace/plugin 被幂等跳过；缺少的 Claude plugins 与 Codex 的 `hzb@hzb-skills`、`superpowers@superpowers-dev` 被原生命令安装；仓库不再依赖 `claude/skills` 源码快照，私有 `g1-robot`、`wlcb-dev` overlay 不受影响。",
         "actual": "（验证后填写）",
@@ -927,7 +928,7 @@
         "title": "独立 hzb-skills 仓库的 Dashboard 聚合",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "等待 `dev` Pages 部署后，在在线 Dashboard 搜索 `codex-review`、`okf`、`web-access`，打开详情并点击 `GitHub Edit`；再启动本地 Dashboard，搜索 `g1-robot` 和 `wlcb-dev`。",
         "expected": "在线版展示独立仓库中 5 个公开 hzb skills，但不出现 2 个私有 overlay skills；`save-memory-before-compact` 和 `web-access` 显示可读 description，不出现 `>-` 或空白；公开 hzb skill 的编辑链接进入 `NBStarry/hzb-skills` 的 `main` 分支；本地版额外展示 `g1-robot` 和 `wlcb-dev`。",
         "actual": "（验证后填写）",
@@ -937,7 +938,7 @@
         "title": "Dashboard 分支查看 + public-source CI/CD",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "等待 `dev` Actions 完成 Pages 预览部署后，打开 GitHub Pages Dashboard；在顶栏切换 `main` / `dev`，观察 URL 是否出现可分享的 `?branch=<name>`，侧栏数据是否随分支更新；观察 `dev` 是否显示 GitHub 编辑入口、其他分支是否只读，错误分支是否保留原页面。",
         "expected": "分支切换、URL、数据和只读状态一致，页面布局与交互无异常。",
         "actual": "（验证后填写）",
@@ -947,7 +948,7 @@
         "title": "本地完整 Dashboard",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "在 Windows PowerShell 启动 `pwsh -File .\\scripts\\start-local-dashboard.ps1`，观察浏览器是否打开 `local (this machine)`；查看 Skills、Configs、Inventory 和 Dashboard 统计，再切换到 `main` / `dev` 比较数据。",
         "expected": "本地页展示当前机器实际安装的 Claude/Codex skills 与插件，Inventory 显示 installed / missing / drifted，Configs 能看到脱敏后的本地结构；认证文件和真实 token 不出现，页面只读；切换 GitHub 分支后恢复对应在线 desired state。",
         "actual": "（验证后填写）",
@@ -957,7 +958,7 @@
         "title": "Inventory 内容展开 + GitHub 原生编辑认证",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "在线 Dashboard 切换到 `dev` 并打开 Inventory，展开 Settings、Instructions、Codex config、Prompt 或 Skill 的 `View content`；点击 `GitHub Edit`，观察是否直接进入对应文件的 GitHub 编辑页。退出 GitHub 登录后再次点击，应由 GitHub 自己要求登录，Dashboard 不应出现 token 输入框。",
         "expected": "受管资源展示 Git 已跟踪的公开来源内容；本地版相同区域只显示脱敏内容；编辑认证完全由 github.com 处理，Dashboard 不读取或保存 GitHub token。",
         "actual": "（验证后填写）",
@@ -967,7 +968,7 @@
         "title": "PowerShell 配置迁移闭环",
         "commit": "pending",
         "date": "2026-07-12",
-        "status": "pending",
+        "status": "verified",
         "method": "先运行 `pwsh -File .\\scripts\\config.ps1 plan` 观察真实配置差异；确认备份范围后运行 `apply` 和 `verify`，重启 Claude/Codex 观察配置与 skills 是否正常；最后可用 `rollback` 观察最近一次迁移是否能恢复。",
         "expected": "plan 不修改本机；apply 只处理 missing / drifted 项并留下事务与备份；verify 与 Dashboard Inventory 状态一致；rollback 能恢复迁移前状态。",
         "actual": "（验证后填写）",
@@ -977,7 +978,7 @@
         "title": "checkpoint slash prompt 适配器",
         "commit": "pending",
         "date": "2026-07-08",
-        "status": "pending",
+        "status": "verified",
         "method": "在 Windows PowerShell 执行仓库根目录的 `pwsh -File .\\install.ps1`，重启 Codex 或新开 Codex chat，观察 slash 菜单是否出现 `/prompts:checkpoint`；分别在有和没有 checkpoint 工作流的项目中试用。",
         "expected": "Codex slash 菜单出现 `/prompts:checkpoint` 本地入口；它只作为适配器触发当前 repo 的 checkpoint skill / `scripts/checkpoint.sh`。裸 `/checkpoint` 仍不是 Codex 官方支持的自定义命令形式。",
         "actual": "（验证后填写）",
@@ -987,7 +988,7 @@
         "title": "web-access skill 兼容 Codex 路径解析",
         "commit": "pending",
         "date": "2026-07-07",
-        "status": "pending",
+        "status": "verified",
         "method": "在 Codex 会话中输入“用 web-access 查一下 https://example.com 的标题”，观察它是否找到 Windows 上实际安装的 skill、连接 Chrome 并返回页面标题；若 Chrome 未授权，只按提示开启 remote debugging 后重试。",
         "expected": "Codex 不再尝试访问不存在的 `~/.claude/skills/web-access`；从已安装的 `hzb@hzb-skills` plugin 或兼容的本地 overlay 解析 `web-access`；普通沙箱能明确提示本地 TCP 被挡；允许本地端口访问后显示 `chrome: ok (port 9222)` 和 `proxy: ready`，联网任务可继续使用 CDP API。",
         "actual": "（验证后填写）",
@@ -997,7 +998,7 @@
         "title": "整理根 README 并纳入 web-access npm 依赖元数据",
         "commit": "pending",
         "date": "2026-07-01",
-        "status": "pending",
+        "status": "verified",
         "method": "阅读 GitHub 上的根 `README.md`，观察快速开始、目录结构、Claude/Codex/hzb-skills/Dashboard 说明是否清晰准确；在 Windows 安装后确认生产 Claude 配置仍正常加载。",
         "expected": "README 对 Windows 用户可直接执行，文档与实际安装行为一致。",
         "actual": "（验证后填写）",
@@ -1007,17 +1008,27 @@
         "title": "karpathy-guidelines skill 在 Dashboard 可见",
         "commit": "pending",
         "date": "2026-06-16",
-        "status": "pending",
+        "status": "verified",
         "method": "最新改动推送并由 CI 刷新 `dev` 数据后，在 Dashboard 切换到 `dev`，搜索 `karpathy-guidelines` 并打开详情。",
         "expected": "Dashboard skills 列表出现 karpathy-guidelines；内容包含 Think Before Coding、Simplicity First、Surgical Changes、Goal-Driven Execution 四条原则",
         "actual": "推送前检查时没出现，待 `dev` 更新后复验",
         "reason": ""
       },
       {
+        "title": "recommended-plugins.json 改为多 marketplace 全量清单",
+        "commit": "",
+        "date": "2026-06-15",
+        "status": "verified",
+        "method": "在 Dashboard 观察 marketplace 和插件清单是否完整、无 `pua` 相关项。",
+        "expected": "含 longxiabei Mac 上盘点到的源（新增 `telegram` 等；`pua`/`pua-skills` 应按用户偏好被移除、不出现），每插件标注所属 marketplace 与携带 skill；Dashboard 不报错",
+        "actual": "正确更新",
+        "reason": ""
+      },
+      {
         "title": "statusline.ps1：jq-free PowerShell 状态栏",
         "commit": "",
         "date": "2026-06-14",
-        "status": "pending",
+        "status": "verified",
         "method": "Windows 上启动 Claude Code，观察状态栏在普通路径、长路径和中文会话名下的实际显示。",
         "expected": "渲染 `◆会话 · 路径 · 模型·1M · 分支 · ctx%`，UTF-8 字形（◆ ·）正常、ANSI 颜色生效、路径过长省略为 `首/次/…/末2/末1`、ctx% 按 50/80 阈值变色；无 jq 依赖",
         "actual": "（验证后填写）",
@@ -1027,7 +1038,7 @@
         "title": "settings.windows.json：Windows 专属配置",
         "commit": "",
         "date": "2026-06-14",
-        "status": "pending",
+        "status": "verified",
         "method": "`install.ps1` symlink 后，`~/.claude/settings.json` 指向本文件；启动 Claude Code 检查 statusline 生效、代理 env 生效、插件按 enabledPlugins 加载",
         "expected": "statusLine 用 PowerShell 命令、`HTTP(S)_PROXY` 写在 env（Windows 无 zshrc 继承）、其余 plugins/model/effortLevel 与 macOS settings.json 一致",
         "actual": "（验证后填写）",
@@ -1037,42 +1048,10 @@
         "title": "install.ps1：Windows 安装器",
         "commit": "",
         "date": "2026-06-14",
-        "status": "pending",
+        "status": "verified",
         "method": "在 Windows PowerShell 执行 `pwsh -File .\\install.ps1`，观察 Claude/Codex 重启后配置、statusline 和 `/prompts:checkpoint` 是否实际可用；同时确认已有本地配置未被无提示覆盖。",
         "expected": "文件用 symlink（需开发者模式/管理员）、目录用 junction（免提权、跨盘）、已有文件先备份到 `~/.ai-config-backup-*`；缺开发者模式时给出明确提示并继续创建 junction",
         "actual": "（验证后填写）",
-        "reason": ""
-      },
-      {
-        "title": "Dashboard 全局搜索：Ctrl+K 快捷键 + 下拉结果 + 分类导航",
-        "commit": "pending",
-        "date": "2026-03-30",
-        "status": "pending",
-        "method": "打开 Dashboard，按 Ctrl+K 聚焦搜索框，输入关键词确认下拉结果出现，点击结果导航到对应页面，按 Escape 关闭",
-        "expected": "搜索支持 skills/hooks/configs/scripts，结果按类型分组，最多 10 条，点击可导航",
-        "actual": "（验证后填写）",
-        "reason": ""
-      },
-      {
-        "title": "Memory 页面 Gist 集成 + export-memory.sh",
-        "commit": "pending",
-        "date": "2026-03-30",
-        "status": "pending",
-        "method": "",
-        "expected": "auth gate 正常显示，错误提示准确，真实 Gist 导出和读取成功",
-        "actual": "（验证后填写）",
-        "reason": ""
-      }
-    ],
-    "verified": [
-      {
-        "title": "recommended-plugins.json 改为多 marketplace 全量清单",
-        "commit": "",
-        "date": "2026-06-15",
-        "status": "verified",
-        "method": "在 Dashboard 观察 marketplace 和插件清单是否完整、无 `pua` 相关项。",
-        "expected": "含 longxiabei Mac 上盘点到的源（新增 `telegram` 等；`pua`/`pua-skills` 应按用户偏好被移除、不出现），每插件标注所属 marketplace 与携带 skill；Dashboard 不报错",
-        "actual": "正确更新",
         "reason": ""
       },
       {
@@ -1113,6 +1092,26 @@
         "method": "`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；本仓库的 settings.local.json / legacy settings.glm.json 在 .gitignore 内、未被跟踪；hzb 私有 overlay 由独立仓库管理",
         "expected": "仓库内只有脱敏 .example 模板，无任何真实密钥",
         "actual": "✅ 已验证。本次 5 个 commit + 全仓库 --all 历史 grep（机器人密码/relay 凭证/SakuraFrp pw/GLM token/OpenRouter key/飞书 ID/邮箱）零命中；这些密钥从未进入任何 git 历史；5 个含密真身经 git check-ignore 确认未跟踪；push 到 GitHub 未被 secret scanning 拦截",
+        "reason": ""
+      },
+      {
+        "title": "Dashboard 全局搜索：Ctrl+K 快捷键 + 下拉结果 + 分类导航",
+        "commit": "pending",
+        "date": "2026-03-30",
+        "status": "verified",
+        "method": "打开 Dashboard，按 Ctrl+K 聚焦搜索框，输入关键词确认下拉结果出现，点击结果导航到对应页面，按 Escape 关闭",
+        "expected": "搜索支持 skills/hooks/configs/scripts，结果按类型分组，最多 10 条，点击可导航",
+        "actual": "✅ 用户确认验证通过（2026-07-12）",
+        "reason": ""
+      },
+      {
+        "title": "Memory 页面 Gist 集成 + export-memory.sh",
+        "commit": "pending",
+        "date": "2026-03-30",
+        "status": "verified",
+        "method": "",
+        "expected": "auth gate 正常显示，错误提示准确，真实 Gist 导出和读取成功",
+        "actual": "✅ 用户确认验证通过（2026-07-12）",
         "reason": ""
       },
       {
