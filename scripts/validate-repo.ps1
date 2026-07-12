@@ -102,6 +102,12 @@ try {
 
   $testHome = Join-Path ([System.IO.Path]::GetTempPath()) ("starrybei-config-test-" + [guid]::NewGuid().ToString('N'))
   New-Item -ItemType Directory -Path $testHome | Out-Null
+  $testBin = Join-Path $testHome 'bin'
+  New-Item -ItemType Directory -Path $testBin | Out-Null
+  Set-Content -LiteralPath (Join-Path $testBin 'claude.cmd') -Value '@exit /b 0' -Encoding ascii
+  Set-Content -LiteralPath (Join-Path $testBin 'codex.cmd') -Value '@exit /b 0' -Encoding ascii
+  $originalPath = $env:PATH
+  $env:PATH = "$testBin$([System.IO.Path]::PathSeparator)$originalPath"
   try {
     $planJson = & pwsh -NoProfile -File $configManager plan -HomePath $testHome -Json
     Assert-True ($LASTEXITCODE -eq 0) 'configuration plan runs against an isolated home'
@@ -121,6 +127,7 @@ try {
     $rolledBack = @($rolledBackJson | ConvertFrom-Json)
     Assert-True (@($rolledBack | Where-Object { $_.status -notin @('missing', 'unsupported', 'tool-not-installed') }).Count -eq 0) 'rollback restores the isolated empty home'
   } finally {
+    $env:PATH = $originalPath
     if (Test-Path -LiteralPath $testHome) {
       Remove-Item -LiteralPath $testHome -Recurse -Force
     }
