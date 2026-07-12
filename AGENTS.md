@@ -12,6 +12,7 @@ Documentation is generally written in Chinese with English section headings. Kee
 - `codex/` contains Codex CLI templates, prompts, and documentation.
 - `skills/hzb-skills/` contains the shared custom hzb skill marketplace used by Claude Code and Codex.
 - `scripts/` contains repository maintenance scripts, including dashboard data generation.
+- `config/manifest.json` is the canonical desired-state inventory consumed by the PowerShell manager and both Dashboard modes.
 - `site/` contains the public GitHub Pages dashboard.
 - `knowledge/` contains reusable knowledge packages, system notes, and playbooks.
 - `docs/` contains design documents, historical plans, and TODOs.
@@ -54,7 +55,8 @@ Both installers link shareable configuration into the relevant user directories 
 
 `site/` is a single-page dashboard deployed through `.github/workflows/deploy-dashboard.yml`. It presents skills, hooks, configs, scripts, plugins, and verification status.
 
-- `scripts/generate-site-data.sh` writes repository-only `site/data.json` by default and can include local Claude sources only with `--include-local`.
+- `scripts/generate-site-data.sh` writes the public repository-only `site/data.json` used by GitHub Pages and CI.
+- `scripts/start-local-dashboard.ps1` launches the private loopback Dashboard. Its Node server overlays installed Claude/Codex skills, plugins, and redacted local configs in memory without changing `site/data.json`.
 - `site/js/editor.js` provides GitHub Contents API editing, diff preview, and Markdown preview.
 - The workflow validates pull requests and pushes to `dev` / `main`. Both branches deploy GitHub Pages: `dev` provides the pre-merge preview, and the later `main` deployment restores the verified stable version.
 
@@ -75,8 +77,9 @@ Both installers link shareable configuration into the relevant user directories 
 - `bash install.sh` links shareable configs into `~/.claude` and `~/.codex`, backing up existing targets first.
 - `pwsh -File .\install.ps1` performs the corresponding Windows installation using file symlinks and directory junctions.
 - `pwsh -File .\scripts\validate-repo.ps1` runs the portable Windows/CI repository checks without Bash or `jq`.
+- `pwsh -File .\scripts\config.ps1 plan` shows desired-vs-actual configuration state; use `apply`, `verify`, and `rollback` for the managed migration loop.
+- `pwsh -File .\scripts\start-local-dashboard.ps1` opens the complete local-only Dashboard on `127.0.0.1`; use `-NoBrowser` when running it headlessly.
 - `bash scripts/generate-site-data.sh` rebuilds public/CI `site/data.json` from repository sources only.
-- `bash scripts/generate-site-data.sh --include-local` adds local Claude skills/plugins for private inspection; do not commit that output.
 - `bash -n install.sh scripts/*.sh claude/scripts/*.sh` checks shell syntax for maintained scripts.
 - `jq empty claude/configs/*.json site/data.json` validates JSON files after edits.
 

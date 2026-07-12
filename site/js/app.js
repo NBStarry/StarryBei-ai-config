@@ -83,7 +83,7 @@
     }
     var option = document.createElement('option');
     option.value = branch;
-    option.textContent = branch;
+    option.textContent = branch === 'local' ? 'local (this machine)' : branch;
     select.appendChild(option);
   }
 
@@ -226,6 +226,7 @@
     document.getElementById('badge-hooks').textContent = stats.total_hooks;
     document.getElementById('badge-configs').textContent = stats.total_configs;
     document.getElementById('badge-commands').textContent = stats.total_commands || 0;
+    document.getElementById('badge-inventory').textContent = stats.total_resources || 0;
     document.getElementById('badge-scripts').textContent = stats.total_scripts;
     document.getElementById('badge-verify').textContent = stats.total_pending;
 
@@ -243,6 +244,7 @@
   // ===== Breadcrumb =====
   var pageNames = {
     dashboard: 'Overview',
+    inventory: 'Inventory',
     skills: 'Skills',
     hooks: 'Hooks',
     configs: 'Configs',
@@ -294,17 +296,24 @@
     var stats = data.stats;
 
     content.appendChild(el('div', { className: 'page-title', textContent: 'Dashboard' }));
-    content.appendChild(el('div', { className: 'page-desc' },
-      'Claude Code configuration overview \u2014 auto-generated on every push'));
+    var isLocal = data.mode === 'local';
+    content.appendChild(el('div', { className: 'page-desc' }, isLocal
+      ? 'Local configuration snapshot \u2014 generated in memory; auth files excluded and sensitive values redacted'
+      : 'Repository configuration overview \u2014 auto-generated on every push'));
 
     // Stat cards
     var grid = el('div', { className: 'stat-grid' });
+    var inventoryResources = data.inventory && data.inventory.resources ? data.inventory.resources : [];
+    var inventoryProblems = inventoryResources.filter(function (resource) {
+      return resource.status !== 'installed' && resource.status !== 'desired' && resource.status !== 'unsupported';
+    }).length;
     var cards = [
+      { label: 'Config State', value: inventoryResources.length, sub: isLocal ? inventoryProblems + ' need attention' : 'desired resources', color: 'color-cyan', page: 'inventory' },
       { label: 'Skills', value: stats.total_skills, sub: Object.keys(getSourceCounts()).length + ' collections', color: 'color-accent', page: 'skills' },
       { label: 'Verified', value: stats.total_verified, sub: stats.total_pending + ' pending', color: 'color-green', page: 'verify' },
       { label: 'Commands', value: stats.total_commands || 0, sub: 'slash commands', color: 'color-orange', page: 'commands' },
-      { label: 'Scripts', value: stats.total_scripts_lines.toLocaleString(), sub: 'lines of bash', color: 'color-yellow', page: 'scripts' },
-      { label: 'Plugins', value: stats.total_plugins, sub: 'recommended', color: 'color-purple', page: null }
+      { label: 'Scripts', value: stats.total_scripts_lines.toLocaleString(), sub: 'tracked lines', color: 'color-yellow', page: 'scripts' },
+      { label: 'Plugins', value: stats.total_plugins, sub: isLocal ? 'installed' : 'recommended', color: 'color-purple', page: null }
     ];
 
     cards.forEach(function (c) {
@@ -346,6 +355,70 @@
       actList.appendChild(item);
     });
     content.appendChild(actList);
+  }
+
+  // --- Desired / Actual Inventory ---
+  function renderInventory() {
+    var content = document.getElementById('content');
+    while (content.firstChild) content.removeChild(content.firstChild);
+
+    var inventory = data.inventory || { mode: 'desired', resources: [] };
+    var resources = inventory.resources || [];
+    var isActual = inventory.mode === 'actual';
+    content.appendChild(el('div', { className: 'page-title', textContent: 'Configuration Inventory' }));
+    content.appendChild(el('div', { className: 'page-desc' }, isActual
+      ? 'Desired repository state compared with this machine. Run scripts/config.ps1 apply to converge it.'
+      : 'Desired repository state for this branch. Open the local Dashboard to compare it with a machine.'));
+
+    var counts = {};
+    resources.forEach(function (resource) {
+      var status = resource.status || 'desired';
+      counts[status] = (counts[status] || 0) + 1;
+    });
+    var summary = el('div', { className: 'inventory-summary' });
+    Object.keys(counts).sort().forEach(function (status) {
+      var chip = el('span', { className: 'inventory-chip status-' + status });
+      chip.appendChild(el('span', { className: 'inventory-chip-count', textContent: String(counts[status]) }));
+      chip.appendChild(document.createTextNode(status));
+      summary.appendChild(chip);
+    });
+    content.appendChild(summary);
+
+    if (resources.length === 0) {
+      content.appendChild(el('div', { className: 'empty-state', textContent: 'No managed resources found in config/manifest.json.' }));
+      return;
+    }
+
+    var list = el('div', { className: 'inventory-list' });
+    resources.forEach(function (resource) {
+      var status = resource.status || 'desired';
+      var card = el('div', { className: 'inventory-card' });
+      var header = el('div', { className: 'inventory-header' });
+      header.appendChild(el('span', { className: 'inventory-id', textContent: resource.id }));
+      header.appendChild(el('span', { className: 'inventory-status status-' + status, textContent: status }));
+      card.appendChild(header);
+
+      var meta = el('div', { className: 'inventory-meta' });
+      [resource.tool, resource.kind, resource.method].filter(Boolean).forEach(function (value) {
+        meta.appendChild(el('span', { textContent: value }));
+      });
+      card.appendChild(meta);
+      if (resource.description) card.appendChild(el('div', { className: 'inventory-description', textContent: resource.description }));
+
+      var paths = el('dl', { className: 'inventory-paths' });
+      var source = resource.source;
+      if (!source && resource.sourceCandidates) source = resource.sourceCandidates.join('  →  ');
+      if (source) {
+        paths.appendChild(el('dt', { textContent: 'Source' }));
+        paths.appendChild(el('dd', { textContent: source }));
+      }
+      paths.appendChild(el('dt', { textContent: 'Target' }));
+      paths.appendChild(el('dd', { textContent: resource.target || '' }));
+      card.appendChild(paths);
+      if (resource.detail) card.appendChild(el('div', { className: 'inventory-detail', textContent: resource.detail }));
+      list.appendChild(card);
+    });
+    content.appendChild(list);
   }
 
   function getSourceCounts() {
@@ -1101,6 +1174,10 @@
       case 'dashboard':
         updateBreadcrumb('dashboard');
         renderDashboard();
+        break;
+      case 'inventory':
+        updateBreadcrumb('inventory');
+        renderInventory();
         break;
       case 'skills':
         updateBreadcrumb('skills');

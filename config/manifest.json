@@ -1,0 +1,170 @@
+{
+  "$schema": "./manifest.schema.json",
+  "version": 1,
+  "description": "Canonical desired state for shareable AI coding tool configuration.",
+  "resources": [
+    {
+      "id": "claude.settings",
+      "tool": "claude",
+      "kind": "config",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "sourceCandidates": [
+        "claude/configs/settings.windows.local.json",
+        "claude/configs/settings.windows.json"
+      ],
+      "target": "${home}/.claude/settings.json",
+      "description": "Claude Code settings; prefer the gitignored private Windows override when present."
+    },
+    {
+      "id": "claude.instructions",
+      "tool": "claude",
+      "kind": "instructions",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "symlink",
+      "source": "claude/configs/CLAUDE.md",
+      "target": "${home}/.claude/CLAUDE.md",
+      "description": "User-wide Claude Code instructions."
+    },
+    {
+      "id": "claude.statusline.windows",
+      "tool": "claude",
+      "kind": "script",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "source": "claude/scripts/statusline.ps1",
+      "target": "${home}/.claude/statusline.ps1",
+      "description": "PowerShell status line used by Claude Code on Windows."
+    },
+    {
+      "id": "claude.hzb-marketplace",
+      "tool": "claude",
+      "kind": "marketplace",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills",
+      "target": "${home}/.claude/hzb-skills",
+      "description": "Local hzb skill marketplace."
+    },
+    {
+      "id": "codex.config",
+      "tool": "codex",
+      "kind": "config",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "seed",
+      "source": "codex/config.toml.example",
+      "target": "${home}/.codex/config.toml",
+      "description": "Machine-specific Codex configuration seeded once and never overwritten."
+    },
+    {
+      "id": "codex.prompt.checkpoint",
+      "tool": "codex",
+      "kind": "prompt",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "source": "codex/prompts/checkpoint.md",
+      "target": "${home}/.codex/prompts/checkpoint.md",
+      "description": "Codex slash-menu checkpoint adapter."
+    },
+    {
+      "id": "codex.skill.codex-review",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/codex-review",
+      "target": "${home}/.codex/skills/codex-review",
+      "description": "Shared hzb skill for independent Codex review."
+    },
+    {
+      "id": "codex.skill.conference-meeting-summary",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/conference-meeting-summary",
+      "target": "${home}/.codex/skills/conference-meeting-summary",
+      "description": "Shared hzb conference summary skill."
+    },
+    {
+      "id": "codex.skill.g1-robot",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/g1-robot",
+      "target": "${home}/.codex/skills/g1-robot",
+      "description": "Shared local operations skill; the real SKILL.md remains gitignored."
+    },
+    {
+      "id": "codex.skill.okf",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/okf",
+      "target": "${home}/.codex/skills/okf",
+      "description": "Open Knowledge Format authoring and review skill."
+    },
+    {
+      "id": "codex.skill.save-memory-before-compact",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/save-memory-before-compact",
+      "target": "${home}/.codex/skills/save-memory-before-compact",
+      "description": "Shared memory checkpoint skill."
+    },
+    {
+      "id": "codex.skill.web-access",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/web-access",
+      "target": "${home}/.codex/skills/web-access",
+      "description": "Shared browser and web access skill."
+    },
+    {
+      "id": "codex.skill.wlcb-dev",
+      "tool": "codex",
+      "kind": "skill",
+      "platforms": [
+        "windows"
+      ],
+      "method": "junction",
+      "source": "skills/hzb-skills/plugins/hzb/skills/wlcb-dev",
+      "target": "${home}/.codex/skills/wlcb-dev",
+      "description": "Shared local development host skill; the real SKILL.md remains gitignored."
+    }
+  ]
+}

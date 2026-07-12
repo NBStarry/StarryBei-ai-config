@@ -35,6 +35,16 @@
   - 预期效果：分支切换、URL、数据和只读状态一致，页面布局与交互无异常。
   - 实际效果：（验证后填写）
 
+- [ ] **本地完整 Dashboard** (commit: pending, date: 2026-07-12)
+  - 验证方法：在 Windows PowerShell 启动 `pwsh -File .\scripts\start-local-dashboard.ps1`，观察浏览器是否打开 `local (this machine)`；查看 Skills、Configs、Inventory 和 Dashboard 统计，再切换到 `main` / `dev` 比较数据。
+  - 预期效果：本地页展示当前机器实际安装的 Claude/Codex skills 与插件，Inventory 显示 installed / missing / drifted，Configs 能看到脱敏后的本地结构；认证文件和真实 token 不出现，页面只读；切换 GitHub 分支后恢复对应在线 desired state。
+  - 实际效果：（验证后填写）
+
+- [ ] **PowerShell 配置迁移闭环** (commit: pending, date: 2026-07-12)
+  - 验证方法：先运行 `pwsh -File .\scripts\config.ps1 plan` 观察真实配置差异；确认备份范围后运行 `apply` 和 `verify`，重启 Claude/Codex 观察配置与 skills 是否正常；最后可用 `rollback` 观察最近一次迁移是否能恢复。
+  - 预期效果：plan 不修改本机；apply 只处理 missing / drifted 项并留下事务与备份；verify 与 Dashboard Inventory 状态一致；rollback 能恢复迁移前状态。
+  - 实际效果：（验证后填写）
+
 ### Codex prompt adapters
 
 - [ ] **checkpoint slash prompt 适配器** (commit: pending, date: 2026-07-08)

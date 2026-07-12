@@ -25,7 +25,7 @@ jobs:
         run: bash -n install.sh scripts/*.sh claude/scripts/*.sh
 
       - name: Validate committed JSON
-        run: jq empty claude/configs/*.json site/data.json
+        run: jq empty claude/configs/*.json config/*.json site/data.json
 
       - name: Build repository-only Dashboard data
         run: |

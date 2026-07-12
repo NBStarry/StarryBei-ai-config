@@ -35,6 +35,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   --green-bg: #238636;
   --hover-bg: #1f2937;
   --badge-bg: #30363d;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
 }
 
 [data-theme="light"] {
@@ -438,6 +439,108 @@ body {
   margin-bottom: 16px;
 }
 
+/* ===== Configuration Inventory ===== */
+.inventory-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.inventory-chip,
+.inventory-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 9px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.inventory-chip-count {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.status-installed { color: var(--green); border-color: color-mix(in srgb, var(--green) 45%, var(--border)); }
+.status-desired { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.status-missing,
+.status-missing-source { color: var(--yellow); border-color: color-mix(in srgb, var(--yellow) 45%, var(--border)); }
+.status-drifted { color: var(--red); border-color: color-mix(in srgb, var(--red) 45%, var(--border)); }
+.status-unsupported { color: var(--text-faint); }
+
+.inventory-list {
+  display: grid;
+  gap: 12px;
+}
+
+.inventory-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.inventory-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.inventory-id {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.inventory-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.inventory-meta span {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--badge-bg);
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.inventory-description,
+.inventory-detail {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.inventory-paths {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 5px 12px;
+  margin: 12px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.inventory-paths dt {
+  color: var(--text-faint);
+}
+
+.inventory-paths dd {
+  margin: 0;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
 /* ===== Dashboard Stat Cards ===== */
 .stat-grid {
   display: grid;
@@ -483,6 +586,7 @@ body {
 .stat-card .stat-value.color-yellow { color: var(--yellow); }
 .stat-card .stat-value.color-orange { color: var(--orange); }
 .stat-card .stat-value.color-purple { color: var(--purple); }
+.stat-card .stat-value.color-cyan { color: var(--cyan); }
 
 /* ===== Recent Activity ===== */
 .activity-list {

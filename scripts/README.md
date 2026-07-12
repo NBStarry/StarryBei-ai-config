@@ -2,6 +2,39 @@
 
 Claude Code 自定义脚本。
 
+## 统一配置管理
+
+`config.ps1` 读取 `config/manifest.json`，在 Windows PowerShell 中提供可审查、可回滚的配置迁移闭环：
+
+```powershell
+pwsh -File .\scripts\config.ps1 doctor
+pwsh -File .\scripts\config.ps1 plan
+pwsh -File .\scripts\config.ps1 apply
+pwsh -File .\scripts\config.ps1 verify
+pwsh -File .\scripts\config.ps1 rollback
+```
+
+`plan` 不写文件；`apply` 只处理 `missing` / `drifted` 资源并写事务日志；`seed` 目标一旦存在就不覆盖。自动化场景可加 `-Json`，测试或迁移其他 Home 可加 `-HomePath <path>`。
+
+## 本地完整 Dashboard
+
+从仓库根目录执行：
+
+```powershell
+pwsh -File .\scripts\start-local-dashboard.ps1
+```
+
+本地版复用 `site/` 前端，但由 `local-dashboard-server.mjs` 在启动时扫描当前机器：
+
+- Claude 已安装插件及其 skills
+- `~/.claude/skills`、`~/.codex/skills`、`~/.agents/skills`
+- Claude/Codex 的本地 settings、全局指令、插件安装清单
+- `config/manifest.json` 与本机目标的逐项状态（installed / missing / drifted）
+
+服务只监听 `127.0.0.1:4173`，数据仅保存在进程内存。`.credentials.json`、`auth.json` 等认证文件不会读取，敏感配置字段会显示为 `[REDACTED]`。按 Ctrl+C 停止；可用 `-Port 4180` 更换端口，或用 `-NoBrowser` 禁止自动打开浏览器。
+
+在线 GitHub Pages 继续只使用 repo-only `site/data.json`，不会包含上述本机数据。
+
 ## statusline.sh
 
 自定义状态栏脚本，在 Claude Code 终端底部显示丰富的上下文信息。

@@ -483,6 +483,13 @@ total_commands=$(echo "$commands_json" | jq 'length')
 total_verified=$(echo "$verify_verified" | jq 'length')
 total_pending=$(echo "$verify_pending" | jq 'length')
 total_deprecated=$(echo "$verify_deprecated" | jq 'length')
+manifest_file="${REPO_ROOT}/config/manifest.json"
+if [ -f "$manifest_file" ]; then
+  inventory_json=$(jq '{mode: "desired", version: .version, resources: [.resources[] + {status: "desired", action: "none"}]}' "$manifest_file")
+else
+  inventory_json='{"mode":"desired","version":1,"resources":[]}'
+fi
+total_resources=$(echo "$inventory_json" | jq '.resources | length')
 
 # Git info
 git_branch=$(cd "$REPO_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
@@ -504,6 +511,7 @@ echo "$commands_json" > "$TMPDIR_DATA/commands.json"
 echo "$verify_pending" > "$TMPDIR_DATA/verify_pending.json"
 echo "$verify_verified" > "$TMPDIR_DATA/verify_verified.json"
 echo "$verify_deprecated" > "$TMPDIR_DATA/verify_deprecated.json"
+echo "$inventory_json" > "$TMPDIR_DATA/inventory.json"
 
 jq -n \
   --slurpfile skills "$TMPDIR_DATA/skills.json" \
@@ -516,6 +524,7 @@ jq -n \
   --slurpfile vp "$TMPDIR_DATA/verify_pending.json" \
   --slurpfile vv "$TMPDIR_DATA/verify_verified.json" \
   --slurpfile vd "$TMPDIR_DATA/verify_deprecated.json" \
+  --slurpfile inventory "$TMPDIR_DATA/inventory.json" \
   --argjson total_skills "$total_skills" \
   --argjson total_hooks "$total_hooks" \
   --argjson total_configs "$total_configs" \
@@ -527,6 +536,7 @@ jq -n \
   --argjson total_verified "$total_verified" \
   --argjson total_pending "$total_pending" \
   --argjson total_deprecated "$total_deprecated" \
+  --argjson total_resources "$total_resources" \
   --arg git_branch "$git_branch" \
   --arg git_commit "$git_commit" \
   --arg generated_at "$generated_at" \
@@ -542,7 +552,8 @@ jq -n \
       total_scripts_lines: $total_scripts_lines,
       total_verified: $total_verified,
       total_pending: $total_pending,
-      total_deprecated: $total_deprecated
+      total_deprecated: $total_deprecated,
+      total_resources: $total_resources
     },
     git: {
       branch: $git_branch,
@@ -556,6 +567,7 @@ jq -n \
     plugins: $plugins[0],
     recommended_skills: $recommended_skills[0],
     commands: $commands[0],
+    inventory: $inventory[0],
     verify: {
       pending: $vp[0],
       verified: $vv[0],
