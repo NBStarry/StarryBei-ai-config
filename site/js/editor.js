@@ -26,16 +26,12 @@ var Editor = (function () {
       .join('/');
   }
 
-  function openGitHub(url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
-
   function edit(filePath) {
-    openGitHub(WEB_BASE + '/edit/' + EDIT_BRANCH + '/' + encodePath(filePath));
+    window.location.assign(WEB_BASE + '/edit/' + EDIT_BRANCH + '/' + encodePath(filePath));
   }
 
   function remove(filePath) {
-    openGitHub(WEB_BASE + '/delete/' + EDIT_BRANCH + '/' + encodePath(filePath));
+    window.location.assign(WEB_BASE + '/delete/' + EDIT_BRANCH + '/' + encodePath(filePath));
   }
 
   function create(directory, template, defaultName) {
@@ -44,31 +40,33 @@ var Editor = (function () {
     var params = new URLSearchParams();
     params.set('filename', name.trim());
     if (template) params.set('value', template);
-    openGitHub(WEB_BASE + '/new/' + EDIT_BRANCH + '/' + encodePath(directory) + '?' + params.toString());
+    window.location.assign(WEB_BASE + '/new/' + EDIT_BRANCH + '/' + encodePath(directory) + '?' + params.toString());
   }
 
   function createEditBtn(filePath) {
-    var btn = document.createElement('button');
+    var btn = document.createElement('a');
     btn.className = 'btn-edit';
-    btn.type = 'button';
+    btn.href = WEB_BASE + '/edit/' + EDIT_BRANCH + '/' + encodePath(filePath);
+    btn.target = '_blank';
+    btn.rel = 'noopener noreferrer';
     btn.textContent = 'GitHub Edit';
     btn.title = 'Edit with your GitHub login';
     btn.addEventListener('click', function (event) {
       event.stopPropagation();
-      edit(filePath);
     });
     return btn;
   }
 
   function createDeleteBtn(filePath) {
-    var btn = document.createElement('button');
+    var btn = document.createElement('a');
     btn.className = 'btn-delete';
-    btn.type = 'button';
+    btn.href = WEB_BASE + '/delete/' + EDIT_BRANCH + '/' + encodePath(filePath);
+    btn.target = '_blank';
+    btn.rel = 'noopener noreferrer';
     btn.textContent = 'GitHub Delete';
     btn.title = 'Delete with your GitHub login';
     btn.addEventListener('click', function (event) {
       event.stopPropagation();
-      remove(filePath);
     });
     return btn;
   }

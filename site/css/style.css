@@ -1742,6 +1742,8 @@ body {
 
 .btn-edit,
 .btn-delete {
+  display: inline-flex;
+  align-items: center;
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -1753,6 +1755,7 @@ body {
   transition: all 0.15s;
   color: var(--text-muted);
   font-family: 'Inter', -apple-system, sans-serif;
+  text-decoration: none;
 }
 
 .btn-edit:hover {
