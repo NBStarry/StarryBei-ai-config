@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,13 +23,20 @@ jobs:
       - name: Install jq
         run: which jq || sudo apt-get install -y jq
 
-      - name: Generate site data (fallback if not pre-generated locally)
+      - name: Generate repository-only site data
+        run: bash scripts/generate-site-data.sh
+
+      - name: Sync generated Dashboard data to main
+        if: github.ref == 'refs/heads/main'
         run: |
-          if [ -f site/data.json ]; then
-            echo "Using pre-generated data.json (from local sync-configs.sh push)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data.json
+          if git diff --cached --quiet; then
+            echo "site/data.json is already current"
           else
-            echo "No pre-generated data.json, generating from repo only"
-            bash scripts/generate-site-data.sh
+            git commit -m "chore(dashboard): refresh generated data"
+            git push origin HEAD:main
           fi
 
       - name: Upload artifact
