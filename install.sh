@@ -38,11 +38,28 @@ link() {
   echo "linked   $dest -> $src"
 }
 
+find_tool() {
+  local tool="$1" candidate
+  if command -v "$tool" >/dev/null 2>&1; then
+    command -v "$tool"
+    return
+  fi
+  for candidate in "$HOME/.local/bin/$tool" "/opt/homebrew/bin/$tool" "/usr/local/bin/$tool"; do
+    if [ -x "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return
+    fi
+  done
+  return 1
+}
+
 echo "Installing AI coding tool configs from $REPO_DIR"
 echo
 
-command -v claude >/dev/null 2>&1 && HAS_CLAUDE=1
-command -v codex >/dev/null 2>&1 && HAS_CODEX=1
+CLAUDE_CMD="$(find_tool claude || true)"
+CODEX_CMD="$(find_tool codex || true)"
+[ -n "$CLAUDE_CMD" ] && HAS_CLAUDE=1
+[ -n "$CODEX_CMD" ] && HAS_CODEX=1
 
 if [ "$HAS_CLAUDE" -eq 0 ] && [ "$HAS_CODEX" -eq 0 ]; then
   echo "No supported installed tools detected; nothing to install."

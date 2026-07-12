@@ -77,7 +77,7 @@ try {
   Assert-True ($installPs1 -match 'install-skill-plugins\.ps1') 'install.ps1 installs declared external skill plugins'
   Assert-True ($installPs1 -match "Find-ToolCommand 'claude'" -and $installPs1 -match "Find-ToolCommand 'codex'") 'install.ps1 detects installed tools before configuring them'
   $installSh = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'install.sh')
-  Assert-True ($installSh -match 'command -v claude' -and $installSh -match 'command -v codex') 'install.sh detects installed tools before configuring them'
+  Assert-True ($installSh -match 'find_tool claude' -and $installSh -match 'find_tool codex' -and $installSh -match '\$HOME/\.local/bin/\$tool') 'install.sh detects installed tools in PATH and common user locations'
   $skillPluginInstallerSource = Get-Content -Raw -LiteralPath $skillPluginInstaller
   Assert-True ($skillPluginInstallerSource -match 'OpenAI\\Codex\\bin') 'PowerShell plugin installer locates the Windows Codex app without a profile alias'
 
