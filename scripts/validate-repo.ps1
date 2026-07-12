@@ -129,17 +129,7 @@ try {
   })
   Assert-True ($privateConfigs.Count -eq 0) 'public Dashboard data excludes local and backup configs'
 
-  $expectedHzbSkills = @(
-    'codex-review',
-    'conference-meeting-summary',
-    'okf',
-    'save-memory-before-compact',
-    'web-access'
-  )
-  $hzbNames = @($data.skills | Where-Object { $_.source -eq 'hzb' } | ForEach-Object { $_.name })
-  foreach ($name in $expectedHzbSkills) {
-    Assert-True ($hzbNames -contains $name) "Dashboard contains hzb skill: $name"
-  }
+  Assert-True (@($data.skills | Where-Object { $_.source -eq 'hzb' }).Count -eq 0) 'Dashboard excludes externally managed hzb skills'
   Assert-True (@($data.skills | Where-Object { $_.name -eq 'karpathy-guidelines' }).Count -eq 1) 'Dashboard contains karpathy-guidelines'
 
   $plugins = Read-Json 'claude/configs/recommended-plugins.json'
@@ -163,15 +153,12 @@ try {
   $sensitiveTrackedPaths = @(
     'claude/configs/settings.local.json',
     'claude/configs/settings.glm.json',
-    'claude/configs/settings.windows.local.json',
-    'skills/hzb-skills/plugins/hzb/commands/connect-internal.md',
-    'skills/hzb-skills/plugins/hzb/commands/connect-internal-backup.md',
-    'skills/hzb-skills/plugins/hzb/skills/g1-robot/SKILL.md',
-    'skills/hzb-skills/plugins/hzb/skills/wlcb-dev/SKILL.md'
+    'claude/configs/settings.windows.local.json'
   )
   foreach ($path in $sensitiveTrackedPaths) {
     Assert-True ($trackedFiles -notcontains $path) "sensitive local file is not tracked: $path"
   }
+  Assert-True (@($trackedFiles | Where-Object { $_ -like 'skills/hzb-skills/*' }).Count -eq 0) 'external hzb-skills source is not vendored'
 
   Write-Host "All $script:CheckCount automated repository checks passed."
 } finally {

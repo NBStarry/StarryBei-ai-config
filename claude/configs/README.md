@@ -61,7 +61,7 @@ git pull && bash scripts/sync-configs.sh pull
 | `ui-ux-pro-max-skill` | nextlevelbuilder/ui-ux-pro-max-skill | UI/UX 设计套件 |
 | `anthropic-agent-skills` | anthropics/skills | 官方文档/创作技能集 |
 | `thedotmack` | thedotmack/claude-mem | 记忆/知识库 |
-| `hzb-skills` | 本地 `skills/hzb-skills/` | 自建（install 脚本注册） |
+| `hzb-skills` | `NBStarry/hzb-skills` | 独立自建 marketplace |
 
 官方源含 superpowers / commit-commands / code-review / feature-dev / code-simplifier / security-guidance / claude-md-management / plugin-dev / skill-creator / frontend-design / github / pyright-lsp / swift-lsp / clangd-lsp / ralph-loop / telegram 等；第三方源各插件携带的 skill 名见 JSON。
 

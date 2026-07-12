@@ -33,10 +33,10 @@
     },
     {
       "id": "hzb-skills",
-      "source": "directory",
-      "repo": "skills/hzb-skills",
-      "add": "claude plugin marketplace add ~/.claude/hzb-skills",
-      "note": "自建，仓库内目录源；由 install.sh / install.ps1 自动 symlink + 注册"
+      "source": "github",
+      "repo": "NBStarry/hzb-skills",
+      "add": "claude plugin marketplace add NBStarry/hzb-skills",
+      "note": "自建独立仓库；本地开发和私有 overlay 使用该仓库自带的 install.ps1"
     }
   ],
   "plugins": [

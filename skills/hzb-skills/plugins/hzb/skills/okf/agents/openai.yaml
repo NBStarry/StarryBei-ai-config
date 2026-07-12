@@ -1,4 +1,0 @@
-interface:
-  display_name: "Open Knowledge Format"
-  short_description: "创建、转换、审查和维护可移植的 OKF 知识包规范"
-  default_prompt: "Use $okf to create or review an Open Knowledge Format bundle."

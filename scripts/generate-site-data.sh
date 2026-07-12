@@ -118,14 +118,6 @@ while IFS= read -r skill_file; do
   scan_skill "$skill_file" "$source_label" "$rel_path"
 done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
-# 2b) 仓库 skills/hzb-skills/ — 只扫描 Git 已跟踪的公开 skill。
-# 工作区可能同时存在被 .gitignore 保护的本机私有 skill，绝不能进入公开数据。
-while IFS= read -r skill_file; do
-  rel_path="${skill_file#${REPO_ROOT}/}"
-  git -C "$REPO_ROOT" ls-files --error-unmatch -- "$rel_path" >/dev/null 2>&1 || continue
-  scan_skill "$skill_file" "hzb" "$rel_path"
-done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
-
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
 if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
@@ -271,7 +263,7 @@ commands_dir_data="$TMPDIR_DATA/commands"
 mkdir -p "$commands_dir_data"
 cmd_idx=0
 
-for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/skills/hzb-skills/plugins/hzb/commands/*.md; do
+for cmd_file in "${REPO_ROOT}"/claude/commands/*.md; do
   [ -f "$cmd_file" ] || continue
   filename=$(basename "$cmd_file")
   [ "$filename" = "README.md" ] && continue

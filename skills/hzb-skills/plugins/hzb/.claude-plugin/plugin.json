@@ -1,8 +1,0 @@
-{
-  "name": "hzb",
-  "version": "1.0.0",
-  "description": "hanzebei 的自建 skill + slash 命令合集，命名空间 hzb:。skills：codex-review、conference-meeting-summary、okf、web-access、save-memory-before-compact；commands：codex-review、connect-internal、connect-internal-backup。",
-  "author": {
-    "name": "hanzebei"
-  }
-}

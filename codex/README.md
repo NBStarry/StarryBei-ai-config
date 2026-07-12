@@ -14,9 +14,10 @@
 
 ## Skills
 
-Codex 与 Claude Code 共用同一套自建 skill 源——`skills/hzb-skills/plugins/hzb/skills/`。
-`install.ps1` / `install.sh` 会把 `~/.codex/skills/<name>` 逐个链接到仓库内的对应 skill，
-避免两套工具各维护一份副本。
+Codex 与 Claude Code 共用的自建 skills 已迁移到独立仓库
+[`NBStarry/hzb-skills`](https://github.com/NBStarry/hzb-skills)。本仓库的安装器只管理
+Codex 配置模板和 prompt adapter；公开 plugin 安装及本机私有 skill Junction 由
+`hzb-skills` 仓库自己的安装流程负责。
 
 ## Slash prompt 适配器
 

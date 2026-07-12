@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Install AI coding tool configs by symlinking repo files into ~/.claude and
-# ~/.codex. Existing files are backed up first. Sensitive files are SEEDED from
-# .example templates (never overwritten if a real file already exists).
+# ~/.codex. Existing files are backed up first. hzb skills are installed
+# separately from https://github.com/NBStarry/hzb-skills.
 #
 # Usage: bash install.sh
 set -euo pipefail
@@ -29,42 +29,6 @@ link() {
   echo "linked   $dest -> $src"
 }
 
-# copy <src> <dest>: back up existing dest, then copy (not symlink).
-# Use for files the tool rewrites in place via atomic temp+rename, which would
-# otherwise replace the symlink with a plain file. See settings.json below.
-copy() {
-  local src="$1" dest="$2"
-  if [ ! -e "$src" ]; then
-    echo "SKIP (missing source): $src"
-    return
-  fi
-  mkdir -p "$(dirname "$dest")"
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    mkdir -p "$BACKUP_DIR"
-    mv "$dest" "$BACKUP_DIR/"
-    echo "backed up $dest -> $BACKUP_DIR/"
-  fi
-  cp "$src" "$dest"
-  echo "copied   $dest <- $src"
-}
-
-# seed <example> <real>: create real from example ONLY if real doesn't exist.
-# Never overwrites — protects local credentials filled in after first install.
-seed() {
-  local example="$1" real="$2"
-  if [ ! -e "$example" ]; then
-    echo "SKIP (missing template): $example"
-    return
-  fi
-  if [ -e "$real" ]; then
-    echo "kept     $real (already exists, not overwritten)"
-    return
-  fi
-  mkdir -p "$(dirname "$real")"
-  cp "$example" "$real"
-  echo "seeded   $real <- $example   (FILL IN real values)"
-}
-
 echo "Installing AI coding tool configs from $REPO_DIR"
 echo
 
@@ -86,30 +50,11 @@ link "$CLAUDE_SETTINGS_SRC" "$HOME/.claude/settings.json"
 link "$REPO_DIR/claude/configs/CLAUDE.md"     "$HOME/.claude/CLAUDE.md"
 link "$REPO_DIR/claude/scripts/statusline.sh" "$HOME/.claude/statusline.sh"
 
-# hzb-skills marketplace: directory-level symlink. Plugin loads from
-# ~/.claude/plugins/cache, so this is safe; run `claude plugin update
-# hzb@hzb-skills` after editing skills to refresh the cache.
-link "$REPO_DIR/skills/hzb-skills" "$HOME/.claude/hzb-skills"
-
-# Seed sensitive real files from sanitized templates (edit afterwards).
-HZB="$REPO_DIR/skills/hzb-skills/plugins/hzb"
-seed "$HZB/commands/connect-internal.md.example"        "$HZB/commands/connect-internal.md"
-seed "$HZB/commands/connect-internal-backup.md.example" "$HZB/commands/connect-internal-backup.md"
-
 echo
 echo "NOTE: GLM backend config is not seeded (API key not in repo)."
 echo "      To use it: create $REPO_DIR/claude/configs/settings.local.json from"
 echo "      claude/configs/settings.glm.json.example, then fill in the real token."
 echo "      This file is gitignored and will be linked as ~/.claude/settings.json."
-
-# ── Codex CLI ───────────────────────────────────────────────────────────────
-# Codex shares the same self-authored skills as Claude Code. Symlink each into
-# ~/.codex/skills (repairs the previously dangling links).
-for s in codex-review conference-meeting-summary okf web-access save-memory-before-compact; do
-  if [ -d "$HZB/skills/$s" ]; then
-    link "$HZB/skills/$s" "$HOME/.codex/skills/$s"
-  fi
-done
 
 # Custom prompts are deprecated upstream, but they are still Codex's documented
 # local slash-menu adapter. Keep prompt files tiny and make skills the truth.
@@ -132,8 +77,8 @@ echo "Done."
 [ -d "$BACKUP_DIR" ] && echo "Backup of replaced files: $BACKUP_DIR"
 echo "Next:"
 echo "  - Restart your Claude Code session to pick up settings/plugins."
-echo "  - Restart Codex or start a new Codex chat to pick up linked skills/prompts."
-echo "  - After editing hzb skills: claude plugin update hzb@hzb-skills"
+echo "  - Restart Codex or start a new Codex chat to pick up linked prompts."
+echo "  - Install hzb skills separately from https://github.com/NBStarry/hzb-skills"
 echo
-echo "WARNING: gitignored real files (credentials) live in the working tree."
+echo "WARNING: gitignored real config files (credentials) may live in the working tree."
 echo "         Do NOT run 'git clean -x' in this repo or they will be deleted."

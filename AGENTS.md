@@ -10,7 +10,7 @@ Documentation is generally written in Chinese with English section headings. Kee
 
 - `claude/` contains Claude Code configs, hooks, commands, agents, skills, and statusline scripts.
 - `codex/` contains Codex CLI templates, prompts, and documentation.
-- `skills/hzb-skills/` contains the shared custom hzb skill marketplace used by Claude Code and Codex.
+- Shared custom hzb skills live in the separate `NBStarry/hzb-skills` repository; do not vendor them here.
 - `scripts/` contains repository maintenance scripts, including dashboard data generation.
 - `config/manifest.json` is the canonical desired-state inventory consumed by the PowerShell manager and both Dashboard modes.
 - `site/` contains the public GitHub Pages dashboard.
@@ -64,7 +64,7 @@ Both installers link shareable configuration into the relevant user directories 
 | Type | Location | Format |
 | --- | --- | --- |
 | Claude skills | `claude/skills/<collection>/<name>/SKILL.md` | Markdown with YAML frontmatter |
-| Shared hzb skills | `skills/hzb-skills/plugins/hzb/skills/<name>/SKILL.md` | Markdown with YAML frontmatter |
+| External hzb skills | `https://github.com/NBStarry/hzb-skills` | Separate cross-tool marketplace repository |
 | Agents | `claude/agents/<name>.md` | Markdown with YAML frontmatter |
 | Commands | `claude/commands/<name>.md` | Markdown with YAML frontmatter |
 | Hooks | `claude/hooks/<name>.json` | JSON with a `hooks` object keyed by event type |

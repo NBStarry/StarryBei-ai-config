@@ -45,18 +45,6 @@
       "description": "PowerShell status line used by Claude Code on Windows."
     },
     {
-      "id": "claude.hzb-marketplace",
-      "tool": "claude",
-      "kind": "marketplace",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills",
-      "target": "${home}/.claude/hzb-skills",
-      "description": "Local hzb skill marketplace."
-    },
-    {
       "id": "codex.config",
       "tool": "codex",
       "kind": "config",
@@ -81,66 +69,6 @@
       "source": "codex/prompts/checkpoint.md",
       "target": "${home}/.codex/prompts/checkpoint.md",
       "description": "Codex slash-menu checkpoint adapter."
-    },
-    {
-      "id": "codex.skill.codex-review",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/codex-review",
-      "target": "${home}/.codex/skills/codex-review",
-      "description": "Shared hzb skill for independent Codex review."
-    },
-    {
-      "id": "codex.skill.conference-meeting-summary",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/conference-meeting-summary",
-      "target": "${home}/.codex/skills/conference-meeting-summary",
-      "description": "Shared hzb conference summary skill."
-    },
-    {
-      "id": "codex.skill.okf",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/okf",
-      "target": "${home}/.codex/skills/okf",
-      "description": "Open Knowledge Format authoring and review skill."
-    },
-    {
-      "id": "codex.skill.save-memory-before-compact",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/save-memory-before-compact",
-      "target": "${home}/.codex/skills/save-memory-before-compact",
-      "description": "Shared memory checkpoint skill."
-    },
-    {
-      "id": "codex.skill.web-access",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/web-access",
-      "target": "${home}/.codex/skills/web-access",
-      "description": "Shared browser and web access skill."
     }
   ]
 }

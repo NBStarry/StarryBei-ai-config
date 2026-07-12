@@ -69,11 +69,6 @@
   - 预期效果：README 对 Windows 用户可直接执行，文档与实际安装行为一致。
   - 实际效果：（验证后填写）
 
-- [ ] **hzb:okf skill 创建与触发** (commit: pending, date: 2026-07-12)
-  - 验证方法：更新 hzb 插件并重启 Claude/Codex 后，分别提出“按 OKF 整理这个数据目录”和普通“写一篇 Markdown 说明”；观察前者是否触发 `hzb:okf` 并遵循官方 v0.1，后者是否避免误触发。
-  - 预期效果：skill 能创建或审查可移植 OKF bundle，引用官方文章/spec，且不会对普通单篇文档强制套用 OKF。
-  - 实际效果：（验证后填写）
-
 ### Karpathy guidelines skill
 
 - [ ] **karpathy-guidelines skill 在 Dashboard 可见** (commit: pending, date: 2026-06-16)
@@ -87,13 +82,6 @@
   - 验证方法：在 Dashboard 观察 marketplace 和插件清单是否完整、无 `pua` 相关项。
   - 预期效果：含 longxiabei Mac 上盘点到的源（新增 `telegram` 等；`pua`/`pua-skills` 应按用户偏好被移除、不出现），每插件标注所属 marketplace 与携带 skill；Dashboard 不报错
   - 实际效果：正确更新
-
-### Dashboard 扫描 hzb-skills (generate-site-data.sh)
-
-- [x] **generate-site-data.sh 纳入 skills/hzb-skills 扫描** (date: 2026-06-14)
-  - 验证方法：在 Dashboard 观察 hzb skills 是否出现、来源标记是否正确。
-  - 预期效果：自建 hzb-skills 出现在 Dashboard skills 列表，标记来源 `hzb`，不重复、不遗漏
-  - 实际效果：正确出现
 
 ### Windows 适配 (install.ps1 / settings.windows.json / statusline.ps1)
 
@@ -109,7 +97,7 @@
   - 实际效果：（验证后填写）
 
 - [ ] **install.ps1：Windows 安装器** (date: 2026-06-14)
-  - 验证方法：在 Windows PowerShell 执行 `pwsh -File .\install.ps1`，观察 Claude/Codex 重启后配置、statusline、hzb skills 和 `/prompts:checkpoint` 是否实际可用；同时确认已有本地配置未被无提示覆盖。
+  - 验证方法：在 Windows PowerShell 执行 `pwsh -File .\install.ps1`，观察 Claude/Codex 重启后配置、statusline 和 `/prompts:checkpoint` 是否实际可用；同时确认已有本地配置未被无提示覆盖。
   - 预期效果：文件用 symlink（需开发者模式/管理员）、目录用 junction（免提权、跨盘）、已有文件先备份到 `~/.ai-config-backup-*`；缺开发者模式时给出明确提示并继续创建 junction
   - 实际效果：（验证后填写）
 
@@ -126,12 +114,12 @@
   - 实际效果：✅ 已验证。data.json：skills=93 hooks=1 configs=4 scripts=1 commands=1 plugins=10，全部非 0；所有 .sh 通过 bash -n
 
 - [x] **install.sh symlink 模式 + settings.json 原子写存活** (commit: pending, date: 2026-06-11)
-  - 验证方法：`bash install.sh` 后 `ls -la` 确认 `~/.claude/{settings.json,CLAUDE.md,statusline.sh,hzb-skills}` 与 `~/.codex/skills/*` 均为指向仓库的 symlink；新开 Claude 会话执行 `/model` 切换→退出→`[ -L ~/.claude/settings.json ]` 仍为 symlink；`/hzb:codex-review` 可见；codex 内 5 个 skill 可见
+  - 验证方法：`bash install.sh` 后 `ls -la` 确认 `~/.claude/{settings.json,CLAUDE.md,statusline.sh}` 均为指向仓库的 symlink；新开 Claude 会话执行 `/model` 切换→退出→`[ -L ~/.claude/settings.json ]` 仍为 symlink
   - 预期效果：symlink 不被原子写打断（若打断则回退 copy 模式）；插件与 statusline 正常
-  - 实际效果：✅ 已验证。所有 symlink 就位；`/model` 切换后 settings.json 仍为 symlink（Claude Code 用普通写穿透 symlink，不用原子 rename，symlink 模式安全）；hzb 插件链路完好；codex skills 6 个悬空已修复
+  - 实际效果：✅ 已验证。所有 symlink 就位；`/model` 切换后 settings.json 仍为 symlink（Claude Code 用普通写穿透 symlink，不用原子 rename，symlink 模式安全）
 
 - [x] **敏感信息未泄漏到公开仓库** (commit: ef615d4, date: 2026-06-11)
-  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；含密真身（g1-robot/SKILL.md、connect-internal*.md、wlcb-dev/SKILL.md、settings.local.json / legacy settings.glm.json）在 .gitignore 内、未被跟踪
+  - 验证方法：`git log -p` 全历史 grep `sshpass -p|pw=|sk-|ghp_|ss://` 无真实值命中；本仓库的 settings.local.json / legacy settings.glm.json 在 .gitignore 内、未被跟踪；hzb 私有 overlay 由独立仓库管理
   - 预期效果：仓库内只有脱敏 .example 模板，无任何真实密钥
   - 实际效果：✅ 已验证。本次 5 个 commit + 全仓库 --all 历史 grep（机器人密码/relay 凭证/SakuraFrp pw/GLM token/OpenRouter key/飞书 ID/邮箱）零命中；这些密钥从未进入任何 git 历史；5 个含密真身经 git check-ignore 确认未跟踪；push 到 GitHub 未被 secret scanning 拦截
 
