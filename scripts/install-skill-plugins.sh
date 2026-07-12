@@ -35,6 +35,21 @@ plugin_args() {
   fi
 }
 
+find_tool() {
+  local tool="$1" candidate
+  if command -v "$tool" >/dev/null 2>&1; then
+    command -v "$tool"
+    return
+  fi
+  for candidate in "$HOME/.local/bin/$tool" "/opt/homebrew/bin/$tool" "/usr/local/bin/$tool"; do
+    if [ -x "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return
+    fi
+  done
+  return 1
+}
+
 for tool in claude codex; do
   if [ "$PLAN" -eq 1 ]; then
     while IFS=$'\t' read -r repository branch; do
@@ -50,16 +65,17 @@ for tool in claude codex; do
     continue
   fi
 
-  if ! command -v "$tool" >/dev/null 2>&1; then
+  tool_cmd="$(find_tool "$tool" || true)"
+  if [ -z "$tool_cmd" ]; then
     echo "WARN: $tool is not installed; skipping its skill plugins." >&2
     continue
   fi
 
   if [ "$tool" = "claude" ]; then
-    marketplace_state=$(claude plugin marketplace list --json)
+    marketplace_state=$("$tool_cmd" plugin marketplace list --json)
     plugin_state=""
   else
-    marketplace_state=$(codex plugin marketplace list --json)
+    marketplace_state=$("$tool_cmd" plugin marketplace list --json)
     plugin_state=""
   fi
 
@@ -76,13 +92,13 @@ for tool in claude codex; do
     fi
     echo "adding   $tool marketplace $id"
     IFS=$'\t' read -r -a args < <(marketplace_args "$tool" "$repository" "$branch")
-    "$tool" "${args[@]}"
+    "$tool_cmd" "${args[@]}"
   done < <(jq -r --arg tool "$tool" '.marketplaces[] | select(.tools | index($tool)) | [.id, .repository, .branch] | @tsv' "$MANIFEST")
 
   if [ "$tool" = "claude" ]; then
-    plugin_state=$(claude plugin list --json)
+    plugin_state=$("$tool_cmd" plugin list --json)
   else
-    plugin_state=$(codex plugin list --json)
+    plugin_state=$("$tool_cmd" plugin list --json)
   fi
 
   while IFS=$'\t' read -r name marketplace; do
@@ -99,6 +115,6 @@ for tool in claude codex; do
     fi
     echo "install  $tool plugin $selector"
     IFS=$'\t' read -r -a args < <(plugin_args "$tool" "$selector")
-    "$tool" "${args[@]}"
+    "$tool_cmd" "${args[@]}"
   done < <(jq -r --arg tool "$tool" '.plugins[] | select(.tools | index($tool)) | [.name, .marketplace] | @tsv' "$MANIFEST")
 done

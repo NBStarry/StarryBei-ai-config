@@ -38,11 +38,11 @@ cd StarryBei-ai-config
 bash install.sh
 ```
 
-`install.sh` 会备份已有目标文件、创建 symlink，并按 `config/skill-plugins.json` 注册外部 marketplace 和安装 plugins。已有真实文件不会被覆盖。脚本依赖 `jq` 读取声明，可通过系统包管理器安装。
+`install.sh` 只处理当前机器已经安装的工具：Claude Code 存在时才链接 `~/.claude` 配置，Codex 存在时才链接 `~/.codex` prompts；不要求机器安装仓库中出现的所有工具。脚本会先备份已有目标文件，再创建 symlink，并只为已安装工具注册对应 marketplace 和 plugins。脚本依赖 `jq` 读取声明，可通过系统包管理器安装。
 
 ## 安装后需要做的事
 
-1. 重启 Claude Code，让 settings、statusline 和插件配置生效。
+1. 重启本次实际配置过的 Claude Code 或 Codex，让配置和 plugins 生效。
 2. 按脚本提示填写本地敏感文件，例如 GLM key、内网连接信息、机器人/硬件凭证。
 3. 如需 Codex CLI，复制模板并登录：
 
@@ -118,7 +118,7 @@ StarryBei-ai-config/
 
 `install.ps1` 的对应行为基本相同，但公开配置使用 `claude/configs/settings.windows.json`，私有生产配置可放在 gitignored 的 `claude/configs/settings.windows.local.json`，状态栏指向 `claude/scripts/statusline.ps1`。
 
-两个安装器都会读取 `config/skill-plugins.json`，只补齐尚未注册的 marketplace 和尚未安装的 plugin，不覆盖已有来源，也不改变已安装 plugin 的启用状态。离线或只想更新配置时可使用 `-SkipSkillPlugins` / `--skip-skill-plugins`。
+两个安装器都会先探测本机已有的 Claude Code / Codex，只配置检测到的工具；缺少某个工具会明确跳过，不会创建该工具的配置目录，也不会要求安装它。随后读取 `config/skill-plugins.json`，只为已有工具补齐尚未注册的 marketplace 和尚未安装的 plugin，不覆盖已有来源，也不改变已安装 plugin 的启用状态。离线或只想更新配置时可使用 `-SkipSkillPlugins` / `--skip-skill-plugins`。
 
 Claude Code 相关文档：
 

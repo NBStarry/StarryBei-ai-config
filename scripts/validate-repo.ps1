@@ -75,6 +75,9 @@ try {
   $installPs1 = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'install.ps1')
   Assert-True ($installPs1 -match "codex\\prompts") 'install.ps1 links Codex prompt adapters'
   Assert-True ($installPs1 -match 'install-skill-plugins\.ps1') 'install.ps1 installs declared external skill plugins'
+  Assert-True ($installPs1 -match "Find-ToolCommand 'claude'" -and $installPs1 -match "Find-ToolCommand 'codex'") 'install.ps1 detects installed tools before configuring them'
+  $installSh = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'install.sh')
+  Assert-True ($installSh -match 'find_tool claude' -and $installSh -match 'find_tool codex' -and $installSh -match '\$HOME/\.local/bin/\$tool') 'install.sh detects installed tools in PATH and common user locations'
   $skillPluginInstallerSource = Get-Content -Raw -LiteralPath $skillPluginInstaller
   Assert-True ($skillPluginInstallerSource -match 'OpenAI\\Codex\\bin') 'PowerShell plugin installer locates the Windows Codex app without a profile alias'
 
@@ -99,6 +102,12 @@ try {
 
   $testHome = Join-Path ([System.IO.Path]::GetTempPath()) ("starrybei-config-test-" + [guid]::NewGuid().ToString('N'))
   New-Item -ItemType Directory -Path $testHome | Out-Null
+  $testBin = Join-Path $testHome 'bin'
+  New-Item -ItemType Directory -Path $testBin | Out-Null
+  Set-Content -LiteralPath (Join-Path $testBin 'claude.cmd') -Value '@exit /b 0' -Encoding ascii
+  Set-Content -LiteralPath (Join-Path $testBin 'codex.cmd') -Value '@exit /b 0' -Encoding ascii
+  $originalPath = $env:PATH
+  $env:PATH = "$testBin$([System.IO.Path]::PathSeparator)$originalPath"
   try {
     $planJson = & pwsh -NoProfile -File $configManager plan -HomePath $testHome -Json
     Assert-True ($LASTEXITCODE -eq 0) 'configuration plan runs against an isolated home'
@@ -110,14 +119,15 @@ try {
     $verifyJson = & pwsh -NoProfile -File $configManager verify -HomePath $testHome -Json
     Assert-True ($LASTEXITCODE -eq 0) 'configuration verify confirms the isolated home'
     $verified = @($verifyJson | ConvertFrom-Json)
-    Assert-True (@($verified | Where-Object status -ne 'installed').Count -eq 0) 'all isolated managed resources converge'
+    Assert-True (@($verified | Where-Object { $_.status -notin @('installed', 'unsupported', 'tool-not-installed') }).Count -eq 0) 'all applicable isolated managed resources converge'
 
     $null = & pwsh -NoProfile -File $configManager rollback -HomePath $testHome -Json
     Assert-True ($LASTEXITCODE -eq 0) 'configuration rollback succeeds against an isolated home'
     $rolledBackJson = & pwsh -NoProfile -File $configManager plan -HomePath $testHome -Json
     $rolledBack = @($rolledBackJson | ConvertFrom-Json)
-    Assert-True (@($rolledBack | Where-Object status -ne 'missing').Count -eq 0) 'rollback restores the isolated empty home'
+    Assert-True (@($rolledBack | Where-Object { $_.status -notin @('missing', 'unsupported', 'tool-not-installed') }).Count -eq 0) 'rollback restores the isolated empty home'
   } finally {
+    $env:PATH = $originalPath
     if (Test-Path -LiteralPath $testHome) {
       Remove-Item -LiteralPath $testHome -Recurse -Force
     }
