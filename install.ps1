@@ -112,8 +112,6 @@ Link-Dir (Join-Path $Repo 'skills\hzb-skills') (Join-Path $ClaudeHome 'hzb-skill
 $Hzb = Join-Path $Repo 'skills\hzb-skills\plugins\hzb'
 Seed-File (Join-Path $Hzb 'commands\connect-internal.md.example')        (Join-Path $Hzb 'commands\connect-internal.md')
 Seed-File (Join-Path $Hzb 'commands\connect-internal-backup.md.example') (Join-Path $Hzb 'commands\connect-internal-backup.md')
-Seed-File (Join-Path $Hzb 'skills\g1-robot\SKILL.md.example')            (Join-Path $Hzb 'skills\g1-robot\SKILL.md')
-Seed-File (Join-Path $Hzb 'skills\wlcb-dev\SKILL.md.example')            (Join-Path $Hzb 'skills\wlcb-dev\SKILL.md')
 
 # -- Register hzb marketplace (idempotent best-effort) -----------------------
 $claudeCli = Get-Command claude -ErrorAction SilentlyContinue
@@ -135,7 +133,7 @@ Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.wi
 Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
 
 # -- Codex CLI: shared skills (directory junctions) --------------------------
-foreach ($s in 'codex-review','conference-meeting-summary','g1-robot','okf','web-access','wlcb-dev','save-memory-before-compact') {
+foreach ($s in 'codex-review','conference-meeting-summary','okf','web-access','save-memory-before-compact') {
   $sdir = Join-Path $Hzb "skills\$s"
   if (Test-Path -LiteralPath $sdir) {
     Link-Dir $sdir (Join-Path $CodexHome "skills\$s")

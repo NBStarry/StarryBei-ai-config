@@ -9,7 +9,7 @@
     {
       "name": "hzb",
       "source": "./plugins/hzb",
-      "description": "hanzebei 自建 skill：codex-review、conference-meeting-summary、g1-robot、okf、web-access、wlcb-dev、save-memory-before-compact。"
+      "description": "hanzebei 自建 skill：codex-review、conference-meeting-summary、okf、web-access、save-memory-before-compact。"
     }
   ]
 }

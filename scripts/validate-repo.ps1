@@ -132,11 +132,9 @@ try {
   $expectedHzbSkills = @(
     'codex-review',
     'conference-meeting-summary',
-    'g1-robot',
     'okf',
     'save-memory-before-compact',
-    'web-access',
-    'wlcb-dev'
+    'web-access'
   )
   $hzbNames = @($data.skills | Where-Object { $_.source -eq 'hzb' } | ForEach-Object { $_.name })
   foreach ($name in $expectedHzbSkills) {
@@ -154,7 +152,7 @@ try {
   $localDashboardCheck = & $node.Source $localDashboardServer --check
   Write-Host $localDashboardCheck
   Assert-True ($LASTEXITCODE -eq 0) 'local Dashboard data overlay builds without external dependencies'
-  Assert-True ($localDashboardCheck -match 'resources=13' -and $localDashboardCheck -match 'contents=13') 'local Dashboard exposes redacted content for every managed resource'
+  Assert-True ($localDashboardCheck -match "resources=$($resourceIds.Count)" -and $localDashboardCheck -match "contents=$($resourceIds.Count)") 'local Dashboard exposes redacted content for every managed resource'
   $localDashboardSource = Get-Content -Raw -LiteralPath $localDashboardServer
   Assert-True ($localDashboardSource -notmatch 'listen\([^\r\n]*0\.0\.0\.0') 'local Dashboard does not bind to all interfaces'
 

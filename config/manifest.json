@@ -107,18 +107,6 @@
       "description": "Shared hzb conference summary skill."
     },
     {
-      "id": "codex.skill.g1-robot",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/g1-robot",
-      "target": "${home}/.codex/skills/g1-robot",
-      "description": "Shared local operations skill; the real SKILL.md remains gitignored."
-    },
-    {
       "id": "codex.skill.okf",
       "tool": "codex",
       "kind": "skill",
@@ -153,18 +141,6 @@
       "source": "skills/hzb-skills/plugins/hzb/skills/web-access",
       "target": "${home}/.codex/skills/web-access",
       "description": "Shared browser and web access skill."
-    },
-    {
-      "id": "codex.skill.wlcb-dev",
-      "tool": "codex",
-      "kind": "skill",
-      "platforms": [
-        "windows"
-      ],
-      "method": "junction",
-      "source": "skills/hzb-skills/plugins/hzb/skills/wlcb-dev",
-      "target": "${home}/.codex/skills/wlcb-dev",
-      "description": "Shared local development host skill; the real SKILL.md remains gitignored."
     }
   ]
 }

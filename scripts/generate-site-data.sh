@@ -118,20 +118,13 @@ while IFS= read -r skill_file; do
   scan_skill "$skill_file" "$source_label" "$rel_path"
 done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
 
-# 2b) 仓库 skills/hzb-skills/ — 自建跨工具 skill marketplace（source 标 hzb）
-# 含密 skill（g1-robot/wlcb-dev）的真身 SKILL.md 被 .gitignore 保护、正文含真实凭证，
-# 扫描其脱敏版 SKILL.md.example 代替，保证 dashboard 能展示但不泄漏。
+# 2b) 仓库 skills/hzb-skills/ — 只扫描 Git 已跟踪的公开 skill。
+# 工作区可能同时存在被 .gitignore 保护的本机私有 skill，绝不能进入公开数据。
 while IFS= read -r skill_file; do
-  [ -f "${skill_file}.example" ] && continue   # 有脱敏兄弟文件的真身 → 跳过，改扫 .example
   rel_path="${skill_file#${REPO_ROOT}/}"
+  git -C "$REPO_ROOT" ls-files --error-unmatch -- "$rel_path" >/dev/null 2>&1 || continue
   scan_skill "$skill_file" "hzb" "$rel_path"
 done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
-# 脱敏版 SKILL.md.example（含密 skill 的可公开版本）
-while IFS= read -r example_file; do
-  skill_file="${example_file%.example}"
-  rel_path="${skill_file#${REPO_ROOT}/}"
-  scan_skill "$example_file" "hzb" "$rel_path"
-done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md.example" -not -path "*/examples/*" 2>/dev/null)
 
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
