@@ -157,6 +157,26 @@ async function readLocalConfig(filePath) {
   };
 }
 
+async function readManagedSourceContent(source) {
+  if (!source) return { content: '', contentFile: '' };
+  let contentFile = source;
+  let stat;
+  try { stat = await fsp.stat(source); } catch { return { content: '', contentFile: '' }; }
+  if (stat.isDirectory()) {
+    contentFile = ['SKILL.md.example', 'SKILL.md', 'README.md', path.join('.claude-plugin', 'marketplace.json')]
+      .map(name => path.join(source, name))
+      .find(candidate => fs.existsSync(candidate)) || '';
+  }
+  if (!contentFile) return { content: '', contentFile: '' };
+
+  const raw = await fsp.readFile(contentFile, 'utf8');
+  let content = redactText(raw);
+  if (path.extname(contentFile).toLowerCase() === '.json') {
+    try { content = JSON.stringify(redactObject(JSON.parse(raw)), null, 2); } catch { /* keep redacted text */ }
+  }
+  return { content, contentFile: friendlyPath(contentFile) };
+}
+
 function latestInstallation(installations) {
   return [...installations].sort((a, b) =>
     String(b.lastUpdated || b.installedAt || '').localeCompare(String(a.lastUpdated || a.installedAt || ''))
@@ -204,13 +224,16 @@ async function getLocalInventory() {
         detail = 'Target exists but does not point to the selected repository source.';
       }
     }
+    const display = await readManagedSourceContent(source);
     resources.push({
       ...resource,
       source,
       target,
       status,
       action: status === 'missing' ? 'install' : status === 'drifted' ? 'replace' : 'none',
-      detail
+      detail,
+      content: display.content,
+      contentFile: display.contentFile
     });
   }
   return {
@@ -329,7 +352,8 @@ function openBrowser(url) {
 
 const localData = await buildLocalData();
 if (options.check) {
-  console.log(`Local Dashboard data: skills=${localData.stats.total_skills} configs=${localData.stats.total_configs} plugins=${localData.stats.total_plugins} resources=${localData.stats.total_resources}`);
+  const contentResources = localData.inventory.resources.filter(resource => resource.content).length;
+  console.log(`Local Dashboard data: skills=${localData.stats.total_skills} configs=${localData.stats.total_configs} plugins=${localData.stats.total_plugins} resources=${localData.stats.total_resources} contents=${contentResources}`);
   process.exit(0);
 }
 

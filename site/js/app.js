@@ -395,7 +395,12 @@
       var card = el('div', { className: 'inventory-card' });
       var header = el('div', { className: 'inventory-header' });
       header.appendChild(el('span', { className: 'inventory-id', textContent: resource.id }));
-      header.appendChild(el('span', { className: 'inventory-status status-' + status, textContent: status }));
+      var headerActions = el('div', { className: 'inventory-header-actions' });
+      headerActions.appendChild(el('span', { className: 'inventory-status status-' + status, textContent: status }));
+      if (canEditSelectedBranch() && resource.contentFile) {
+        headerActions.appendChild(Editor.createEditBtn(resource.contentFile));
+      }
+      header.appendChild(headerActions);
       card.appendChild(header);
 
       var meta = el('div', { className: 'inventory-meta' });
@@ -416,6 +421,12 @@
       paths.appendChild(el('dd', { textContent: resource.target || '' }));
       card.appendChild(paths);
       if (resource.detail) card.appendChild(el('div', { className: 'inventory-detail', textContent: resource.detail }));
+      if (resource.content) {
+        var details = el('details', { className: 'inventory-content' });
+        details.appendChild(el('summary', { textContent: 'View content' + (resource.contentFile ? ' — ' + resource.contentFile : '') }));
+        details.appendChild(el('pre', { textContent: resource.content }));
+        card.appendChild(details);
+      }
       list.appendChild(card);
     });
     content.appendChild(list);
@@ -443,7 +454,7 @@
     titleRow.appendChild(el('div', { className: 'page-title', textContent: 'Skills' }));
     if (canEditSelectedBranch()) {
       var skillTemplate = '---\nname: \ndescription: \nversion: 1.0.0\n---\n\n# Skill Name\n';
-      titleRow.appendChild(Editor.createCreateBtn('skills', skillTemplate, 'my-skill/SKILL.md'));
+      titleRow.appendChild(Editor.createCreateBtn('claude/skills/custom', skillTemplate, 'my-skill/SKILL.md'));
     }
     content.appendChild(titleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -580,7 +591,7 @@
     hookTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Hooks' }));
     if (canEditSelectedBranch()) {
       var hookTemplate = '{\n  "hooks": {}\n}';
-      hookTitleRow.appendChild(Editor.createCreateBtn('hooks', hookTemplate, 'my-hook.json'));
+      hookTitleRow.appendChild(Editor.createCreateBtn('claude/hooks', hookTemplate, 'my-hook.json'));
     }
     content.appendChild(hookTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -643,7 +654,7 @@
     configTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Configs' }));
     if (canEditSelectedBranch()) {
       var configTemplate = '{}';
-      configTitleRow.appendChild(Editor.createCreateBtn('configs', configTemplate, 'my-config.json'));
+      configTitleRow.appendChild(Editor.createCreateBtn('claude/configs', configTemplate, 'my-config.json'));
     }
     content.appendChild(configTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -1053,7 +1064,7 @@
     commandsTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Commands' }));
     if (canEditSelectedBranch()) {
       var cmdTemplate = '# Command Title\n\nDescription of what this command does.\n\n## Usage\n\n```bash\n# example\n```\n';
-      commandsTitleRow.appendChild(Editor.createCreateBtn('commands', cmdTemplate, 'my-command.md'));
+      commandsTitleRow.appendChild(Editor.createCreateBtn('claude/commands', cmdTemplate, 'my-command.md'));
     }
     content.appendChild(commandsTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },

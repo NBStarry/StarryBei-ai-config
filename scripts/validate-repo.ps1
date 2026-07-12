@@ -110,6 +110,13 @@ try {
   Assert-True ([int]$data.stats.total_commands -eq @($data.commands).Count) 'Dashboard command total matches data'
   if ($data.ContainsKey('inventory')) {
     Assert-True ([int]$data.stats.total_resources -eq @($data.inventory.resources).Count) 'Dashboard resource total matches inventory data'
+    $inventoryResources = @($data.inventory.resources)
+    if ($inventoryResources.Count -gt 0 -and $inventoryResources[0].ContainsKey('content')) {
+      foreach ($id in 'claude.settings', 'claude.instructions', 'codex.config', 'codex.prompt.checkpoint') {
+        $resource = @($inventoryResources | Where-Object id -eq $id)
+        Assert-True ($resource.Count -eq 1 -and -not [string]::IsNullOrWhiteSpace([string]$resource[0].content)) "Dashboard inventory includes public content for $id"
+      }
+    }
   }
 
   $localSources = @($data.skills | Where-Object {
@@ -144,10 +151,16 @@ try {
 
   & $node.Source --check $localDashboardServer
   Assert-True ($LASTEXITCODE -eq 0) 'local Dashboard server has valid JavaScript syntax'
-  & $node.Source $localDashboardServer --check
+  $localDashboardCheck = & $node.Source $localDashboardServer --check
+  Write-Host $localDashboardCheck
   Assert-True ($LASTEXITCODE -eq 0) 'local Dashboard data overlay builds without external dependencies'
+  Assert-True ($localDashboardCheck -match 'resources=13' -and $localDashboardCheck -match 'contents=13') 'local Dashboard exposes redacted content for every managed resource'
   $localDashboardSource = Get-Content -Raw -LiteralPath $localDashboardServer
   Assert-True ($localDashboardSource -notmatch 'listen\([^\r\n]*0\.0\.0\.0') 'local Dashboard does not bind to all interfaces'
+
+  $editorSource = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'site/js/editor.js')
+  Assert-True ($editorSource -notmatch '(sessionStorage|github_token|api\.github\.com|Authorization)') 'Dashboard editor does not handle GitHub tokens'
+  Assert-True ($editorSource -match '/edit/' -and $editorSource -match '/new/' -and $editorSource -match '/delete/') 'Dashboard editor delegates mutations to GitHub-native pages'
 
   $sensitiveTrackedPaths = @(
     'claude/configs/settings.local.json',

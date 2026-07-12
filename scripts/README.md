@@ -131,7 +131,7 @@ bash scripts/sync-configs.sh diff
 
 ```
 本地修改配置 → sync-configs.sh push → git commit + push → GitHub Actions 部署 → Dashboard 可见
-Dashboard 编辑 → GitHub API 提交 → git pull → sync-configs.sh pull → 本地生效
+Dashboard 编辑 → GitHub 原生编辑页提交 → git pull → sync-configs.sh pull → 本地生效
 ```
 
 ### Dependencies / 依赖

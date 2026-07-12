@@ -485,7 +485,56 @@ total_pending=$(echo "$verify_pending" | jq 'length')
 total_deprecated=$(echo "$verify_deprecated" | jq 'length')
 manifest_file="${REPO_ROOT}/config/manifest.json"
 if [ -f "$manifest_file" ]; then
-  inventory_json=$(jq '{mode: "desired", version: .version, resources: [.resources[] + {status: "desired", action: "none"}]}' "$manifest_file")
+  inventory_dir="$TMPDIR_DATA/inventory"
+  mkdir -p "$inventory_dir"
+  inventory_idx=0
+  while IFS= read -r resource; do
+    selected_source=""
+    while IFS= read -r candidate; do
+      [ -n "$candidate" ] || continue
+      if [ -e "${REPO_ROOT}/${candidate}" ] && [ -n "$(git -C "$REPO_ROOT" ls-files -- "$candidate")" ]; then
+        selected_source="$candidate"
+        break
+      fi
+    done < <(echo "$resource" | jq -r 'if .source then [.source][] else .sourceCandidates[] end')
+
+    content_file=""
+    if [ -n "$selected_source" ] && [ -f "${REPO_ROOT}/${selected_source}" ]; then
+      content_file="$selected_source"
+    elif [ -n "$selected_source" ] && [ -d "${REPO_ROOT}/${selected_source}" ]; then
+      for nested in SKILL.md SKILL.md.example README.md .claude-plugin/marketplace.json; do
+        candidate="${selected_source}/${nested}"
+        if [ -f "${REPO_ROOT}/${candidate}" ] && git -C "$REPO_ROOT" ls-files --error-unmatch -- "$candidate" >/dev/null 2>&1; then
+          content_file="$candidate"
+          break
+        fi
+      done
+    fi
+
+    : > "$TMPDIR_DATA/tmp_inventory_content"
+    if [ -n "$content_file" ]; then
+      cat "${REPO_ROOT}/${content_file}" > "$TMPDIR_DATA/tmp_inventory_content"
+    fi
+    jq -n \
+      --argjson resource "$resource" \
+      --arg resolved_source "$selected_source" \
+      --arg content_file "$content_file" \
+      --rawfile content "$TMPDIR_DATA/tmp_inventory_content" \
+      '$resource + {
+        status: "desired",
+        action: "none",
+        resolvedSource: $resolved_source,
+        contentFile: $content_file,
+        content: $content
+      }' > "$inventory_dir/$inventory_idx.json"
+    inventory_idx=$((inventory_idx + 1))
+  done < <(jq -c '.resources[]' "$manifest_file")
+  inventory_resources=$(jq -s '.' "$inventory_dir"/*.json)
+  inventory_version=$(jq '.version' "$manifest_file")
+  inventory_json=$(jq -n \
+    --argjson version "$inventory_version" \
+    --argjson resources "$inventory_resources" \
+    '{mode: "desired", version: $version, resources: $resources}')
 else
   inventory_json='{"mode":"desired","version":1,"resources":[]}'
 fi

@@ -57,7 +57,7 @@ Both installers link shareable configuration into the relevant user directories 
 
 - `scripts/generate-site-data.sh` writes the public repository-only `site/data.json` used by GitHub Pages and CI.
 - `scripts/start-local-dashboard.ps1` launches the private loopback Dashboard. Its Node server overlays installed Claude/Codex skills, plugins, and redacted local configs in memory without changing `site/data.json`.
-- `site/js/editor.js` provides GitHub Contents API editing, diff preview, and Markdown preview.
+- `site/js/editor.js` opens GitHub-native edit/new/delete pages on `dev`; authentication stays on github.com and no GitHub token is handled by the Dashboard.
 - The workflow validates pull requests and pushes to `dev` / `main`. Both branches deploy GitHub Pages: `dev` provides the pre-merge preview, and the later `main` deployment restores the verified stable version.
 
 ### Extension Formats

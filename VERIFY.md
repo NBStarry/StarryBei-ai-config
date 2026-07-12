@@ -31,13 +31,18 @@
 ### Dashboard CI/CD and branch viewer
 
 - [ ] **Dashboard 分支查看 + repo-only CI/CD** (commit: pending, date: 2026-07-12)
-  - 验证方法：等待 `dev` Actions 完成 Pages 预览部署后，打开 GitHub Pages Dashboard；在顶栏切换 `main` / `dev`，观察 URL 是否出现可分享的 `?branch=<name>`，侧栏数据是否随分支更新；观察 `dev` 是否显示 CRUD、其他分支是否只读，错误分支是否保留原页面。
+  - 验证方法：等待 `dev` Actions 完成 Pages 预览部署后，打开 GitHub Pages Dashboard；在顶栏切换 `main` / `dev`，观察 URL 是否出现可分享的 `?branch=<name>`，侧栏数据是否随分支更新；观察 `dev` 是否显示 GitHub 编辑入口、其他分支是否只读，错误分支是否保留原页面。
   - 预期效果：分支切换、URL、数据和只读状态一致，页面布局与交互无异常。
   - 实际效果：（验证后填写）
 
 - [ ] **本地完整 Dashboard** (commit: pending, date: 2026-07-12)
   - 验证方法：在 Windows PowerShell 启动 `pwsh -File .\scripts\start-local-dashboard.ps1`，观察浏览器是否打开 `local (this machine)`；查看 Skills、Configs、Inventory 和 Dashboard 统计，再切换到 `main` / `dev` 比较数据。
   - 预期效果：本地页展示当前机器实际安装的 Claude/Codex skills 与插件，Inventory 显示 installed / missing / drifted，Configs 能看到脱敏后的本地结构；认证文件和真实 token 不出现，页面只读；切换 GitHub 分支后恢复对应在线 desired state。
+  - 实际效果：（验证后填写）
+
+- [ ] **Inventory 内容展开 + GitHub 原生编辑认证** (commit: pending, date: 2026-07-12)
+  - 验证方法：在线 Dashboard 切换到 `dev` 并打开 Inventory，展开 Settings、Instructions、Codex config、Prompt 或 Skill 的 `View content`；点击 `GitHub Edit`，观察是否直接进入对应文件的 GitHub 编辑页。退出 GitHub 登录后再次点击，应由 GitHub 自己要求登录，Dashboard 不应出现 token 输入框。
+  - 预期效果：受管资源展示 Git 已跟踪的公开来源内容；本地版相同区域只显示脱敏内容；编辑认证完全由 github.com 处理，Dashboard 不读取或保存 GitHub token。
   - 实际效果：（验证后填写）
 
 - [ ] **PowerShell 配置迁移闭环** (commit: pending, date: 2026-07-12)
