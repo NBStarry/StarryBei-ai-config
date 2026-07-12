@@ -31,7 +31,7 @@
 ### Dashboard CI/CD and branch viewer
 
 - [ ] **Dashboard 分支查看 + repo-only CI/CD** (commit: pending, date: 2026-07-12)
-  - 验证方法：打开 GitHub Pages Dashboard，在顶栏切换 `main` / `dev`，观察 URL 是否出现可分享的 `?branch=<name>`，侧栏数据是否随分支更新；观察 `dev` 是否显示 CRUD、其他分支是否只读，错误分支是否保留原页面。
+  - 验证方法：等待 `dev` Actions 完成 Pages 预览部署后，打开 GitHub Pages Dashboard；在顶栏切换 `main` / `dev`，观察 URL 是否出现可分享的 `?branch=<name>`，侧栏数据是否随分支更新；观察 `dev` 是否显示 CRUD、其他分支是否只读，错误分支是否保留原页面。
   - 预期效果：分支切换、URL、数据和只读状态一致，页面布局与交互无异常。
   - 实际效果：（验证后填写）
 

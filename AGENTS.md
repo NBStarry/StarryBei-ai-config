@@ -56,7 +56,7 @@ Both installers link shareable configuration into the relevant user directories 
 
 - `scripts/generate-site-data.sh` writes repository-only `site/data.json` by default and can include local Claude sources only with `--include-local`.
 - `site/js/editor.js` provides GitHub Contents API editing, diff preview, and Markdown preview.
-- The workflow validates pull requests and pushes to `dev` / `main`, but deploys GitHub Pages only from `main`.
+- The workflow validates pull requests and pushes to `dev` / `main`. Both branches deploy GitHub Pages: `dev` provides the pre-merge preview, and the later `main` deployment restores the verified stable version.
 
 ### Extension Formats
 
