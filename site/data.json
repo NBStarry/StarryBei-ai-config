@@ -7,7 +7,7 @@
     "total_plugins": 22,
     "total_recommended_skills": 26,
     "total_commands": 0,
-    "total_scripts_lines": 156,
+    "total_scripts_lines": 172,
     "total_verified": 35,
     "total_pending": 1,
     "total_deprecated": 8,
@@ -15,9 +15,9 @@
   },
   "git": {
     "branch": "dev",
-    "commit": "0bdc7cd"
+    "commit": "5b88cf7"
   },
-  "generated_at": "2026-07-12T07:53:30Z",
+  "generated_at": "2026-07-12T07:56:28Z",
   "skills": [
     {
       "name": "claude-md-improver",
@@ -410,7 +410,7 @@
       "name": "install-skill-plugins.sh",
       "file": "scripts/install-skill-plugins.sh",
       "description": "Install the external plugins that provide the skills represented by this repo.",
-      "lines": 104,
+      "lines": 120,
       "deps": ""
     },
     {
