@@ -3,12 +3,15 @@
 # Links repo files into %USERPROFILE%\.claude and %USERPROFILE%\.codex.
 #   - Files   -> symbolic links (New-Item SymbolicLink). Needs Windows
 #               Developer Mode ON, or an elevated (Run as administrator) shell.
-#   - Folders -> directory junctions (New-Item Junction). No privilege needed,
-#               works across volumes (repo on A:, home on C:).
-# Existing targets are backed up first. Sensitive files are SEEDED from .example
-# templates (never overwritten if a real file already exists).
+# Existing targets are backed up first. Skills are installed from their
+# declared external marketplaces instead of copied from this repository.
 #
-# Usage:  powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+# Usage:  pwsh -NoProfile -File .\install.ps1 [-SkipSkillPlugins]
+
+[CmdletBinding()]
+param(
+  [switch]$SkipSkillPlugins
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -70,66 +73,33 @@ function Link-File([string]$src, [string]$dest) {
   }
 }
 
-# Link a DIRECTORY via junction (no privilege needed, cross-volume OK).
-function Link-Dir([string]$src, [string]$dest) {
-  if (-not (Test-Path -LiteralPath $src)) { Write-Host "SKIP (missing source): $src"; return }
-  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dest) | Out-Null
-  Backup-IfExists $dest
-  New-Item -ItemType Junction -Path $dest -Target $src | Out-Null
-  Write-Host "junction $dest -> $src"
-}
-
-# Create real from example ONLY if real doesn't exist (never overwrites).
-function Seed-File([string]$example, [string]$real) {
-  if (-not (Test-Path -LiteralPath $example)) { Write-Host "SKIP (missing template): $example"; return }
-  if (Test-Path -LiteralPath $real) { Write-Host "kept     $real (already exists, not overwritten)"; return }
-  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $real) | Out-Null
-  Copy-Item -LiteralPath $example -Destination $real
-  Write-Host "seeded   $real <- $example   (FILL IN real values)"
-}
-
 Write-Host "Installing AI coding tool configs from $Repo"
 Write-Host ""
 
 # -- Claude Code: files (symlinks) ------------------------------------------
 # Windows uses settings.windows.json (PowerShell statusline + proxy in env)
-# instead of the macOS settings.json (bash/jq statusline).
-Link-File (Join-Path $Repo 'claude\configs\settings.windows.json') (Join-Path $ClaudeHome 'settings.json')
+# instead of the macOS settings.json (bash/jq statusline). A gitignored
+# settings.windows.local.json can hold private production credentials.
+$SettingsSource = Join-Path $Repo 'claude\configs\settings.windows.json'
+$PrivateSettingsSource = Join-Path $Repo 'claude\configs\settings.windows.local.json'
+if (Test-Path -LiteralPath $PrivateSettingsSource) {
+  $SettingsSource = $PrivateSettingsSource
+  Write-Host "using private Claude settings: $SettingsSource"
+}
+Link-File $SettingsSource (Join-Path $ClaudeHome 'settings.json')
 Link-File (Join-Path $Repo 'claude\configs\CLAUDE.md')             (Join-Path $ClaudeHome 'CLAUDE.md')
 Link-File (Join-Path $Repo 'claude\scripts\statusline.ps1')        (Join-Path $ClaudeHome 'statusline.ps1')
 
-# -- Claude Code: hzb-skills marketplace (directory junction) ----------------
-Link-Dir (Join-Path $Repo 'skills\hzb-skills') (Join-Path $ClaudeHome 'hzb-skills')
-
-# -- Seed sensitive real files from sanitized templates ----------------------
-$Hzb = Join-Path $Repo 'skills\hzb-skills\plugins\hzb'
-Seed-File (Join-Path $Hzb 'commands\connect-internal.md.example')        (Join-Path $Hzb 'commands\connect-internal.md')
-Seed-File (Join-Path $Hzb 'commands\connect-internal-backup.md.example') (Join-Path $Hzb 'commands\connect-internal-backup.md')
-
-# -- Register hzb marketplace (idempotent best-effort) -----------------------
-$claudeCli = Get-Command claude -ErrorAction SilentlyContinue
-if ($claudeCli) {
-  try {
-    & claude plugin marketplace add (Join-Path $ClaudeHome 'hzb-skills') 2>&1 | Out-Null
-    Write-Host "registered hzb-skills marketplace"
-  } catch {
-    Write-Host "NOTE: run once to register hzb: claude plugin marketplace add `"$ClaudeHome\hzb-skills`""
-  }
-} else {
-  Write-Host "NOTE: 'claude' not on PATH. Register hzb later with:"
-  Write-Host "      claude plugin marketplace add `"$ClaudeHome\hzb-skills`""
-}
-
 Write-Host ""
 Write-Host "NOTE: GLM backend config is not seeded (API key not in repo)."
-Write-Host "      To use it:  Copy-Item '$Repo\claude\configs\settings.glm.json.example' '$ClaudeHome\settings.glm.json'"
-Write-Host "      then fill in ANTHROPIC_AUTH_TOKEN."
+Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.windows.local.json'"
+Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
 
-# -- Codex CLI: shared skills (directory junctions) --------------------------
-foreach ($s in 'codex-review','conference-meeting-summary','web-access','save-memory-before-compact') {
-  $sdir = Join-Path $Hzb "skills\$s"
-  if (Test-Path -LiteralPath $sdir) {
-    Link-Dir $sdir (Join-Path $CodexHome "skills\$s")
+# -- Codex CLI: local slash-menu prompt adapters (file symlinks) --------------
+$CodexPrompts = Join-Path $Repo 'codex\prompts'
+if (Test-Path -LiteralPath $CodexPrompts) {
+  foreach ($prompt in Get-ChildItem -LiteralPath $CodexPrompts -File -Filter '*.md') {
+    Link-File $prompt.FullName (Join-Path $CodexHome "prompts\$($prompt.Name)")
   }
 }
 
@@ -137,6 +107,15 @@ Write-Host ""
 if (-not (Test-Path -LiteralPath (Join-Path $CodexHome 'config.toml'))) {
   Write-Host "NOTE: no ~\.codex\config.toml found."
   Write-Host "      Copy-Item '$Repo\codex\config.toml.example' '$CodexHome\config.toml'   # then set trusted project paths"
+}
+
+# -- External skill plugins --------------------------------------------------
+if ($SkipSkillPlugins) {
+  Write-Host "SKIP     external skill plugins"
+} else {
+  Write-Host ""
+  Write-Host "Installing external skill plugins from config\skill-plugins.json"
+  & (Join-Path $Repo 'scripts\install-skill-plugins.ps1')
 }
 
 # -- done --------------------------------------------------------------------
@@ -152,7 +131,8 @@ if ($SymlinkFailed) {
 }
 Write-Host "Next:"
 Write-Host "  - Restart your Claude Code session to pick up settings/plugins."
-Write-Host "  - After editing hzb skills: claude plugin update hzb@hzb-skills"
+Write-Host "  - Restart Codex or start a new Codex chat to pick up linked prompts."
+Write-Host "  - External skills are managed by config\skill-plugins.json."
 Write-Host ""
-Write-Host "WARNING: gitignored real files (credentials) live in the working tree."
+Write-Host "WARNING: gitignored real config files (credentials) may live in the working tree."
 Write-Host "         Do NOT run 'git clean -x' in this repo or they will be deleted."

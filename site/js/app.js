@@ -8,6 +8,11 @@
   var currentVerifyTab = 'pending';
   var memoryData = null;
   var MEMORY_GIST_ID = '';
+  var OWNER = 'NBStarry';
+  var REPO = 'StarryBei-ai-config';
+  var selectedBranch = null;
+  var localData = null;
+  var branchRequestId = 0;
 
   // ===== Theme Toggle =====
   var toggleBtn = document.getElementById('themeToggle');
@@ -30,16 +35,150 @@
   });
 
   // ===== Data Loading =====
-  function loadData(callback) {
+  function loadJson(url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'data.json');
+    xhr.open('GET', url);
     xhr.onload = function () {
-      if (xhr.status === 200) {
-        data = JSON.parse(xhr.responseText);
-        callback();
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          callback(null, JSON.parse(xhr.responseText));
+        } catch (e) {
+          callback('Invalid JSON: ' + e.message);
+        }
+      } else {
+        callback('Request failed with status ' + xhr.status);
       }
     };
+    xhr.onerror = function () {
+      callback('Network error');
+    };
     xhr.send();
+  }
+
+  function getRequestedBranch() {
+    try {
+      return new URL(window.location.href).searchParams.get('branch');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function updateBranchUrl(branch) {
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set('branch', branch);
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    } catch (e) { /* old browser: keep current URL */ }
+  }
+
+  function setBranchStatus(message, type) {
+    var status = document.getElementById('branchStatus');
+    status.textContent = message || '';
+    status.className = 'branch-status' + (type ? ' ' + type : '');
+  }
+
+  function addBranchOption(select, branch) {
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === branch) return;
+    }
+    var option = document.createElement('option');
+    option.value = branch;
+    option.textContent = branch === 'local' ? 'local (this machine)' : branch;
+    select.appendChild(option);
+  }
+
+  function loadBranchList(currentBranch) {
+    var select = document.getElementById('branchSelect');
+    addBranchOption(select, 'main');
+    addBranchOption(select, 'dev');
+    addBranchOption(select, currentBranch);
+    select.value = currentBranch;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/branches?per_page=100');
+    xhr.setRequestHeader('Accept', 'application/vnd.github+json');
+    xhr.onload = function () {
+      if (xhr.status < 200 || xhr.status >= 300) return;
+      try {
+        var branches = JSON.parse(xhr.responseText);
+        branches.forEach(function (branch) {
+          addBranchOption(select, branch.name);
+        });
+        select.value = selectedBranch || currentBranch;
+      } catch (e) { /* retain the current branch option */ }
+    };
+    xhr.send();
+  }
+
+  function loadRemoteBranchData(branch, callback) {
+    var metadataUrl = 'https://api.github.com/repos/' + OWNER + '/' + REPO
+      + '/contents/site/data.json?ref=' + encodeURIComponent(branch);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', metadataUrl);
+    xhr.setRequestHeader('Accept', 'application/vnd.github+json');
+    xhr.onload = function () {
+      if (xhr.status < 200 || xhr.status >= 300) {
+        callback('No site/data.json found on ' + branch);
+        return;
+      }
+      try {
+        var metadata = JSON.parse(xhr.responseText);
+        if (!metadata.download_url) {
+          callback('No downloadable Dashboard data found on ' + branch);
+          return;
+        }
+        loadJson(metadata.download_url, callback);
+      } catch (e) {
+        callback('Invalid GitHub response: ' + e.message);
+      }
+    };
+    xhr.onerror = function () {
+      callback('Unable to reach GitHub for branch ' + branch);
+    };
+    xhr.send();
+  }
+
+  function canEditSelectedBranch() {
+    return typeof Editor !== 'undefined' && Editor.canEdit();
+  }
+
+  function canDeleteSkill(skill) {
+    return !skill.external || skill.repository === 'NBStarry/hzb-skills';
+  }
+
+  function applyBranchData(branch, branchData, updateUrl) {
+    selectedBranch = branch;
+    data = branchData;
+    if (!data.git) data.git = {};
+    data.git.branch = branch;
+    if (typeof Editor !== 'undefined') Editor.setViewBranch(branch);
+    document.getElementById('branchSelect').value = branch;
+    if (updateUrl) updateBranchUrl(branch);
+    setBranchStatus('', '');
+    updateSidebar();
+    render();
+  }
+
+  function selectBranch(branch, updateUrl) {
+    if (!branch || branch === selectedBranch) return;
+    var requestId = ++branchRequestId;
+    var previousBranch = selectedBranch;
+    setBranchStatus('Loading...', 'loading');
+
+    if (localData && localData.git && localData.git.branch === branch) {
+      applyBranchData(branch, localData, updateUrl);
+      return;
+    }
+
+    loadRemoteBranchData(branch, function (err, branchData) {
+      if (requestId !== branchRequestId) return;
+      if (err) {
+        document.getElementById('branchSelect').value = previousBranch;
+        setBranchStatus(err, 'error');
+        return;
+      }
+      applyBranchData(branch, branchData, updateUrl);
+    });
   }
 
   // ===== Utility: Create Element Helper =====
@@ -91,6 +230,7 @@
     document.getElementById('badge-hooks').textContent = stats.total_hooks;
     document.getElementById('badge-configs').textContent = stats.total_configs;
     document.getElementById('badge-commands').textContent = stats.total_commands || 0;
+    document.getElementById('badge-inventory').textContent = stats.total_resources || 0;
     document.getElementById('badge-scripts').textContent = stats.total_scripts;
     document.getElementById('badge-verify').textContent = stats.total_pending;
 
@@ -108,6 +248,7 @@
   // ===== Breadcrumb =====
   var pageNames = {
     dashboard: 'Overview',
+    inventory: 'Inventory',
     skills: 'Skills',
     hooks: 'Hooks',
     configs: 'Configs',
@@ -159,17 +300,24 @@
     var stats = data.stats;
 
     content.appendChild(el('div', { className: 'page-title', textContent: 'Dashboard' }));
-    content.appendChild(el('div', { className: 'page-desc' },
-      'Claude Code configuration overview \u2014 auto-generated on every push'));
+    var isLocal = data.mode === 'local';
+    content.appendChild(el('div', { className: 'page-desc' }, isLocal
+      ? 'Local configuration snapshot \u2014 generated in memory; auth files excluded and sensitive values redacted'
+      : 'Repository configuration overview \u2014 auto-generated on every push'));
 
     // Stat cards
     var grid = el('div', { className: 'stat-grid' });
+    var inventoryResources = data.inventory && data.inventory.resources ? data.inventory.resources : [];
+    var inventoryProblems = inventoryResources.filter(function (resource) {
+      return resource.status !== 'installed' && resource.status !== 'desired' && resource.status !== 'unsupported';
+    }).length;
     var cards = [
+      { label: 'Config State', value: inventoryResources.length, sub: isLocal ? inventoryProblems + ' need attention' : 'desired resources', color: 'color-cyan', page: 'inventory' },
       { label: 'Skills', value: stats.total_skills, sub: Object.keys(getSourceCounts()).length + ' collections', color: 'color-accent', page: 'skills' },
       { label: 'Verified', value: stats.total_verified, sub: stats.total_pending + ' pending', color: 'color-green', page: 'verify' },
       { label: 'Commands', value: stats.total_commands || 0, sub: 'slash commands', color: 'color-orange', page: 'commands' },
-      { label: 'Scripts', value: stats.total_scripts_lines.toLocaleString(), sub: 'lines of bash', color: 'color-yellow', page: 'scripts' },
-      { label: 'Plugins', value: stats.total_plugins, sub: 'recommended', color: 'color-purple', page: null }
+      { label: 'Scripts', value: stats.total_scripts_lines.toLocaleString(), sub: 'tracked lines', color: 'color-yellow', page: 'scripts' },
+      { label: 'Plugins', value: stats.total_plugins, sub: isLocal ? 'installed' : 'recommended', color: 'color-purple', page: null }
     ];
 
     cards.forEach(function (c) {
@@ -213,6 +361,81 @@
     content.appendChild(actList);
   }
 
+  // --- Desired / Actual Inventory ---
+  function renderInventory() {
+    var content = document.getElementById('content');
+    while (content.firstChild) content.removeChild(content.firstChild);
+
+    var inventory = data.inventory || { mode: 'desired', resources: [] };
+    var resources = inventory.resources || [];
+    var isActual = inventory.mode === 'actual';
+    content.appendChild(el('div', { className: 'page-title', textContent: 'Configuration Inventory' }));
+    content.appendChild(el('div', { className: 'page-desc' }, isActual
+      ? 'Desired repository state compared with this machine. Run scripts/config.ps1 apply to converge it.'
+      : 'Desired repository state for this branch. Open the local Dashboard to compare it with a machine.'));
+
+    var counts = {};
+    resources.forEach(function (resource) {
+      var status = resource.status || 'desired';
+      counts[status] = (counts[status] || 0) + 1;
+    });
+    var summary = el('div', { className: 'inventory-summary' });
+    Object.keys(counts).sort().forEach(function (status) {
+      var chip = el('span', { className: 'inventory-chip status-' + status });
+      chip.appendChild(el('span', { className: 'inventory-chip-count', textContent: String(counts[status]) }));
+      chip.appendChild(document.createTextNode(status));
+      summary.appendChild(chip);
+    });
+    content.appendChild(summary);
+
+    if (resources.length === 0) {
+      content.appendChild(el('div', { className: 'empty-state', textContent: 'No managed resources found in config/manifest.json.' }));
+      return;
+    }
+
+    var list = el('div', { className: 'inventory-list' });
+    resources.forEach(function (resource) {
+      var status = resource.status || 'desired';
+      var card = el('div', { className: 'inventory-card' });
+      var header = el('div', { className: 'inventory-header' });
+      header.appendChild(el('span', { className: 'inventory-id', textContent: resource.id }));
+      var headerActions = el('div', { className: 'inventory-header-actions' });
+      headerActions.appendChild(el('span', { className: 'inventory-status status-' + status, textContent: status }));
+      if (canEditSelectedBranch() && resource.contentFile) {
+        headerActions.appendChild(Editor.createEditBtn(resource.contentFile));
+      }
+      header.appendChild(headerActions);
+      card.appendChild(header);
+
+      var meta = el('div', { className: 'inventory-meta' });
+      [resource.tool, resource.kind, resource.method].filter(Boolean).forEach(function (value) {
+        meta.appendChild(el('span', { textContent: value }));
+      });
+      card.appendChild(meta);
+      if (resource.description) card.appendChild(el('div', { className: 'inventory-description', textContent: resource.description }));
+
+      var paths = el('dl', { className: 'inventory-paths' });
+      var source = resource.source;
+      if (!source && resource.sourceCandidates) source = resource.sourceCandidates.join('  →  ');
+      if (source) {
+        paths.appendChild(el('dt', { textContent: 'Source' }));
+        paths.appendChild(el('dd', { textContent: source }));
+      }
+      paths.appendChild(el('dt', { textContent: 'Target' }));
+      paths.appendChild(el('dd', { textContent: resource.target || '' }));
+      card.appendChild(paths);
+      if (resource.detail) card.appendChild(el('div', { className: 'inventory-detail', textContent: resource.detail }));
+      if (resource.content) {
+        var details = el('details', { className: 'inventory-content' });
+        details.appendChild(el('summary', { textContent: 'View content' + (resource.contentFile ? ' — ' + resource.contentFile : '') }));
+        details.appendChild(el('pre', { textContent: resource.content }));
+        card.appendChild(details);
+      }
+      list.appendChild(card);
+    });
+    content.appendChild(list);
+  }
+
   function getSourceCounts() {
     var counts = {};
     data.skills.forEach(function (s) {
@@ -233,9 +456,15 @@
     // Title row with create button
     var titleRow = el('div', { className: 'page-title-row' });
     titleRow.appendChild(el('div', { className: 'page-title', textContent: 'Skills' }));
-    if (typeof Editor !== 'undefined') {
-      var skillTemplate = '---\nname: \ndescription: \nversion: 1.0.0\n---\n\n# Skill Name\n';
-      titleRow.appendChild(Editor.createCreateBtn('skills', skillTemplate, 'my-skill/SKILL.md'));
+    if (canEditSelectedBranch()) {
+      var skillTemplate = '---\nname: \ndescription: \nmetadata:\n  author: NBStarry\n  version: "1.0.0"\n---\n\n# Skill Name\n';
+      titleRow.appendChild(Editor.createCreateBtn(
+        'plugins/hzb/skills',
+        skillTemplate,
+        'my-skill/SKILL.md',
+        'NBStarry/hzb-skills',
+        'main'
+      ));
     }
     content.appendChild(titleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -273,16 +502,22 @@
         style: show ? '' : 'display:none'
       });
       row.appendChild(el('span', { className: 'sr-name', textContent: skill.name }));
-      row.appendChild(el('span', { className: 'sr-source', textContent: skill.source }));
+      row.appendChild(el('span', {
+        className: 'sr-source',
+        textContent: skill.source,
+        title: skill.repository ? skill.repository + '@' + skill.branch : skill.source
+      }));
       // Truncate description for display
       var desc = skill.description || '';
       if (desc.length > 100) desc = desc.substring(0, 100) + '...';
       row.appendChild(el('span', { className: 'sr-desc', textContent: desc }));
       row.appendChild(el('span', { className: 'sr-version', textContent: skill.version ? 'v' + skill.version : '' }));
-      if (typeof Editor !== 'undefined' && skill.file) {
+      if (canEditSelectedBranch() && skill.file) {
         var actions = el('span', { className: 'crud-actions' });
-        actions.appendChild(Editor.createEditBtn(skill.file));
-        actions.appendChild(Editor.createDeleteBtn(skill.file));
+        actions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
+        if (canDeleteSkill(skill)) {
+          actions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+        }
         row.appendChild(actions);
       }
       listContainer.appendChild(row);
@@ -319,14 +554,24 @@
     header.appendChild(el('div', { className: 'sd-title', textContent: skill.name }));
     var meta = el('div', { className: 'sd-meta' });
     meta.appendChild(el('span', { textContent: '\uD83D\uDCE6 ' + skill.source }));
+    if (skill.repository) {
+      meta.appendChild(el('a', {
+        href: 'https://github.com/' + skill.repository + '/tree/' + encodeURIComponent(skill.branch || 'main'),
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        textContent: '\uD83D\uDD17 ' + skill.repository + '@' + (skill.branch || 'main')
+      }));
+    }
     if (skill.version) {
       meta.appendChild(el('span', { textContent: '\uD83C\uDFF7 v' + skill.version }));
     }
     meta.appendChild(el('span', { textContent: '\uD83D\uDCC4 ' + (skill.file || '') }));
-    if (typeof Editor !== 'undefined' && skill.file) {
+    if (canEditSelectedBranch() && skill.file) {
       var detailActions = el('span', { className: 'crud-actions' });
-      detailActions.appendChild(Editor.createEditBtn(skill.file));
-      detailActions.appendChild(Editor.createDeleteBtn(skill.file));
+      detailActions.appendChild(Editor.createEditBtn(skill.file, skill.repository, skill.branch));
+      if (canDeleteSkill(skill)) {
+        detailActions.appendChild(Editor.createDeleteBtn(skill.file, skill.repository, skill.branch));
+      }
       meta.appendChild(detailActions);
     }
     header.appendChild(meta);
@@ -370,9 +615,9 @@
 
     var hookTitleRow = el('div', { className: 'page-title-row' });
     hookTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Hooks' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var hookTemplate = '{\n  "hooks": {}\n}';
-      hookTitleRow.appendChild(Editor.createCreateBtn('hooks', hookTemplate, 'my-hook.json'));
+      hookTitleRow.appendChild(Editor.createCreateBtn('claude/hooks', hookTemplate, 'my-hook.json'));
     }
     content.appendChild(hookTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -398,7 +643,7 @@
 
       header.appendChild(el('span', { className: 'hc-file', textContent: hook.file }));
 
-      if (typeof Editor !== 'undefined' && hook.file) {
+      if (canEditSelectedBranch() && hook.file) {
         var hookActions = el('span', { className: 'crud-actions' });
         hookActions.appendChild(Editor.createEditBtn(hook.file));
         hookActions.appendChild(Editor.createDeleteBtn(hook.file));
@@ -433,9 +678,9 @@
 
     var configTitleRow = el('div', { className: 'page-title-row' });
     configTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Configs' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var configTemplate = '{}';
-      configTitleRow.appendChild(Editor.createCreateBtn('configs', configTemplate, 'my-config.json'));
+      configTitleRow.appendChild(Editor.createCreateBtn('claude/configs', configTemplate, 'my-config.json'));
     }
     content.appendChild(configTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },
@@ -447,7 +692,7 @@
       var header = el('div', { className: 'config-card-header' });
       header.appendChild(el('div', { className: 'cc-name', textContent: config.name }));
       header.appendChild(el('div', { className: 'cc-path', textContent: config.file }));
-      if (typeof Editor !== 'undefined' && config.file) {
+      if (canEditSelectedBranch() && config.file) {
         var configActions = el('div', { className: 'crud-actions' });
         configActions.appendChild(Editor.createEditBtn(config.file));
         configActions.appendChild(Editor.createDeleteBtn(config.file));
@@ -843,16 +1088,16 @@
 
     var commandsTitleRow = el('div', { className: 'page-title-row' });
     commandsTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Commands' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var cmdTemplate = '# Command Title\n\nDescription of what this command does.\n\n## Usage\n\n```bash\n# example\n```\n';
-      commandsTitleRow.appendChild(Editor.createCreateBtn('commands', cmdTemplate, 'my-command.md'));
+      commandsTitleRow.appendChild(Editor.createCreateBtn('claude/commands', cmdTemplate, 'my-command.md'));
     }
     content.appendChild(commandsTitleRow);
     content.appendChild(el('div', { className: 'page-desc' },
       (data.commands ? data.commands.length : 0) + ' slash commands synced from ~/.claude/commands/'));
 
     if (!data.commands || data.commands.length === 0) {
-      content.appendChild(el('div', { className: 'empty-state', textContent: 'No commands found. Run sync-configs.sh push to sync local commands.' }));
+      content.appendChild(el('div', { className: 'empty-state', textContent: 'No commands found. Regenerate site/data.json after adding repository commands.' }));
       return;
     }
 
@@ -862,7 +1107,7 @@
       var header = el('div', { className: 'cmd-header' });
       header.appendChild(el('span', { className: 'cmd-name', textContent: '/' + cmd.name }));
       header.appendChild(el('span', { className: 'cmd-lines', textContent: cmd.lines + ' lines' }));
-      if (typeof Editor !== 'undefined' && cmd.file) {
+      if (canEditSelectedBranch() && cmd.file) {
         var cmdActions = el('div', { className: 'crud-actions' });
         cmdActions.appendChild(Editor.createEditBtn(cmd.file));
         cmdActions.appendChild(Editor.createDeleteBtn(cmd.file));
@@ -966,6 +1211,10 @@
       case 'dashboard':
         updateBreadcrumb('dashboard');
         renderDashboard();
+        break;
+      case 'inventory':
+        updateBreadcrumb('inventory');
+        renderInventory();
         break;
       case 'skills':
         updateBreadcrumb('skills');
@@ -1232,6 +1481,10 @@
     setTimeout(hideSearchResults, 200);
   });
 
+  document.getElementById('branchSelect').addEventListener('change', function () {
+    selectBranch(this.value, true);
+  });
+
   document.addEventListener('keydown', function (e) {
     // Ctrl+K or Cmd+K
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -1247,9 +1500,16 @@
   });
 
   // ===== Init =====
-  loadData(function () {
-    updateSidebar();
-    render();
+  loadJson('data.json?ts=' + Date.now(), function (err, initialData) {
+    if (err) {
+      setBranchStatus(err, 'error');
+      return;
+    }
+    localData = initialData;
+    var localBranch = initialData.git && initialData.git.branch ? initialData.git.branch : 'main';
+    var requestedBranch = getRequestedBranch() || localBranch;
+    loadBranchList(requestedBranch);
+    selectBranch(requestedBranch, Boolean(getRequestedBranch()));
   });
 
 })();

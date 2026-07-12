@@ -11,6 +11,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+*.bak-*
 .vscode/
 .idea/
 
@@ -22,16 +23,13 @@ Thumbs.db
 credentials.json
 secrets.json
 
-# Real config/skill files containing credentials — committed as .example only.
-# install.sh seeds these from the .example templates on fresh machines.
+# Real config files containing credentials — committed as .example only.
+claude/configs/settings.local.json
 claude/configs/settings.glm.json
-skills/hzb-skills/plugins/hzb/commands/connect-internal.md
-skills/hzb-skills/plugins/hzb/commands/connect-internal-backup.md
-skills/hzb-skills/plugins/hzb/skills/g1-robot/SKILL.md
-skills/hzb-skills/plugins/hzb/skills/wlcb-dev/SKILL.md
+claude/configs/settings.windows.local.json
 
 # Node modules
 node_modules/
 
-# Dashboard data is now committed (generated locally with full skill scan)
+# Dashboard data is tracked and generated from declared public sources for branch viewing.
 # site/data.json

@@ -1,14 +1,33 @@
 #!/bin/bash
 # Generate Site Data for Dashboard
-# 扫描仓库 + 本地 ~/.claude/ 的 skills、hooks、configs、scripts、commands、plugins
+# 默认扫描仓库及登记的公开外部来源；显式传 --include-local 才附加本机 Claude skills/plugins
 # 输出统一的 JSON 数据到 site/data.json，供前端 Dashboard 使用
-# 本地运行时自动包含插件 skills；CI 环境只扫仓库
+# site/data.json 会被 Git 跟踪，因此默认模式只读取 Git 已跟踪的公开内容
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUTPUT="${REPO_ROOT}/site/data.json"
 CLAUDE_HOME="${HOME}/.claude"
+INCLUDE_LOCAL=0
+
+case "${1:-}" in
+  "") ;;
+  --repo-only) INCLUDE_LOCAL=0 ;;
+  --include-local) INCLUDE_LOCAL=1 ;;
+  --help)
+    echo "Usage: $0 [--repo-only|--include-local]"
+    echo "  --repo-only     Scan repository and registered public sources (default; safe for CI/public data)."
+    echo "  --include-local Also include local Claude skills and plugins for private inspection."
+    exit 0
+    ;;
+  *)
+    echo "Unknown option: $1" >&2
+    echo "Usage: $0 [--repo-only|--include-local]" >&2
+    exit 2
+    ;;
+esac
+
 TMPDIR_DATA=$(mktemp -d)
 trap 'rm -rf "$TMPDIR_DATA"' EXIT
 
@@ -18,7 +37,71 @@ trap 'rm -rf "$TMPDIR_DATA"' EXIT
 get_frontmatter_field() {
   local file="$1"
   local field="$2"
-  sed -n '/^---$/,/^---$/p' "$file" | grep "^${field}:" | head -1 | sed "s/^${field}:[[:space:]]*//" || true
+  awk -v field="$field" '
+    function trim(value) {
+      sub(/^[[:space:]]+/, "", value)
+      sub(/[[:space:]]+$/, "", value)
+      return value
+    }
+    function emit() {
+      if (result != "") print result
+      emitted = 1
+      exit
+    }
+    /^---[[:space:]]*$/ {
+      boundaries++
+      if (boundaries == 2) {
+        if (collecting) emit()
+        exit
+      }
+      next
+    }
+    boundaries != 1 { next }
+    collecting {
+      if ($0 ~ /^[[:space:]]+/) {
+        continuation = trim($0)
+        if (continuation != "") result = result (result == "" ? "" : " ") continuation
+        next
+      }
+      emit()
+    }
+    index($0, field ":") == 1 {
+      result = trim(substr($0, length(field) + 2))
+      if (result == "" || result ~ /^[>|][+-]?$/) {
+        result = ""
+        collecting = 1
+        next
+      }
+      emit()
+    }
+    END {
+      if (collecting && !emitted && result != "") print result
+    }
+  ' "$file" || true
+}
+
+# 读取 metadata.<field>；用于兼容标准 Skill metadata 中的 version 等 UI 字段。
+get_frontmatter_metadata_field() {
+  local file="$1"
+  local field="$2"
+  awk -v field="$field" '
+    /^---[[:space:]]*$/ { boundaries++; next }
+    boundaries != 1 { next }
+    /^metadata:[[:space:]]*$/ { in_metadata = 1; next }
+    in_metadata && $0 !~ /^[[:space:]]+/ { exit }
+    in_metadata {
+      line = $0
+      sub(/^[[:space:]]+/, "", line)
+      if (index(line, field ":") == 1) {
+        value = substr(line, length(field) + 2)
+        sub(/^[[:space:]]+/, "", value)
+        sub(/[[:space:]]+$/, "", value)
+        gsub(/^"|"$/, "", value)
+        print value
+        exit
+      }
+    }
+  ' "$file" || true
 }
 
 # 读取 frontmatter 之后的正文
@@ -34,7 +117,7 @@ json_escape() {
 }
 
 # ─── Skills 扫描 ───
-# 扫描三个来源：仓库 skills/、本地 ~/.claude/skills/、已安装插件 skills
+# 扫描三类来源：登记的公开外部仓库、本地 skills、已安装插件 skills
 
 skills_dir="$TMPDIR_DATA/skills"
 mkdir -p "$skills_dir"
@@ -46,12 +129,17 @@ scan_skill() {
   local skill_file="$1"
   local source_label="$2"
   local display_path="$3"
+  local source_repository="${4:-}"
+  local source_branch="${5:-}"
 
   local name description version
   name=$(get_frontmatter_field "$skill_file" "name")
   [ -z "$name" ] && return
   description=$(get_frontmatter_field "$skill_file" "description")
   version=$(get_frontmatter_field "$skill_file" "version")
+  if [ -z "$version" ]; then
+    version=$(get_frontmatter_metadata_field "$skill_file" "version")
+  fi
 
   # 去重：同名 skill 只保留第一个
   if grep -qFx "$name" "$seen_skills_file" 2>/dev/null; then
@@ -67,8 +155,11 @@ scan_skill() {
     --arg version "$version" \
     --arg source "$source_label" \
     --arg file "$display_path" \
+    --arg repository "$source_repository" \
+    --arg branch "$source_branch" \
     --rawfile content "$TMPDIR_DATA/tmp_content" \
-    '{name: $name, description: $description, version: $version, source: $source, file: $file, content: $content}' \
+    '{name: $name, description: $description, version: $version, source: $source, file: $file, content: $content}
+      + if $repository != "" then {repository: $repository, branch: $branch, external: true} else {} end' \
     > "$skills_dir/$skill_idx.json"
   skill_idx=$((skill_idx + 1))
 }
@@ -76,7 +167,7 @@ scan_skill() {
 # 1) 本地自定义 skills (~/.claude/skills/)
 # 注意：跳过 lark-* 等第三方 skill（npx skills 装的，symlink 到 ~/.agents，CI 环境没有，
 # 会导致线上/本地数据不一致）。第三方清单改由 claude/configs/recommended-skills.json 记录。
-if [ -d "${CLAUDE_HOME}/skills" ]; then
+if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/skills" ]; then
   while IFS= read -r skill_file; do
     local_name=$(get_frontmatter_field "$skill_file" "name")
     case "$local_name" in
@@ -86,30 +177,40 @@ if [ -d "${CLAUDE_HOME}/skills" ]; then
   done < <(find -L "${CLAUDE_HOME}/skills" -name "SKILL.md" 2>/dev/null)
 fi
 
-# 2) 仓库 claude/skills/
-while IFS= read -r skill_file; do
-  rel_path="${skill_file#${REPO_ROOT}/}"
-  slash_count=$(echo "$rel_path" | tr -cd '/' | wc -c | tr -d ' ')
-  # rel_path 形如 claude/skills/<marketplace>/<name>/SKILL.md（≥4 个斜杠）
-  if [ "$slash_count" -ge 4 ]; then
-    source_label=$(echo "$rel_path" | cut -d'/' -f3)
-  else
-    source_label="custom"
-  fi
-  scan_skill "$skill_file" "$source_label" "$rel_path"
-done < <(find "${REPO_ROOT}/claude/skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
+# 2) Dashboard 登记的公开外部 skill 仓库
+# 优先复用同级 clone，但始终通过 git ls-files 只读取已跟踪文件，避免私有 overlay 进入公开数据。
+external_sources_file="${REPO_ROOT}/config/external-skill-sources.json"
+if [ -f "$external_sources_file" ]; then
+  while IFS=$'\t' read -r source_id repository branch source_path source_label; do
+    [ -z "$source_id" ] && continue
+    repo_name="${repository##*/}"
+    sibling_checkout="$(dirname "$REPO_ROOT")/${repo_name}"
+    if [ -d "${sibling_checkout}/.git" ]; then
+      external_checkout="$sibling_checkout"
+    else
+      checkout_key=$(printf '%s-%s' "$repository" "$branch" | tr '/:@' '----')
+      external_checkout="${TMPDIR_DATA}/external/${checkout_key}"
+      mkdir -p "$(dirname "$external_checkout")"
+      if [ ! -d "${external_checkout}/.git" ]; then
+        git clone --quiet --depth 1 --branch "$branch" "https://github.com/${repository}.git" "$external_checkout"
+      fi
+    fi
 
-# 2b) 仓库 skills/hzb-skills/ — 只扫描 Git 已跟踪的公开 skill。
-# 工作区可能同时存在被 .gitignore 保护的本机私有 skill，绝不能进入公开数据。
-while IFS= read -r skill_file; do
-  rel_path="${skill_file#${REPO_ROOT}/}"
-  git -C "$REPO_ROOT" ls-files --error-unmatch -- "$rel_path" >/dev/null 2>&1 || continue
-  scan_skill "$skill_file" "hzb" "$rel_path"
-done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md" -not -path "*/examples/*" 2>/dev/null)
+    while IFS= read -r rel_path; do
+      [ -z "$rel_path" ] && continue
+      scan_skill \
+        "${external_checkout}/${rel_path}" \
+        "$source_label" \
+        "$rel_path" \
+        "$repository" \
+        "$branch"
+    done < <(git -C "$external_checkout" ls-files "${source_path}/*/SKILL.md")
+  done < <(jq -r '.sources[] | [.id, .repository, .branch, .path, .source] | @tsv' "$external_sources_file")
+fi
 
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
-if [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
+if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
   while IFS= read -r skill_file; do
     # 跳过非 Claude Code 标准路径（.cursor, .gemini, .codex 等）
     if echo "$skill_file" | grep -qE '/\.(cursor|gemini|codex|mastracode|continue|opencode|factory|codebuddy|pi)/'; then
@@ -172,6 +273,14 @@ for config_file in "${REPO_ROOT}"/claude/configs/*.json "${REPO_ROOT}"/claude/co
   [ -f "$config_file" ] || continue
   rel_path="${config_file#${REPO_ROOT}/}"
   filename=$(basename "$config_file")
+  case "$filename" in
+    *.bak|*.bak-*|*.local.json|settings.local.json|settings.glm.json|settings.windows.local.json)
+      continue
+      ;;
+  esac
+  if git -C "$REPO_ROOT" check-ignore -q "$rel_path" 2>/dev/null; then
+    continue
+  fi
   cat "$config_file" > "$TMPDIR_DATA/tmp_content"
 
   # 提取 JSON 配置文件的元数据摘要
@@ -244,7 +353,7 @@ commands_dir_data="$TMPDIR_DATA/commands"
 mkdir -p "$commands_dir_data"
 cmd_idx=0
 
-for cmd_file in "${REPO_ROOT}"/claude/commands/*.md "${REPO_ROOT}"/skills/hzb-skills/plugins/hzb/commands/*.md; do
+for cmd_file in "${REPO_ROOT}"/claude/commands/*.md; do
   [ -f "$cmd_file" ] || continue
   filename=$(basename "$cmd_file")
   [ "$filename" = "README.md" ] && continue
@@ -371,7 +480,7 @@ if [ -f "$verify_file" ]; then
     fi
 
     # 检测 section 标题
-    if [[ "$line" =~ ^##[[:space:]].*Pending ]]; then
+    if [[ "$line" =~ ^##[[:space:]].*(Pending|Current[[:space:]]Manual[[:space:]]Verification|当前人工验收) ]]; then
       flush_entry
       current_section="pending"
       continue
@@ -383,7 +492,7 @@ if [ -f "$verify_file" ]; then
       flush_entry
       current_section="deprecated"
       continue
-    elif [[ "$line" =~ ^##[[:space:]] ]] && [[ ! "$line" =~ Pending|Verified|Deprecated ]]; then
+    elif [[ "$line" =~ ^##[[:space:]] ]] && [[ ! "$line" =~ Pending|Verified|Deprecated|Current[[:space:]]Manual[[:space:]]Verification|当前人工验收 ]]; then
       # Other section headers (e.g., How It Works, Status Legend) — skip
       flush_entry
       current_section=""
@@ -403,10 +512,10 @@ if [ -f "$verify_file" ]; then
       local_meta="${BASH_REMATCH[3]}"
 
       case "$local_marker" in
-        " ") current_status="pending" ;;
-        "x") current_status="verified" ;;
-        "-") current_status="deprecated" ;;
-        *)   current_status="unknown" ;;
+        " ") current_status="pending"; current_section="pending" ;;
+        "x") current_status="verified"; current_section="verified" ;;
+        "-") current_status="deprecated"; current_section="deprecated" ;;
+        *)   current_status="unknown"; current_section="" ;;
       esac
 
       # Extract commit and date from meta
@@ -449,6 +558,62 @@ total_commands=$(echo "$commands_json" | jq 'length')
 total_verified=$(echo "$verify_verified" | jq 'length')
 total_pending=$(echo "$verify_pending" | jq 'length')
 total_deprecated=$(echo "$verify_deprecated" | jq 'length')
+manifest_file="${REPO_ROOT}/config/manifest.json"
+if [ -f "$manifest_file" ]; then
+  inventory_dir="$TMPDIR_DATA/inventory"
+  mkdir -p "$inventory_dir"
+  inventory_idx=0
+  while IFS= read -r resource; do
+    selected_source=""
+    while IFS= read -r candidate; do
+      [ -n "$candidate" ] || continue
+      if [ -e "${REPO_ROOT}/${candidate}" ] && [ -n "$(git -C "$REPO_ROOT" ls-files -- "$candidate")" ]; then
+        selected_source="$candidate"
+        break
+      fi
+    done < <(echo "$resource" | jq -r 'if .source then [.source][] else .sourceCandidates[] end')
+
+    content_file=""
+    if [ -n "$selected_source" ] && [ -f "${REPO_ROOT}/${selected_source}" ]; then
+      content_file="$selected_source"
+    elif [ -n "$selected_source" ] && [ -d "${REPO_ROOT}/${selected_source}" ]; then
+      for nested in SKILL.md SKILL.md.example README.md .claude-plugin/marketplace.json; do
+        candidate="${selected_source}/${nested}"
+        if [ -f "${REPO_ROOT}/${candidate}" ] && git -C "$REPO_ROOT" ls-files --error-unmatch -- "$candidate" >/dev/null 2>&1; then
+          content_file="$candidate"
+          break
+        fi
+      done
+    fi
+
+    : > "$TMPDIR_DATA/tmp_inventory_content"
+    if [ -n "$content_file" ]; then
+      cat "${REPO_ROOT}/${content_file}" > "$TMPDIR_DATA/tmp_inventory_content"
+    fi
+    jq -n \
+      --argjson resource "$resource" \
+      --arg resolved_source "$selected_source" \
+      --arg content_file "$content_file" \
+      --rawfile content "$TMPDIR_DATA/tmp_inventory_content" \
+      '$resource + {
+        status: "desired",
+        action: "none",
+        resolvedSource: $resolved_source,
+        contentFile: $content_file,
+        content: $content
+      }' > "$inventory_dir/$inventory_idx.json"
+    inventory_idx=$((inventory_idx + 1))
+  done < <(jq -c '.resources[]' "$manifest_file")
+  inventory_resources=$(jq -s '.' "$inventory_dir"/*.json)
+  inventory_version=$(jq '.version' "$manifest_file")
+  inventory_json=$(jq -n \
+    --argjson version "$inventory_version" \
+    --argjson resources "$inventory_resources" \
+    '{mode: "desired", version: $version, resources: $resources}')
+else
+  inventory_json='{"mode":"desired","version":1,"resources":[]}'
+fi
+total_resources=$(echo "$inventory_json" | jq '.resources | length')
 
 # Git info
 git_branch=$(cd "$REPO_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
@@ -470,6 +635,7 @@ echo "$commands_json" > "$TMPDIR_DATA/commands.json"
 echo "$verify_pending" > "$TMPDIR_DATA/verify_pending.json"
 echo "$verify_verified" > "$TMPDIR_DATA/verify_verified.json"
 echo "$verify_deprecated" > "$TMPDIR_DATA/verify_deprecated.json"
+echo "$inventory_json" > "$TMPDIR_DATA/inventory.json"
 
 jq -n \
   --slurpfile skills "$TMPDIR_DATA/skills.json" \
@@ -482,6 +648,7 @@ jq -n \
   --slurpfile vp "$TMPDIR_DATA/verify_pending.json" \
   --slurpfile vv "$TMPDIR_DATA/verify_verified.json" \
   --slurpfile vd "$TMPDIR_DATA/verify_deprecated.json" \
+  --slurpfile inventory "$TMPDIR_DATA/inventory.json" \
   --argjson total_skills "$total_skills" \
   --argjson total_hooks "$total_hooks" \
   --argjson total_configs "$total_configs" \
@@ -493,6 +660,7 @@ jq -n \
   --argjson total_verified "$total_verified" \
   --argjson total_pending "$total_pending" \
   --argjson total_deprecated "$total_deprecated" \
+  --argjson total_resources "$total_resources" \
   --arg git_branch "$git_branch" \
   --arg git_commit "$git_commit" \
   --arg generated_at "$generated_at" \
@@ -508,7 +676,8 @@ jq -n \
       total_scripts_lines: $total_scripts_lines,
       total_verified: $total_verified,
       total_pending: $total_pending,
-      total_deprecated: $total_deprecated
+      total_deprecated: $total_deprecated,
+      total_resources: $total_resources
     },
     git: {
       branch: $git_branch,
@@ -522,6 +691,7 @@ jq -n \
     plugins: $plugins[0],
     recommended_skills: $recommended_skills[0],
     commands: $commands[0],
+    inventory: $inventory[0],
     verify: {
       pending: $vp[0],
       verified: $vv[0],

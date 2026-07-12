@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>AI Config Dashboard</title>
+  <link rel="stylesheet" href="css/style.css?v=20260712-4">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
@@ -12,7 +12,7 @@
 <!-- Sidebar -->
 <div class="sidebar">
   <div class="sidebar-header" id="logo-link">
-    <h1>&#9881; Claude Code Config</h1>
+    <h1>&#9881; AI Config</h1>
     <div class="subtitle">NBStarry's Dashboard</div>
   </div>
 
@@ -21,6 +21,10 @@
     <div class="nav-item active" data-page="dashboard">
       <span class="dot dot-blue"></span> Dashboard
       <span class="badge">home</span>
+    </div>
+    <div class="nav-item" data-page="inventory">
+      <span class="dot dot-cyan"></span> Inventory
+      <span class="badge" id="badge-inventory">0</span>
     </div>
   </div>
 
@@ -70,13 +74,18 @@
 <div class="main">
   <div class="topbar">
     <div class="breadcrumb" id="breadcrumb"></div>
+    <label class="branch-picker" for="branchSelect">
+      <span>Branch</span>
+      <select id="branchSelect" aria-label="View repository branch"></select>
+      <span class="branch-status" id="branchStatus" role="status" aria-live="polite"></span>
+    </label>
     <input class="search-box" id="searchBox" placeholder="Search skills, configs... (Ctrl+K)" />
     <button class="theme-toggle" id="themeToggle">&#127769;</button>
   </div>
   <div class="content" id="content"></div>
 </div>
 
-<script src="js/editor.js"></script>
-<script src="js/app.js"></script>
+<script src="js/editor.js?v=20260712-7"></script>
+<script src="js/app.js?v=20260712-7"></script>
 </body>
 </html>

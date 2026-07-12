@@ -1,14 +1,15 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "HTTP_PROXY": "http://127.0.0.1:7890",
-    "HTTPS_PROXY": "http://127.0.0.1:7890"
+    "HTTP_PROXY": "http://127.0.0.1:7897",
+    "HTTPS_PROXY": "http://127.0.0.1:7897",
+    "ALL_PROXY": "http://127.0.0.1:7897",
+    "NO_PROXY": "localhost,127.0.0.1,::1"
   },
   "permissions": {
     "allow": [],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus[1m]",
   "hooks": {},
   "statusLine": {
     "type": "command",
@@ -34,7 +35,9 @@
     "claude-mem@thedotmack": true,
     "clangd-lsp@claude-plugins-official": false,
     "hzb@hzb-skills": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "andrej-karpathy-skills@karpathy-skills": true
   },
   "extraKnownMarketplaces": {
     "planning-with-files": {
@@ -66,10 +69,17 @@
         "source": "directory",
         "path": "C:\\Users\\StarryBei\\.claude\\hzb-skills"
       }
+    },
+    "karpathy-skills": {
+      "source": {
+        "source": "github",
+        "repo": "forrestchang/andrej-karpathy-skills"
+      }
     }
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "auto",
   "preferredNotifChannel": "terminal_bell",

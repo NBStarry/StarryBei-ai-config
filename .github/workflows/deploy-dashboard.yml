@@ -1,57 +1,104 @@
-name: Deploy Dashboard
+name: Validate and Deploy Dashboard
 
 on:
   push:
     branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install jq
         run: which jq || sudo apt-get install -y jq
 
-      - name: Generate repository-only site data
-        run: bash scripts/generate-site-data.sh
+      - name: Validate shell scripts
+        run: bash -n install.sh scripts/*.sh claude/scripts/*.sh
 
-      - name: Sync generated Dashboard data to main
-        if: github.ref == 'refs/heads/main'
+      - name: Validate committed JSON
+        run: jq empty claude/configs/*.json config/*.json site/data.json
+
+      - name: Build public Dashboard data
+        run: |
+          cp site/data.json "$RUNNER_TEMP/site-data.committed.json"
+          bash scripts/generate-site-data.sh --repo-only
+          jq empty site/data.json
+
+      - name: Detect Dashboard data changes
+        id: dashboard-data
+        run: |
+          jq 'del(.generated_at, .git)' "$RUNNER_TEMP/site-data.committed.json" > "$RUNNER_TEMP/committed.normalized.json"
+          jq 'del(.generated_at, .git)' site/data.json > "$RUNNER_TEMP/generated.normalized.json"
+          if diff -q "$RUNNER_TEMP/committed.normalized.json" "$RUNNER_TEMP/generated.normalized.json" >/dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sync generated Dashboard data to dev
+        if: steps.dashboard-data.outputs.changed == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/dev'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add site/data.json
-          if git diff --cached --quiet; then
-            echo "site/data.json is already current"
-          else
-            git commit -m "chore(dashboard): refresh generated data"
-            git push origin HEAD:main
-          fi
+          git commit -m "chore(dashboard): refresh generated data"
+          git push origin HEAD:dev
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload generated Dashboard data for Windows validation
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-dashboard-data
+          path: site/data.json
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./site
 
-  deploy:
-    if: github.ref == 'refs/heads/main'
+  windows-validation:
     needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download generated Dashboard data
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-dashboard-data
+          path: site
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Run PowerShell repository checks
+        shell: pwsh
+        run: ./scripts/validate-repo.ps1
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: [build, windows-validation]
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

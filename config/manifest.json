@@ -1,0 +1,74 @@
+{
+  "$schema": "./manifest.schema.json",
+  "version": 1,
+  "description": "Canonical desired state for shareable AI coding tool configuration.",
+  "resources": [
+    {
+      "id": "claude.settings",
+      "tool": "claude",
+      "kind": "config",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "sourceCandidates": [
+        "claude/configs/settings.windows.local.json",
+        "claude/configs/settings.windows.json"
+      ],
+      "target": "${home}/.claude/settings.json",
+      "description": "Claude Code settings; prefer the gitignored private Windows override when present."
+    },
+    {
+      "id": "claude.instructions",
+      "tool": "claude",
+      "kind": "instructions",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "symlink",
+      "source": "claude/configs/CLAUDE.md",
+      "target": "${home}/.claude/CLAUDE.md",
+      "description": "User-wide Claude Code instructions."
+    },
+    {
+      "id": "claude.statusline.windows",
+      "tool": "claude",
+      "kind": "script",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "source": "claude/scripts/statusline.ps1",
+      "target": "${home}/.claude/statusline.ps1",
+      "description": "PowerShell status line used by Claude Code on Windows."
+    },
+    {
+      "id": "codex.config",
+      "tool": "codex",
+      "kind": "config",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "seed",
+      "source": "codex/config.toml.example",
+      "target": "${home}/.codex/config.toml",
+      "description": "Machine-specific Codex configuration seeded once and never overwritten."
+    },
+    {
+      "id": "codex.prompt.checkpoint",
+      "tool": "codex",
+      "kind": "prompt",
+      "platforms": [
+        "windows"
+      ],
+      "method": "symlink",
+      "source": "codex/prompts/checkpoint.md",
+      "target": "${home}/.codex/prompts/checkpoint.md",
+      "description": "Codex slash-menu checkpoint adapter."
+    }
+  ]
+}
