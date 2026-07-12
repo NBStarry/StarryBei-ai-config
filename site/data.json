@@ -10,14 +10,14 @@
     "total_scripts_lines": 52,
     "total_verified": 21,
     "total_pending": 14,
-    "total_deprecated": 9,
+    "total_deprecated": 8,
     "total_resources": 11
   },
   "git": {
     "branch": "dev",
-    "commit": "7df76bc"
+    "commit": "743e6bd"
   },
-  "generated_at": "2026-07-12T05:18:08Z",
+  "generated_at": "2026-07-12T06:07:01Z",
   "skills": [
     {
       "name": "karpathy-guidelines",
@@ -1284,16 +1284,6 @@
       }
     ],
     "deprecated": [
-      {
-        "title": "新增 knowledge/ OKF-style 知识包试点",
-        "commit": "pending",
-        "date": "2026-06-23",
-        "status": "deprecated",
-        "method": "",
-        "expected": "",
-        "actual": "",
-        "reason": "知识包不需要固定放在本仓库中；规范改由 `hzb:okf` skill 提供，在创建 agent-readable 知识文档时按需触发。"
-      },
       {
         "title": "本地配置同步：sync-configs.sh + Dashboard Configs 增强",
         "commit": "pending",
