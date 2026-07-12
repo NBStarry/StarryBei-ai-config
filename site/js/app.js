@@ -1386,7 +1386,7 @@
   });
 
   // ===== Init =====
-  loadJson('data.json', function (err, initialData) {
+  loadJson('data.json?ts=' + Date.now(), function (err, initialData) {
     if (err) {
       setBranchStatus(err, 'error');
       return;
