@@ -53,6 +53,12 @@ jobs:
           git commit -m "chore(dashboard): refresh generated data"
           git push origin HEAD:dev
 
+      - name: Upload generated Dashboard data for Windows validation
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-dashboard-data
+          path: site/data.json
+
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
@@ -60,9 +66,16 @@ jobs:
           path: ./site
 
   windows-validation:
+    needs: build
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Download generated Dashboard data
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-dashboard-data
+          path: site
 
       - uses: actions/setup-node@v6
         with:
