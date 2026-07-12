@@ -1,6 +1,6 @@
 ﻿# Windows installer for StarryBei-ai-config (PowerShell port of install.sh).
 #
-# Links repo files into %USERPROFILE%\.claude and %USERPROFILE%\.codex.
+# Configures only tools already installed on this machine.
 #   - Files   -> symbolic links (New-Item SymbolicLink). Needs Windows
 #               Developer Mode ON, or an elevated (Run as administrator) shell.
 # Existing targets are backed up first. Skills are installed from their
@@ -21,6 +21,25 @@ $CodexHome  = Join-Path $env:USERPROFILE '.codex'
 $Stamp      = Get-Date -Format 'yyyyMMdd-HHmmss'
 $BackupDir  = Join-Path $env:USERPROFILE ".ai-config-backup-$Stamp"
 $SymlinkFailed = $false
+
+function Find-ToolCommand([string]$Name) {
+  $command = Get-Command $Name -ErrorAction SilentlyContinue
+  if ($null -ne $command) { return $command.Source }
+
+  if ($Name -eq 'codex' -and -not [string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
+    $codexBin = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\bin'
+    if (Test-Path -LiteralPath $codexBin) {
+      return Get-ChildItem -LiteralPath $codexBin -Recurse -Filter 'codex.exe' -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1 -ExpandProperty FullName
+    }
+  }
+
+  return $null
+}
+
+$ClaudeCommand = Find-ToolCommand 'claude'
+$CodexCommand = Find-ToolCommand 'codex'
 
 # Probe symlink capability ONCE up front. If we can't create symlinks (no
 # Developer Mode and not elevated), we must NOT back up/destroy existing files.
@@ -76,37 +95,50 @@ function Link-File([string]$src, [string]$dest) {
 Write-Host "Installing AI coding tool configs from $Repo"
 Write-Host ""
 
+if ($null -eq $ClaudeCommand -and $null -eq $CodexCommand) {
+  Write-Host 'No supported installed tools detected; nothing to install.'
+  return
+}
+
 # -- Claude Code: files (symlinks) ------------------------------------------
 # Windows uses settings.windows.json (PowerShell statusline + proxy in env)
 # instead of the macOS settings.json (bash/jq statusline). A gitignored
 # settings.windows.local.json can hold private production credentials.
-$SettingsSource = Join-Path $Repo 'claude\configs\settings.windows.json'
-$PrivateSettingsSource = Join-Path $Repo 'claude\configs\settings.windows.local.json'
-if (Test-Path -LiteralPath $PrivateSettingsSource) {
-  $SettingsSource = $PrivateSettingsSource
-  Write-Host "using private Claude settings: $SettingsSource"
-}
-Link-File $SettingsSource (Join-Path $ClaudeHome 'settings.json')
-Link-File (Join-Path $Repo 'claude\configs\CLAUDE.md')             (Join-Path $ClaudeHome 'CLAUDE.md')
-Link-File (Join-Path $Repo 'claude\scripts\statusline.ps1')        (Join-Path $ClaudeHome 'statusline.ps1')
+if ($null -ne $ClaudeCommand) {
+  $SettingsSource = Join-Path $Repo 'claude\configs\settings.windows.json'
+  $PrivateSettingsSource = Join-Path $Repo 'claude\configs\settings.windows.local.json'
+  if (Test-Path -LiteralPath $PrivateSettingsSource) {
+    $SettingsSource = $PrivateSettingsSource
+    Write-Host "using private Claude settings: $SettingsSource"
+  }
+  Link-File $SettingsSource (Join-Path $ClaudeHome 'settings.json')
+  Link-File (Join-Path $Repo 'claude\configs\CLAUDE.md')      (Join-Path $ClaudeHome 'CLAUDE.md')
+  Link-File (Join-Path $Repo 'claude\scripts\statusline.ps1') (Join-Path $ClaudeHome 'statusline.ps1')
 
-Write-Host ""
-Write-Host "NOTE: GLM backend config is not seeded (API key not in repo)."
-Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.windows.local.json'"
-Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
+  Write-Host ""
+  Write-Host "NOTE: GLM backend config is not seeded (API key not in repo)."
+  Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.windows.local.json'"
+  Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
+} else {
+  Write-Host 'SKIP     Claude Code config (claude is not installed)'
+}
 
 # -- Codex CLI: local slash-menu prompt adapters (file symlinks) --------------
-$CodexPrompts = Join-Path $Repo 'codex\prompts'
-if (Test-Path -LiteralPath $CodexPrompts) {
-  foreach ($prompt in Get-ChildItem -LiteralPath $CodexPrompts -File -Filter '*.md') {
-    Link-File $prompt.FullName (Join-Path $CodexHome "prompts\$($prompt.Name)")
+if ($null -ne $CodexCommand) {
+  $CodexPrompts = Join-Path $Repo 'codex\prompts'
+  if (Test-Path -LiteralPath $CodexPrompts) {
+    foreach ($prompt in Get-ChildItem -LiteralPath $CodexPrompts -File -Filter '*.md') {
+      Link-File $prompt.FullName (Join-Path $CodexHome "prompts\$($prompt.Name)")
+    }
   }
-}
 
-Write-Host ""
-if (-not (Test-Path -LiteralPath (Join-Path $CodexHome 'config.toml'))) {
-  Write-Host "NOTE: no ~\.codex\config.toml found."
-  Write-Host "      Copy-Item '$Repo\codex\config.toml.example' '$CodexHome\config.toml'   # then set trusted project paths"
+  Write-Host ""
+  if (-not (Test-Path -LiteralPath (Join-Path $CodexHome 'config.toml'))) {
+    Write-Host "NOTE: no ~\.codex\config.toml found."
+    Write-Host "      Copy-Item '$Repo\codex\config.toml.example' '$CodexHome\config.toml'   # then set trusted project paths"
+  }
+} else {
+  Write-Host 'SKIP     Codex config (codex is not installed)'
 }
 
 # -- External skill plugins --------------------------------------------------
@@ -130,8 +162,8 @@ if ($SymlinkFailed) {
   Write-Host "  (or run this script from an elevated 'Run as administrator' PowerShell)"
 }
 Write-Host "Next:"
-Write-Host "  - Restart your Claude Code session to pick up settings/plugins."
-Write-Host "  - Restart Codex or start a new Codex chat to pick up linked prompts."
+if ($null -ne $ClaudeCommand) { Write-Host "  - Restart your Claude Code session to pick up settings/plugins." }
+if ($null -ne $CodexCommand) { Write-Host "  - Restart Codex or start a new Codex chat to pick up linked prompts." }
 Write-Host "  - External skills are managed by config\skill-plugins.json."
 Write-Host ""
 Write-Host "WARNING: gitignored real config files (credentials) may live in the working tree."

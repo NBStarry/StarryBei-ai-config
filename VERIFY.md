@@ -28,6 +28,11 @@
   - 实际效果：（验证后填写）
 -->
 
+- [ ] **安装器只配置本机已有工具** (commit: pending, date: 2026-07-12)
+  - 验证方法：在只安装 Claude Code 的 Mac 上运行 `bash install.sh`，再在同时安装 Claude Code 与 Codex 的 Mac 上运行同一命令；观察备份、链接和插件安装结果。
+  - 预期效果：Claude-only 机器只更新 `~/.claude` 并明确跳过 Codex，不创建新的 Codex 配置；双工具机器分别更新两套配置和对应插件；两者均保留原配置备份。
+  - 实际效果：（验证后填写）
+
 ### Dashboard CI/CD and branch viewer
 
 - [x] **原生 marketplace/plugin 安装恢复** (commit: pending, date: 2026-07-12)

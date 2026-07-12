@@ -28,6 +28,19 @@ function Get-CurrentPlatform {
   return 'linux'
 }
 
+function Test-ToolAvailable([string]$Name) {
+  if ($null -ne (Get-Command $Name -ErrorAction SilentlyContinue)) { return $true }
+
+  if ($Name -eq 'codex' -and $IsWindows -and -not [string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
+    $codexBin = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\bin'
+    if (Test-Path -LiteralPath $codexBin) {
+      return $null -ne (Get-ChildItem -LiteralPath $codexBin -Recurse -Filter 'codex.exe' -ErrorAction SilentlyContinue | Select-Object -First 1)
+    }
+  }
+
+  return $false
+}
+
 function Get-OptionalProperty([object]$Value, [string]$Name) {
   $property = $Value.PSObject.Properties[$Name]
   if ($null -eq $property) { return $null }
@@ -113,6 +126,7 @@ function Test-LinkTarget([object]$Item, [string]$ExpectedSource) {
 function Get-ResourceState([object]$Resource) {
   $platform = Get-CurrentPlatform
   $supported = @($Resource.platforms) -contains $platform
+  $toolAvailable = Test-ToolAvailable ([string]$Resource.tool)
   $target = Expand-Target ([string]$Resource.target)
   $source = Resolve-ResourceSource $Resource
   $item = Get-PathEntry $target
@@ -122,6 +136,9 @@ function Get-ResourceState([object]$Resource) {
   if (-not $supported) {
     $status = 'unsupported'
     $detail = "Not managed on $platform."
+  } elseif (-not $toolAvailable) {
+    $status = 'tool-not-installed'
+    $detail = "$($Resource.tool) is not installed; resource is not managed on this machine."
   } elseif (-not $source) {
     $status = 'missing-source'
     $detail = 'No source candidate exists in this checkout.'
@@ -339,7 +356,7 @@ switch ($Command) {
   'verify' {
     $states = Get-Plan
     if ($Json) { $states | ConvertTo-Json -Depth 5 } else { Write-StateTable $states }
-    $problems = @($states | Where-Object { $_.status -notin @('installed', 'unsupported') })
+    $problems = @($states | Where-Object { $_.status -notin @('installed', 'unsupported', 'tool-not-installed') })
     if ($problems.Count -gt 0) { throw "$($problems.Count) managed resource(s) are not converged." }
   }
   'rollback' { Invoke-Rollback }
