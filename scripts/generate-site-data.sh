@@ -1,14 +1,33 @@
 #!/bin/bash
 # Generate Site Data for Dashboard
-# 扫描仓库 + 本地 ~/.claude/ 的 skills、hooks、configs、scripts、commands、plugins
+# 默认只扫描仓库内公开内容；显式传 --include-local 才附加本机 Claude skills/plugins
 # 输出统一的 JSON 数据到 site/data.json，供前端 Dashboard 使用
-# 本地运行时自动包含插件 skills；CI 环境只扫仓库
+# site/data.json 会被 Git 跟踪，因此默认模式必须可复现且不读取本机私有目录
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUTPUT="${REPO_ROOT}/site/data.json"
 CLAUDE_HOME="${HOME}/.claude"
+INCLUDE_LOCAL=0
+
+case "${1:-}" in
+  "") ;;
+  --repo-only) INCLUDE_LOCAL=0 ;;
+  --include-local) INCLUDE_LOCAL=1 ;;
+  --help)
+    echo "Usage: $0 [--repo-only|--include-local]"
+    echo "  --repo-only     Scan only repository sources (default; safe for CI/public data)."
+    echo "  --include-local Also include local Claude skills and plugins for private inspection."
+    exit 0
+    ;;
+  *)
+    echo "Unknown option: $1" >&2
+    echo "Usage: $0 [--repo-only|--include-local]" >&2
+    exit 2
+    ;;
+esac
+
 TMPDIR_DATA=$(mktemp -d)
 trap 'rm -rf "$TMPDIR_DATA"' EXIT
 
@@ -76,7 +95,7 @@ scan_skill() {
 # 1) 本地自定义 skills (~/.claude/skills/)
 # 注意：跳过 lark-* 等第三方 skill（npx skills 装的，symlink 到 ~/.agents，CI 环境没有，
 # 会导致线上/本地数据不一致）。第三方清单改由 claude/configs/recommended-skills.json 记录。
-if [ -d "${CLAUDE_HOME}/skills" ]; then
+if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/skills" ]; then
   while IFS= read -r skill_file; do
     local_name=$(get_frontmatter_field "$skill_file" "name")
     case "$local_name" in
@@ -116,7 +135,7 @@ done < <(find "${REPO_ROOT}/skills/hzb-skills" -name "SKILL.md.example" -not -pa
 
 # 3) 已安装插件 skills (~/.claude/plugins/marketplaces/*)
 # 只扫 Claude Code 标准路径下的 skills/ 目录，避免 .cursor/.gemini 等副本
-if [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
+if [ "$INCLUDE_LOCAL" -eq 1 ] && [ -d "${CLAUDE_HOME}/plugins/marketplaces" ]; then
   while IFS= read -r skill_file; do
     # 跳过非 Claude Code 标准路径（.cursor, .gemini, .codex 等）
     if echo "$skill_file" | grep -qE '/\.(cursor|gemini|codex|mastracode|continue|opencode|factory|codebuddy|pi)/'; then
@@ -386,7 +405,7 @@ if [ -f "$verify_file" ]; then
     fi
 
     # 检测 section 标题
-    if [[ "$line" =~ ^##[[:space:]].*Pending ]]; then
+    if [[ "$line" =~ ^##[[:space:]].*(Pending|Current[[:space:]]Manual[[:space:]]Verification|当前人工验收) ]]; then
       flush_entry
       current_section="pending"
       continue
@@ -398,7 +417,7 @@ if [ -f "$verify_file" ]; then
       flush_entry
       current_section="deprecated"
       continue
-    elif [[ "$line" =~ ^##[[:space:]] ]] && [[ ! "$line" =~ Pending|Verified|Deprecated ]]; then
+    elif [[ "$line" =~ ^##[[:space:]] ]] && [[ ! "$line" =~ Pending|Verified|Deprecated|Current[[:space:]]Manual[[:space:]]Verification|当前人工验收 ]]; then
       # Other section headers (e.g., How It Works, Status Legend) — skip
       flush_entry
       current_section=""
@@ -418,10 +437,10 @@ if [ -f "$verify_file" ]; then
       local_meta="${BASH_REMATCH[3]}"
 
       case "$local_marker" in
-        " ") current_status="pending" ;;
-        "x") current_status="verified" ;;
-        "-") current_status="deprecated" ;;
-        *)   current_status="unknown" ;;
+        " ") current_status="pending"; current_section="pending" ;;
+        "x") current_status="verified"; current_section="verified" ;;
+        "-") current_status="deprecated"; current_section="deprecated" ;;
+        *)   current_status="unknown"; current_section="" ;;
       esac
 
       # Extract commit and date from meta

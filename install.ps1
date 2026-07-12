@@ -135,10 +135,18 @@ Write-Host "      To use it on Windows: create '$Repo\claude\configs\settings.wi
 Write-Host "      from settings.windows.json, add the real backend env, and keep it local."
 
 # -- Codex CLI: shared skills (directory junctions) --------------------------
-foreach ($s in 'codex-review','conference-meeting-summary','g1-robot','web-access','wlcb-dev','save-memory-before-compact') {
+foreach ($s in 'codex-review','conference-meeting-summary','g1-robot','okf','web-access','wlcb-dev','save-memory-before-compact') {
   $sdir = Join-Path $Hzb "skills\$s"
   if (Test-Path -LiteralPath $sdir) {
     Link-Dir $sdir (Join-Path $CodexHome "skills\$s")
+  }
+}
+
+# -- Codex CLI: local slash-menu prompt adapters (file symlinks) --------------
+$CodexPrompts = Join-Path $Repo 'codex\prompts'
+if (Test-Path -LiteralPath $CodexPrompts) {
+  foreach ($prompt in Get-ChildItem -LiteralPath $CodexPrompts -File -Filter '*.md') {
+    Link-File $prompt.FullName (Join-Path $CodexHome "prompts\$($prompt.Name)")
   }
 }
 
@@ -161,6 +169,7 @@ if ($SymlinkFailed) {
 }
 Write-Host "Next:"
 Write-Host "  - Restart your Claude Code session to pick up settings/plugins."
+Write-Host "  - Restart Codex or start a new Codex chat to pick up linked skills/prompts."
 Write-Host "  - After editing hzb skills: claude plugin update hzb@hzb-skills"
 Write-Host ""
 Write-Host "WARNING: gitignored real files (credentials) live in the working tree."

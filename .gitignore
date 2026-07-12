@@ -36,5 +36,5 @@ skills/hzb-skills/plugins/hzb/skills/wlcb-dev/SKILL.md
 # Node modules
 node_modules/
 
-# Dashboard data is now committed (generated locally with full skill scan)
+# Dashboard data is tracked and generated in repository-only mode for public branch viewing.
 # site/data.json

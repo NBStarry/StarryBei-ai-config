@@ -107,11 +107,20 @@ echo "      This file is gitignored and will be linked as ~/.claude/settings.jso
 # ── Codex CLI ───────────────────────────────────────────────────────────────
 # Codex shares the same self-authored skills as Claude Code. Symlink each into
 # ~/.codex/skills (repairs the previously dangling links).
-for s in codex-review conference-meeting-summary g1-robot web-access wlcb-dev save-memory-before-compact; do
+for s in codex-review conference-meeting-summary g1-robot okf web-access wlcb-dev save-memory-before-compact; do
   if [ -d "$HZB/skills/$s" ]; then
     link "$HZB/skills/$s" "$HOME/.codex/skills/$s"
   fi
 done
+
+# Custom prompts are deprecated upstream, but they are still Codex's documented
+# local slash-menu adapter. Keep prompt files tiny and make skills the truth.
+if [ -d "$REPO_DIR/codex/prompts" ]; then
+  for prompt in "$REPO_DIR"/codex/prompts/*.md; do
+    [ -e "$prompt" ] || continue
+    link "$prompt" "$HOME/.codex/prompts/$(basename "$prompt")"
+  done
+fi
 
 echo
 if [ ! -e "$HOME/.codex/config.toml" ]; then
@@ -125,6 +134,7 @@ echo "Done."
 [ -d "$BACKUP_DIR" ] && echo "Backup of replaced files: $BACKUP_DIR"
 echo "Next:"
 echo "  - Restart your Claude Code session to pick up settings/plugins."
+echo "  - Restart Codex or start a new Codex chat to pick up linked skills/prompts."
 echo "  - After editing hzb skills: claude plugin update hzb@hzb-skills"
 echo
 echo "WARNING: gitignored real files (credentials) live in the working tree."

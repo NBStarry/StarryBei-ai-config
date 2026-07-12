@@ -8,6 +8,11 @@
   var currentVerifyTab = 'pending';
   var memoryData = null;
   var MEMORY_GIST_ID = '';
+  var OWNER = 'NBStarry';
+  var REPO = 'StarryBei-ai-config';
+  var selectedBranch = null;
+  var localData = null;
+  var branchRequestId = 0;
 
   // ===== Theme Toggle =====
   var toggleBtn = document.getElementById('themeToggle');
@@ -30,16 +35,146 @@
   });
 
   // ===== Data Loading =====
-  function loadData(callback) {
+  function loadJson(url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'data.json');
+    xhr.open('GET', url);
     xhr.onload = function () {
-      if (xhr.status === 200) {
-        data = JSON.parse(xhr.responseText);
-        callback();
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          callback(null, JSON.parse(xhr.responseText));
+        } catch (e) {
+          callback('Invalid JSON: ' + e.message);
+        }
+      } else {
+        callback('Request failed with status ' + xhr.status);
       }
     };
+    xhr.onerror = function () {
+      callback('Network error');
+    };
     xhr.send();
+  }
+
+  function getRequestedBranch() {
+    try {
+      return new URL(window.location.href).searchParams.get('branch');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function updateBranchUrl(branch) {
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set('branch', branch);
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    } catch (e) { /* old browser: keep current URL */ }
+  }
+
+  function setBranchStatus(message, type) {
+    var status = document.getElementById('branchStatus');
+    status.textContent = message || '';
+    status.className = 'branch-status' + (type ? ' ' + type : '');
+  }
+
+  function addBranchOption(select, branch) {
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === branch) return;
+    }
+    var option = document.createElement('option');
+    option.value = branch;
+    option.textContent = branch;
+    select.appendChild(option);
+  }
+
+  function loadBranchList(currentBranch) {
+    var select = document.getElementById('branchSelect');
+    addBranchOption(select, 'main');
+    addBranchOption(select, 'dev');
+    addBranchOption(select, currentBranch);
+    select.value = currentBranch;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/branches?per_page=100');
+    xhr.setRequestHeader('Accept', 'application/vnd.github+json');
+    xhr.onload = function () {
+      if (xhr.status < 200 || xhr.status >= 300) return;
+      try {
+        var branches = JSON.parse(xhr.responseText);
+        branches.forEach(function (branch) {
+          addBranchOption(select, branch.name);
+        });
+        select.value = selectedBranch || currentBranch;
+      } catch (e) { /* retain the current branch option */ }
+    };
+    xhr.send();
+  }
+
+  function loadRemoteBranchData(branch, callback) {
+    var metadataUrl = 'https://api.github.com/repos/' + OWNER + '/' + REPO
+      + '/contents/site/data.json?ref=' + encodeURIComponent(branch);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', metadataUrl);
+    xhr.setRequestHeader('Accept', 'application/vnd.github+json');
+    xhr.onload = function () {
+      if (xhr.status < 200 || xhr.status >= 300) {
+        callback('No site/data.json found on ' + branch);
+        return;
+      }
+      try {
+        var metadata = JSON.parse(xhr.responseText);
+        if (!metadata.download_url) {
+          callback('No downloadable Dashboard data found on ' + branch);
+          return;
+        }
+        loadJson(metadata.download_url, callback);
+      } catch (e) {
+        callback('Invalid GitHub response: ' + e.message);
+      }
+    };
+    xhr.onerror = function () {
+      callback('Unable to reach GitHub for branch ' + branch);
+    };
+    xhr.send();
+  }
+
+  function canEditSelectedBranch() {
+    return typeof Editor !== 'undefined' && Editor.canEdit();
+  }
+
+  function applyBranchData(branch, branchData, updateUrl) {
+    selectedBranch = branch;
+    data = branchData;
+    if (!data.git) data.git = {};
+    data.git.branch = branch;
+    if (typeof Editor !== 'undefined') Editor.setViewBranch(branch);
+    document.getElementById('branchSelect').value = branch;
+    if (updateUrl) updateBranchUrl(branch);
+    setBranchStatus('', '');
+    updateSidebar();
+    render();
+  }
+
+  function selectBranch(branch, updateUrl) {
+    if (!branch || branch === selectedBranch) return;
+    var requestId = ++branchRequestId;
+    var previousBranch = selectedBranch;
+    setBranchStatus('Loading...', 'loading');
+
+    if (localData && localData.git && localData.git.branch === branch) {
+      applyBranchData(branch, localData, updateUrl);
+      return;
+    }
+
+    loadRemoteBranchData(branch, function (err, branchData) {
+      if (requestId !== branchRequestId) return;
+      if (err) {
+        document.getElementById('branchSelect').value = previousBranch;
+        setBranchStatus(err, 'error');
+        return;
+      }
+      applyBranchData(branch, branchData, updateUrl);
+    });
   }
 
   // ===== Utility: Create Element Helper =====
@@ -233,7 +368,7 @@
     // Title row with create button
     var titleRow = el('div', { className: 'page-title-row' });
     titleRow.appendChild(el('div', { className: 'page-title', textContent: 'Skills' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var skillTemplate = '---\nname: \ndescription: \nversion: 1.0.0\n---\n\n# Skill Name\n';
       titleRow.appendChild(Editor.createCreateBtn('skills', skillTemplate, 'my-skill/SKILL.md'));
     }
@@ -279,7 +414,7 @@
       if (desc.length > 100) desc = desc.substring(0, 100) + '...';
       row.appendChild(el('span', { className: 'sr-desc', textContent: desc }));
       row.appendChild(el('span', { className: 'sr-version', textContent: skill.version ? 'v' + skill.version : '' }));
-      if (typeof Editor !== 'undefined' && skill.file) {
+      if (canEditSelectedBranch() && skill.file) {
         var actions = el('span', { className: 'crud-actions' });
         actions.appendChild(Editor.createEditBtn(skill.file));
         actions.appendChild(Editor.createDeleteBtn(skill.file));
@@ -323,7 +458,7 @@
       meta.appendChild(el('span', { textContent: '\uD83C\uDFF7 v' + skill.version }));
     }
     meta.appendChild(el('span', { textContent: '\uD83D\uDCC4 ' + (skill.file || '') }));
-    if (typeof Editor !== 'undefined' && skill.file) {
+    if (canEditSelectedBranch() && skill.file) {
       var detailActions = el('span', { className: 'crud-actions' });
       detailActions.appendChild(Editor.createEditBtn(skill.file));
       detailActions.appendChild(Editor.createDeleteBtn(skill.file));
@@ -370,7 +505,7 @@
 
     var hookTitleRow = el('div', { className: 'page-title-row' });
     hookTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Hooks' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var hookTemplate = '{\n  "hooks": {}\n}';
       hookTitleRow.appendChild(Editor.createCreateBtn('hooks', hookTemplate, 'my-hook.json'));
     }
@@ -398,7 +533,7 @@
 
       header.appendChild(el('span', { className: 'hc-file', textContent: hook.file }));
 
-      if (typeof Editor !== 'undefined' && hook.file) {
+      if (canEditSelectedBranch() && hook.file) {
         var hookActions = el('span', { className: 'crud-actions' });
         hookActions.appendChild(Editor.createEditBtn(hook.file));
         hookActions.appendChild(Editor.createDeleteBtn(hook.file));
@@ -433,7 +568,7 @@
 
     var configTitleRow = el('div', { className: 'page-title-row' });
     configTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Configs' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var configTemplate = '{}';
       configTitleRow.appendChild(Editor.createCreateBtn('configs', configTemplate, 'my-config.json'));
     }
@@ -447,7 +582,7 @@
       var header = el('div', { className: 'config-card-header' });
       header.appendChild(el('div', { className: 'cc-name', textContent: config.name }));
       header.appendChild(el('div', { className: 'cc-path', textContent: config.file }));
-      if (typeof Editor !== 'undefined' && config.file) {
+      if (canEditSelectedBranch() && config.file) {
         var configActions = el('div', { className: 'crud-actions' });
         configActions.appendChild(Editor.createEditBtn(config.file));
         configActions.appendChild(Editor.createDeleteBtn(config.file));
@@ -843,7 +978,7 @@
 
     var commandsTitleRow = el('div', { className: 'page-title-row' });
     commandsTitleRow.appendChild(el('div', { className: 'page-title', textContent: 'Commands' }));
-    if (typeof Editor !== 'undefined') {
+    if (canEditSelectedBranch()) {
       var cmdTemplate = '# Command Title\n\nDescription of what this command does.\n\n## Usage\n\n```bash\n# example\n```\n';
       commandsTitleRow.appendChild(Editor.createCreateBtn('commands', cmdTemplate, 'my-command.md'));
     }
@@ -852,7 +987,7 @@
       (data.commands ? data.commands.length : 0) + ' slash commands synced from ~/.claude/commands/'));
 
     if (!data.commands || data.commands.length === 0) {
-      content.appendChild(el('div', { className: 'empty-state', textContent: 'No commands found. Run sync-configs.sh push to sync local commands.' }));
+      content.appendChild(el('div', { className: 'empty-state', textContent: 'No commands found. Regenerate site/data.json after adding repository commands.' }));
       return;
     }
 
@@ -862,7 +997,7 @@
       var header = el('div', { className: 'cmd-header' });
       header.appendChild(el('span', { className: 'cmd-name', textContent: '/' + cmd.name }));
       header.appendChild(el('span', { className: 'cmd-lines', textContent: cmd.lines + ' lines' }));
-      if (typeof Editor !== 'undefined' && cmd.file) {
+      if (canEditSelectedBranch() && cmd.file) {
         var cmdActions = el('div', { className: 'crud-actions' });
         cmdActions.appendChild(Editor.createEditBtn(cmd.file));
         cmdActions.appendChild(Editor.createDeleteBtn(cmd.file));
@@ -1232,6 +1367,10 @@
     setTimeout(hideSearchResults, 200);
   });
 
+  document.getElementById('branchSelect').addEventListener('change', function () {
+    selectBranch(this.value, true);
+  });
+
   document.addEventListener('keydown', function (e) {
     // Ctrl+K or Cmd+K
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -1247,9 +1386,16 @@
   });
 
   // ===== Init =====
-  loadData(function () {
-    updateSidebar();
-    render();
+  loadJson('data.json', function (err, initialData) {
+    if (err) {
+      setBranchStatus(err, 'error');
+      return;
+    }
+    localData = initialData;
+    var localBranch = initialData.git && initialData.git.branch ? initialData.git.branch : 'main';
+    var requestedBranch = getRequestedBranch() || localBranch;
+    loadBranchList(requestedBranch);
+    selectBranch(requestedBranch, Boolean(getRequestedBranch()));
   });
 
 })();

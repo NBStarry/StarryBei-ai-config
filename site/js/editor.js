@@ -7,7 +7,16 @@ var Editor = (function () {
   var OWNER = 'NBStarry';
   var REPO = 'StarryBei-ai-config';
   var BRANCH = 'dev';
+  var viewBranch = BRANCH;
   var API_BASE = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/';
+
+  function setViewBranch(branch) {
+    viewBranch = branch || BRANCH;
+  }
+
+  function canEdit() {
+    return viewBranch === BRANCH;
+  }
 
   // ===== Token Management =====
 
@@ -648,6 +657,8 @@ var Editor = (function () {
 
   return {
     init: init,
+    setViewBranch: setViewBranch,
+    canEdit: canEdit,
     edit: edit,
     create: create,
     remove: remove,
