@@ -75,6 +75,8 @@ try {
   $installPs1 = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'install.ps1')
   Assert-True ($installPs1 -match "codex\\prompts") 'install.ps1 links Codex prompt adapters'
   Assert-True ($installPs1 -match 'install-skill-plugins\.ps1') 'install.ps1 installs declared external skill plugins'
+  $skillPluginInstallerSource = Get-Content -Raw -LiteralPath $skillPluginInstaller
+  Assert-True ($skillPluginInstallerSource -match 'OpenAI\\Codex\\bin') 'PowerShell plugin installer locates the Windows Codex app without a profile alias'
 
   $skillPluginPlan = @(& pwsh -NoProfile -File $skillPluginInstaller -Plan)
   Assert-True ($LASTEXITCODE -eq 0) 'skill plugin installer plan runs without external writes'

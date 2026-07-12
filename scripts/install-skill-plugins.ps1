@@ -44,6 +44,23 @@ function Get-PluginArguments([string]$Tool, $Plugin) {
   return @('plugin', 'add', $selector, '--json')
 }
 
+function Resolve-ToolCommand([string]$Tool) {
+  $command = Get-Command $Tool -ErrorAction SilentlyContinue
+  if ($null -ne $command) { return $Tool }
+
+  if ($Tool -eq 'codex' -and -not [string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
+    $codexBin = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\bin'
+    if (Test-Path -LiteralPath $codexBin) {
+      $candidate = Get-ChildItem -LiteralPath $codexBin -Recurse -Filter 'codex.exe' -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1 -ExpandProperty FullName
+      if (-not [string]::IsNullOrWhiteSpace($candidate)) { return $candidate }
+    }
+  }
+
+  return $null
+}
+
 foreach ($tool in @('claude', 'codex')) {
   $marketplaces = @($Manifest.marketplaces | Where-Object { $_.tools -contains $tool })
   $plugins = @($Manifest.plugins | Where-Object { $_.tools -contains $tool })
@@ -58,16 +75,17 @@ foreach ($tool in @('claude', 'codex')) {
     continue
   }
 
-  if ($null -eq (Get-Command $tool -ErrorAction SilentlyContinue)) {
+  $toolCommand = Resolve-ToolCommand $tool
+  if ($null -eq $toolCommand) {
     Write-Warning "$tool is not installed; skipping its skill plugins."
     continue
   }
 
   if ($tool -eq 'claude') {
-    $marketplaceState = @(Invoke-Json $tool @('plugin', 'marketplace', 'list', '--json'))
+    $marketplaceState = @(Invoke-Json $toolCommand @('plugin', 'marketplace', 'list', '--json'))
     $existingMarketplaces = @($marketplaceState | ForEach-Object { [string]$_.name })
   } else {
-    $marketplaceState = Invoke-Json $tool @('plugin', 'marketplace', 'list', '--json')
+    $marketplaceState = Invoke-Json $toolCommand @('plugin', 'marketplace', 'list', '--json')
     $existingMarketplaces = @($marketplaceState.marketplaces | ForEach-Object { [string]$_.name })
   }
 
@@ -77,14 +95,14 @@ foreach ($tool in @('claude', 'codex')) {
       continue
     }
     Write-Host "adding   $tool marketplace $($marketplace.id)"
-    Invoke-Checked $tool (Get-MarketplaceArguments $tool $marketplace)
+    Invoke-Checked $toolCommand (Get-MarketplaceArguments $tool $marketplace)
   }
 
   if ($tool -eq 'claude') {
-    $pluginState = @(Invoke-Json $tool @('plugin', 'list', '--json'))
+    $pluginState = @(Invoke-Json $toolCommand @('plugin', 'list', '--json'))
     $installedPlugins = @($pluginState | ForEach-Object { [string]$_.id })
   } else {
-    $pluginState = Invoke-Json $tool @('plugin', 'list', '--json')
+    $pluginState = Invoke-Json $toolCommand @('plugin', 'list', '--json')
     $installedPlugins = @($pluginState.installed | ForEach-Object { [string]$_.pluginId })
   }
 
@@ -95,6 +113,6 @@ foreach ($tool in @('claude', 'codex')) {
       continue
     }
     Write-Host "install  $tool plugin $selector"
-    Invoke-Checked $tool (Get-PluginArguments $tool $plugin)
+    Invoke-Checked $toolCommand (Get-PluginArguments $tool $plugin)
   }
 }
