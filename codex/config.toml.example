@@ -14,4 +14,6 @@ approvals_reviewer = "guardian_subagent"
 trust_level = "trusted"
 
 [tui]
+# 在支持 OSC 标题的终端中显示运行状态和会话名。
+terminal_title = ["activity", "thread-title"]
 status_line = ["current-dir", "model-with-reasoning", "git-branch", "context-used"]

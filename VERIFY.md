@@ -28,6 +28,11 @@
   - 实际效果：（验证后填写）
 -->
 
+- [x] **VS Code 中显示 Codex 会话名和运行状态** (commit: pending, date: 2026-07-17)
+  - 验证方法：把 `vscode/settings.json` 中的设置合并到 VS Code 用户设置，并在 Codex 中启用 `terminal_title = ["activity", "thread-title"]`；重启 Codex、恢复一个已命名会话，观察终端 Tab。
+  - 预期效果：Tab 不再显示 npm 启动器进程名 `node` 或工作目录；空闲时显示 Codex 会话名，运行时在会话名前显示活动状态。
+  - 实际效果：已在 VS Code 1.117.0 与 Codex CLI 0.144.5 上验证；名为 `test` 的会话输出 `test`，运行时输出类似 `⠋ test`，用户确认符合预期。
+
 - [x] **安装器只配置本机已有工具** (commit: 0bdc7cd, date: 2026-07-12)
   - 验证方法：在只安装 Claude Code 的 Mac 上运行 `bash install.sh`，再在同时安装 Claude Code 与 Codex 的 Mac 上运行同一命令；观察备份、链接和插件安装结果。
   - 预期效果：Claude-only 机器只更新 `~/.claude` 并明确跳过 Codex，不创建新的 Codex 配置；双工具机器分别更新两套配置和对应插件；两者均保留原配置备份。

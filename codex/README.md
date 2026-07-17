@@ -45,6 +45,15 @@ codex login
 
 macOS/Linux 使用仓库根目录的 `bash install.sh`。
 
+## VS Code 终端标题
+
+`config.toml.example` 的 `tui.terminal_title` 会让 Codex 通过 OSC 标题序列输出
+运行状态和会话名。VS Code 还需要把终端 Tab 标题来源切换为 `${sequence}`；仓库
+中的 [vscode/settings.json](../vscode/settings.json) 提供了可合并到用户设置的最小片段。
+
+不要用该片段覆盖现有的 VS Code `settings.json`。合并设置并重启 Codex 后，空闲时
+Tab 显示会话名，运行时显示类似 `⠋ session-name` 的活动状态。
+
 ## 为什么 config.toml 不 symlink
 
 Codex 运行时会自动改写 `config.toml`（追加 project trust level、记录 model
