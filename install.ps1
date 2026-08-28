@@ -100,6 +100,19 @@ if ($null -eq $ClaudeCommand -and $null -eq $CodexCommand) {
   return
 }
 
+# Promote the public Windows proxy settings to the user environment so Codex
+# and other AI CLIs inherit the same Clash route as Claude Code.
+$ProxySettingsPath = Join-Path $Repo 'claude\configs\settings.windows.json'
+$ProxySettings = Get-Content -LiteralPath $ProxySettingsPath -Raw | ConvertFrom-Json
+foreach ($Name in @('HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'NO_PROXY')) {
+  $Value = [string]$ProxySettings.env.$Name
+  if ([string]::IsNullOrWhiteSpace($Value)) {
+    throw "Missing $Name in $ProxySettingsPath"
+  }
+  [Environment]::SetEnvironmentVariable($Name, $Value, 'User')
+}
+Write-Host 'configured Windows user proxy environment for AI CLI tools'
+
 # -- Claude Code: files (symlinks) ------------------------------------------
 # Windows uses settings.windows.json (PowerShell statusline + proxy in env)
 # instead of the macOS settings.json (bash/jq statusline). A gitignored

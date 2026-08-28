@@ -105,6 +105,11 @@
 
 ### Windows 适配 (install.ps1 / settings.windows.json / statusline.ps1)
 
+- [x] **Windows AI CLI 继承 Clash 用户代理** (commit: pending, date: 2026-08-28)
+  - 验证方法：在 Windows 运行 `pwsh -NoProfile -File .\install.ps1 -SkipSkillPlugins`，彻底关闭并重新打开 PowerShell 7，检查四个用户级代理变量，再从新会话启动 Codex。
+  - 预期效果：`HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY` 指向 `http://127.0.0.1:7897`，`NO_PROXY` 保留本机回环地址；Codex 使用 ChatGPT 账号时经 Clash 到达 OpenAI，安装器重复运行不产生漂移。
+  - 实际效果：StarryBei-YOGA14U 实跑安装器后，新 PowerShell 会话继承四个用户级变量；`codex-cli 0.146.1` 正常启动，经 Clash 请求 `chatgpt.com` 返回 HTTP 403，强制直连 5 秒超时。
+
 - [x] **statusline.ps1：jq-free PowerShell 状态栏** (date: 2026-06-14)
   - 验证方法：Windows 上启动 Claude Code，观察状态栏在普通路径、长路径和中文会话名下的实际显示。
   - 预期效果：渲染 `◆会话 · 路径 · 模型·1M · 分支 · ctx%`，UTF-8 字形（◆ ·）正常、ANSI 颜色生效、路径过长省略为 `首/次/…/末2/末1`、ctx% 按 50/80 阈值变色；无 jq 依赖

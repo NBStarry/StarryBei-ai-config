@@ -27,8 +27,9 @@ Windows 安装器会使用：
 - 文件 symlink：需要开启“开发人员模式”或使用管理员 PowerShell
 - 目录 junction：不需要提权，可跨盘使用
 - `claude/configs/settings.windows.json`：Windows 专用 Claude Code 配置，状态栏使用 PowerShell 版本
+- 当前用户环境：从上述公开配置读取 `HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY`、`NO_PROXY`，让 Codex 等新启动的 AI CLI 统一使用 `127.0.0.1:7897` 的 Clash 代理
 
-如果文件 symlink 创建失败，脚本会保留已有配置并提示开启开发人员模式后重跑。
+安装完成后应彻底关闭并重新打开终端，让新的用户环境变量进入 Codex 等进程。如果文件 symlink 创建失败，脚本会保留已有配置并提示开启开发人员模式后重跑。
 
 ### macOS / Linux
 
