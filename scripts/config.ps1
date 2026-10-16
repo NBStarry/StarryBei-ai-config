@@ -30,6 +30,7 @@ function Get-CurrentPlatform {
 
 function Test-ToolAvailable([string]$Name) {
   if ($null -ne (Get-Command $Name -ErrorAction SilentlyContinue)) { return $true }
+  if ($Name -eq 'hermes' -and (Test-Path -LiteralPath (Join-Path $HOME '.hermes/hermes-agent/venv/bin/python'))) { return $true }
 
   if ($Name -eq 'codex' -and $IsWindows -and -not [string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) {
     $codexBin = Join-Path $env:LOCALAPPDATA 'OpenAI\Codex\bin'

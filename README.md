@@ -14,6 +14,8 @@
 
 ## 快速开始
 
+跨项目开发流程参见[统一开发规范 0.2.0](workflow/v0.2.0/README.md)。新任务由总管分派产品、架构、开发和独立测试。总管确认设计后继续推进，并在当前会话与飞书机器人私聊同步；同一问题最多自动返工三轮。用户无需创建开发会话或运行绑定命令。旧版本、旧任务和已有绑定保持原流程。详细规则见[开发规范 Web 指南](site/workflow.html)，实际证据见[本次规范维护记录](docs/plans/2026-10-13-codex-root-principles.md)。
+
 ### Windows
 
 ```powershell
@@ -39,7 +41,28 @@ cd StarryBei-ai-config
 bash install.sh
 ```
 
-`install.sh` 只处理当前机器已经安装的工具：Claude Code 存在时才链接 `~/.claude` 配置，Codex 存在时才链接 `~/.codex` prompts；不要求机器安装仓库中出现的所有工具。脚本会先备份已有目标文件，再创建 symlink，并只为已安装工具注册对应 marketplace 和 plugins。脚本依赖 `jq` 读取声明，可通过系统包管理器安装。
+`install.sh` 只处理当前机器已经安装的工具：Claude Code 存在时链接 `~/.claude` 配置；Codex 存在时链接 prompts、全局原则和规范入口，并合并四项 hook；Hermes 存在时链接规范插件并合并启用列表。不要求安装仓库中出现的所有工具。脚本会先备份已有目标，并只为已安装工具注册对应 marketplace 和 plugins。全量安装依赖 `jq`；规范安装需要 Python 3，Hermes 使用其虚拟环境已有的 PyYAML。
+
+### 只安装开发规范
+
+已有工具配置时，优先使用此入口。它不改 Claude、代理、认证或插件市场：
+
+```bash
+bash install.sh --workflow-only
+```
+
+Windows 的 Codex 入口为 `pwsh -File .\install.ps1 -WorkflowOnly`，需要 Python 3 和创建 symlink 的权限。Windows 实机验收尚未完成。若只指定一个工具，使用：
+
+```bash
+python3 -B scripts/install-workflow.py --tool codex
+~/.hermes/hermes-agent/venv/bin/python -B scripts/install-workflow.py --tool hermes
+```
+
+Hermes 的独立 Profile 需要逐个安装：在 Hermes 命令后添加 `--home ~/.hermes/profiles/<profile>`。默认命令只处理主入口，不自动枚举成员或迁移项目。安装器保留其他配置和 Hermes 原有 AGENTS；新增上下文由插件加载同一份根原则。
+
+重复安装不会重复注册。安装后按输出保存 `receipt.json` 路径。回退使用同一 Python 运行 `scripts/install-workflow.py --rollback <receipt.json>`；若目标已被后来操作修改，回退会拒绝覆盖。备份可能包含私有配置，仅保存在宿主配置目录，不上传。
+
+Codex 安装后在 `/hooks` 审阅并信任新增定义，再新开会话。Hermes 安装后重新加载相应进程。文件链接存在不代表运行时已加载。参见 [Hermes 接入与验证](hermes/README.md) 和 [开发规范 Web 指南](site/workflow.html)。
 
 ## 安装后需要做的事
 
@@ -80,6 +103,8 @@ pwsh -File .\scripts\config.ps1 rollback
 - `rollback` 回滚最近一次事务；也可用 `-Transaction <id>` 指定事务。
 
 `install.ps1` 继续保留为兼容安装入口；新状态引擎更适合审查差异、迁移新机器和可靠回滚。`codex/config.toml` 采用 `seed`，存在时不会被覆盖，因为它包含机器路径和运行时写入内容。
+
+状态引擎只管理 manifest 声明的文件链接；Codex hook 合并和 Hermes 插件启用使用独立规范安装入口。仅 `config.ps1 apply` 不构成规范安装完成证明。
 
 ## 仓库结构
 
