@@ -1,0 +1,315 @@
+{
+  "task": "dashboard-context",
+  "task_guid": "dafb5a5f-0025-45ae-9a25-3864e6e1d7a8",
+  "task_url": "https://applink.feishu.cn/client/todo/detail?guid=dafb5a5f-0025-45ae-9a25-3864e6e1d7a8",
+  "reviewed_at": "2026-10-16T15:25:08.582509+00:00",
+  "reviewer": {
+    "role": "product",
+    "session_id": "01a1454c-1ea9-7c11-bd6a-6cdd9acb882f",
+    "session_id_source": "CODEX_THREAD_ID",
+    "delegation": "总管正式 delegate 已成功；status 读回 sequence 1 的 product 绑定",
+    "workspace": "/Users/hanzebei/.codex/worktrees/migration-dashboard-context/StarryBei-ai-config",
+    "branch": "SuperBei/migration-dashboard-context",
+    "base_commit": "16efffdbe0ae070922da4a46859d072cc04f407d"
+  },
+  "old_owner": {
+    "session_id": "01a11a50-c074-7f82-99c2-757fe1b94391",
+    "host": "local",
+    "handoff_turn_id": "01a1443a-6375-7911-9a0a-c11cc9524254",
+    "handoff_sha256": "f17b528c4436ecf4c1423d1df5eb79e1f73d060d42f594c30a9c994bbd9bbf44",
+    "source_id": "S12",
+    "retained_scope": "原 checkout 未提交文件保留；不归入本次候选"
+  },
+  "status": {
+    "actual_input_review": "completed",
+    "formal_product_publish": false,
+    "formal_product_confirm": false,
+    "prototype_user_review": "pending",
+    "production_summary_design": "waiting_for_prototype_user_review",
+    "implementation": "not_started_in_this_continuation",
+    "user_acceptance": "pending",
+    "feishu_snapshot_status": "todo",
+    "feishu_snapshot_completed_at": "0",
+    "live_feishu_refetch_performed": false
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/TODO.md",
+      "sha256": "20ac92892eb6a61f04ef986a377ee6a916ad521047d7dc728dcc6a69a8d3628c",
+      "use": "两条未完成需求；历史勾选保留",
+      "scope": "原 checkout，历史快照"
+    },
+    {
+      "id": "S2",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/VERIFY.md",
+      "sha256": "bee3179965d7c53d44d27a79c37d8ca59cda2deedd2b5600ee8ab7e1e6f8cb9e",
+      "use": "功能验收与 HTML 原型均待用户验收",
+      "scope": "原 checkout，历史快照"
+    },
+    {
+      "id": "S3",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-context-sync.md",
+      "sha256": "f594439d2d735c2c3efe3e0962d9b675e9730ea7618dae8adff5a51498d6ca47",
+      "use": "原计划四节、C1–C8、执行记录与用户评审前置",
+      "scope": "原 checkout，未提交历史草稿"
+    },
+    {
+      "id": "S4",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/prototypes/project-context.html",
+      "sha256": "fcc6218ab99731faef5b67eeaa27967aed17be3296a49e72a8d3c2293e5353db",
+      "use": "虚构原型的界面、状态模型与交互源码",
+      "scope": "原 checkout，未提交历史原型"
+    },
+    {
+      "id": "S5",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/prototypes/project-context.test.mjs",
+      "sha256": "fae291b3d9e1d201a2049e59ee0b623b2aee24052f9e74d45f07cac0b0cf669b",
+      "use": "原型自检范围；本轮未执行",
+      "scope": "原 checkout，未提交测试"
+    },
+    {
+      "id": "S6",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-context.mjs",
+      "sha256": "dce23aa20862c2f0566a98880661b0c00f0cc5e1eb4449e821fe1288f6073831",
+      "use": "文件清单能力与路径边界",
+      "scope": "原 checkout，未提交历史模块"
+    },
+    {
+      "id": "S7",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-sessions.mjs",
+      "sha256": "378005f4613269e98794a953aabfd05244d980c4d2924cfbcd790f14ec8a0ba5",
+      "use": "局部会话记录、新建输入列表及非完整标记",
+      "scope": "原 checkout，未提交历史模块"
+    },
+    {
+      "id": "S8",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard.test.mjs",
+      "sha256": "db52e9e6809c66a71b38faebbfb1cfd66bb7af1a0d6367951c04b173e9adb895",
+      "use": "7 项测试源码的范围；本轮未执行",
+      "scope": "原 checkout，未提交测试"
+    },
+    {
+      "id": "S9",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "sha256": "6440e42852a221974bf9b594ebda5c8c66b9e88367ba448ae70ea4ae9a642e14",
+      "use": "现有接口调用与 Host、Origin、方法边界",
+      "scope": "原 checkout，含未提交修改"
+    },
+    {
+      "id": "S10",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/js/app.js",
+      "sha256": "69bb3bf4f0ab40c59b655e7f927570695aafad8074b9efa4003a69560f841b96",
+      "use": "三类上下文 UI 与旧响应丢弃",
+      "scope": "原 checkout，含未提交修改"
+    },
+    {
+      "id": "S11",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/SuperBeiTeam/artifacts/team-boundary-migration/feishu-preclose-readback/dashboard-context.json",
+      "sha256": "d0eebeec175e6e9aa387476a86e1cc8b55c915682278b9efe5f3a1519ad24f9f",
+      "use": "飞书回读成功、原任务未完成、原型用户未验收",
+      "scope": "私有本机快照；只公开路径、摘要与脱敏事实"
+    },
+    {
+      "id": "S12",
+      "source_path": "/Users/hanzebei/.codex/worktrees/team-boundary-migration/SuperBeiTeam/agent-coops/tasks/team-boundary-migration/evidence/owner-handoffs-summary.json",
+      "sha256": "e75db6516ceb45c8a2b2f5461d20028143f863096dafc53ad41028f099a17ec1",
+      "use": "旧 owner 已交接；原 checkout 未提交工作没有归入本次实现",
+      "scope": "私有交接摘要；不复制正文"
+    }
+  ],
+  "valid_conclusions": [
+    {
+      "id": "R1",
+      "conclusion": "保留项目全部预加载信息与会话实际完整输入两条原需求。",
+      "sources": [
+        "S1",
+        "S11"
+      ]
+    },
+    {
+      "id": "R2",
+      "conclusion": "HTML 原型先供用户评审；确认前不设计生产摘要能力和页面实现。",
+      "sources": [
+        "S3",
+        "S11"
+      ]
+    },
+    {
+      "id": "R3",
+      "conclusion": "原型包含概览、要求、显式任务、能力和缺口；全部使用虚构数据。",
+      "sources": [
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "id": "R4",
+      "conclusion": "文件清单只证明文件读取；技能可用不证明本轮加载。",
+      "sources": [
+        "S4",
+        "S6",
+        "S10"
+      ]
+    },
+    {
+      "id": "R5",
+      "conclusion": "已保存会话返回 complete=false；新建输入返回 complete_request=false。已有会话完整请求导出仍未实现。",
+      "sources": [
+        "S2",
+        "S7",
+        "S9",
+        "S10"
+      ]
+    },
+    {
+      "id": "R6",
+      "conclusion": "原型自检源码与历史浏览器记录存在；本轮仅静态复核，未重跑运行验收。",
+      "sources": [
+        "S3",
+        "S4",
+        "S5",
+        "S8"
+      ]
+    },
+    {
+      "id": "R7",
+      "conclusion": "原型和上下文模块仍位于原 checkout 的未提交工作；本次仅形成文档候选。",
+      "sources": [
+        "S3",
+        "S4",
+        "S6",
+        "S7",
+        "S12"
+      ]
+    }
+  ],
+  "criteria_review": [
+    {
+      "id": "C1",
+      "preserved": "选择项目后无需打开文件即可说明用途、技术栈和主要要求；示例标记可见",
+      "reviewed": "概览与标记源码；历史布局观察",
+      "gap": "概览截图和用户复述反馈"
+    },
+    {
+      "id": "C2",
+      "preserved": "依据摘录支持说明，来源和时间可见，关闭后返回原位置",
+      "reviewed": "dialog 与焦点恢复源码；历史 Escape 观察",
+      "gap": "对应说明的操作记录、依据截图及返回位置核对"
+    },
+    {
+      "id": "C3",
+      "preserved": "两个任务的名称、状态、说明、原文一致变化",
+      "reviewed": "独立任务来源断言及历史依据观察",
+      "gap": "两次选择截图与用户确认"
+    },
+    {
+      "id": "C4",
+      "preserved": "会话显示记录及缺口，不标为完整请求",
+      "reviewed": "局部、压缩和损坏提示源码与历史观察",
+      "gap": "会话截图及用户边界理解评审；真实完整性另验"
+    },
+    {
+      "id": "C5",
+      "preserved": "点击前不加载，失败有原因，重试回到标为新建示例的成功结果",
+      "reviewed": "状态模型、自检与历史三状态观察",
+      "gap": "三种状态及操作记录，用户操作预期评审"
+    },
+    {
+      "id": "C6",
+      "preserved": "切换项目清空旧任务、依据、会话、预览及错误，显示无任务和无会话",
+      "reviewed": "项目重置、旧响应丢弃、自检与历史切换观察",
+      "gap": "切换前后截图与操作记录；未来生产页另验"
+    },
+    {
+      "id": "C7",
+      "preserved": "无项目、缺失、读取失败不虚构内容，可返回或重试，缺口可理解",
+      "reviewed": "空状态与恢复源码和历史观察",
+      "gap": "状态截图、点击记录及用户理解反馈"
+    },
+    {
+      "id": "C8",
+      "preserved": "1440x1000 与390x844、明暗主题无遮挡可读，关闭可见，检查键盘路径",
+      "reviewed": "历史四布局与焦点恢复结论；本轮未运行浏览器",
+      "gap": "布局截图及可追溯键盘记录，用户评审"
+    }
+  ],
+  "evidence_gaps": [
+    "新 Product 尚未正式 publish 或 confirm；新工作区状态中 artifacts 与 confirmed 为空。",
+    "HTML 原型缺少用户评审与可理解性反馈，S3 用户评审和 S4 条件未满足。",
+    "所读入口未给出 C1–C8 逐项截图与点击记录的独立文件定位；未宣称这些文件在别处不存在。",
+    "历史自动与浏览器通过记录只对旧环境和旧产物有效；本轮未复跑。",
+    "生产摘要、任务识别、冲突处理和真实来源定位尚待原型确认后设计。",
+    "真实采集、生产脱敏和已有会话完整请求没有完成证据；现有接口显式返回非完整结果。",
+    "原功能人工验收仍需语言、计数、原话、刷新、项目隔离、会话边界及新建导出的实际观察。",
+    "本轮未验证当前服务、部署、PowerShell 或线上 CI；未读回飞书实时状态。"
+  ],
+  "earliest_missing_stage": "正式产品产物发布与确认；原型用户评审仍是生产摘要设计和页面实施的前置条件",
+  "next_steps": [
+    "总管审查三文件候选与摘要，并安排同任务正式产品产物及确认。",
+    "定位已有 C1–C8 证据，向用户提交原 HTML 评审，记录所评摘要、反馈及未通过项。",
+    "用户确认原型后，再安排架构设计；完整输入能力先核实实际采集范围。",
+    "上游确认后再安排实施和独立测试；原 checkout 文件迁入范围须明确。",
+    "用户验收通过后在原飞书任务记录完成，分别保留自动、运行、部署与用户证据。"
+  ],
+  "waiting_conditions": [
+    "正式产品确认尚未获得。",
+    "用户尚未确认 HTML 原型，禁止提前设计生产摘要和启动页面实施。",
+    "完整上下文需求保持未完成，不因迁移或示例原型通过而关闭。"
+  ],
+  "checks": {
+    "scope": [
+      "agent-coops/tasks/dashboard-context/README.md",
+      "agent-coops/tasks/dashboard-context/evidence/product-continuation.md",
+      "agent-coops/tasks/dashboard-context/evidence/product-continuation.json"
+    ],
+    "pre_write_workflow_check": {
+      "exit_code": 0,
+      "stdout": "WORKFLOW_OK"
+    },
+    "document_checks": {
+      "exit_code": 0,
+      "result": "JSON、真实会话与工作区、GUID、C1-C8、四节结构、12项来源SHA-256、未确认边界、私有快照元数据排除及历史文件未迁入检查通过；仅文档候选。",
+      "git_diff_check": {
+        "exit_code": 0,
+        "scope": "三条授权路径"
+      }
+    },
+    "post_write_workflow_check": {
+      "exit_code": 0,
+      "stdout": "WORKFLOW_OK",
+      "scope": "三条授权路径"
+    },
+    "staged_workflow_check": {
+      "initial_exit_code": 2,
+      "initial_output": [
+        "agent-coops/tasks/dashboard-context/README.md：LINK_MISSING：/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-context-sync.md",
+        "agent-coops/tasks/dashboard-context/README.md：LINK_MISSING：/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/prototypes/project-context.html"
+      ],
+      "cause": "候选树检查无法解析原 checkout 的本机历史文件链接；原文件存在但不属于候选树。",
+      "correction": "README 保留本机路径和历史说明，以路径文字代替候选内超链接，并标明仅该设备本机可访问；source_path 与 SHA-256 不变。这是证据入口表达修正，不是业务实现或验收标准降低。没有复制历史文件或修改门禁。",
+      "retry": {
+        "exit_code": 0,
+        "stdout": "WORKFLOW_OK",
+        "staged_paths": "仅三条授权路径",
+        "cached_diff_check_exit_code": 0
+      }
+    },
+    "normal_commit_hook": "由后续正常提交结果证明"
+  },
+  "not_performed": [
+    "formal publish",
+    "formal confirm",
+    "生产实现",
+    "新原型或图片生成",
+    "历史自检重跑",
+    "浏览器",
+    "服务启动",
+    "安装",
+    "真实配置修改",
+    "公开 data 生成",
+    "push",
+    "飞书写入"
+  ],
+  "privacy": "仅保存脱敏产品事实、文件路径和 SHA-256；不复制私有回读原文、完整请求、聊天、私人配置值、凭证或 Team 私有正文。"
+}
