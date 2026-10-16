@@ -16,8 +16,8 @@
 - 旧团队安装参数仅提示私有 Team 入口，不写配置或下载代码。
 - 基础原则及有效文档只维护基础职责，团队内容指向 Team。保留 Claude 的五条模型选择语义；合并验收遵守目标项目当前有效正本。
 - 保留旧 workflow 发行文件及 hook/plugin 程序字节，已有消费者不卸载、不迁移。
-- 本仓 TODO、VERIFY 的映射与冻结由迁移总管处理；最终 Web 指南由后续真实 Hermes 任务交付。
+- 本仓 TODO、VERIFY 的映射与冻结已核对。Team 私有 Web 指南由真实 Hermes 任务交付；本仓[公开入口子工程](../team-web-guide/README.md)已完成本地实现与独立测试。
 
 ## 工程证据
 
-[本仓执行记录](执行记录.md)区分自动检查、实际运行和用户验收。当前入口不构成新门禁已安装、部署完成、工程确认或用户验收回执。
+[本仓执行记录](执行记录.md)区分自动检查、实际运行和用户验收。[公开入口独立报告](../team-web-guide/evidence/测试验收.md)与[总管工程确认](../team-web-guide/evidence/coordinator-final-confirmation.json)只覆盖同一候选的 A1–A4。主迁移仍需真实 Hermes 闭环、公开部署与用户验收证据；本入口不代替这些回执。
