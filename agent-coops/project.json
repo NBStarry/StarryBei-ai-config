@@ -1,0 +1,44 @@
+{
+  "workflow_version": "0.2.1",
+  "workflow_source": "@installed-team",
+  "workflow_sha256": "e139f04a1c8a529d87e7b2037c49bddf681b6b57bad78bf40aa9424de7598d0c",
+  "project": "StarryBei-ai-config",
+  "root_files": [
+    ".gitignore",
+    "AGENTS.md",
+    "LICENSE",
+    "README.md",
+    "STATUS.md",
+    "TODO.md",
+    "VERIFY.md",
+    "install.ps1",
+    "install.sh"
+  ],
+  "allowed_roots": [
+    ".claude",
+    ".github",
+    "agent-coops",
+    "claude",
+    "codex",
+    "config",
+    "deprecated",
+    "docs",
+    "hermes",
+    "scripts",
+    "site",
+    "vscode",
+    "workflow"
+  ],
+  "legacy_task_roots": [
+    "docs/plans",
+    "docs/superpowers/plans"
+  ],
+  "validation": {
+    "workflow": "python3 agent-coops/run.py check --staged"
+  },
+  "lark": {
+    "identity": "user",
+    "tasklist_guid": "fb197971-6b2a-42f8-8b77-2805568ef481"
+  },
+  "permissions": "用户于2026-10-16授权本项目团队边界迁移与0.2.1接入；其他项目保持原合同。"
+}
