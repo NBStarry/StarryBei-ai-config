@@ -1,0 +1,26 @@
+{
+  "assets": [
+    "agent-coops/tasks/team-web-guide/evidence/product-prototype.html",
+    "agent-coops/tasks/team-web-guide/evidence/before-desktop.png",
+    "agent-coops/tasks/team-web-guide/evidence/product-desktop.png",
+    "agent-coops/tasks/team-web-guide/evidence/product-mobile.png"
+  ],
+  "criteria": [
+    {
+      "id": "A1",
+      "text": "公开迁移页只说明职责迁移与访问要求，不再展示五角色、阶段、返工或团队安装正文，不读取 Team 私有源，不提供团队状态面板或自动跳转。"
+    },
+    {
+      "id": "A2",
+      "text": "生产页提供返回 Config Dashboard、Team 已存在的 README 指南与安装入口、Team 仓库三个原生链接；链接目标与产品表一致，私有入口明确需要权限，不虚构未来指南路径。"
+    },
+    {
+      "id": "A3",
+      "text": "桌面 1280px 与移动 390px 宽度均可阅读并操作；文字与按钮不重叠、无遮挡、无横向滚动，链接文字说明目标，键盘可访问真实链接。"
+    },
+    {
+      "id": "A4",
+      "text": "保留 site/workflow.html 原文件路径；workflow.html 及带既有片段的历史地址仍显示迁移说明；返回入口继续到 index.html。生产旧地址实际运行和部署情况单独记录。"
+    }
+  ]
+}

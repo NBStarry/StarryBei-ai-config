@@ -1,0 +1,65 @@
+{
+  "task": "team-web-guide",
+  "coordinator_session": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+  "device": "韩泽北的 MacBook Pro",
+  "host": "Codex",
+  "chat_title": "统一多项目开发规范",
+  "recorded_at": "2026-10-16T13:09:54.773772+00:00",
+  "scope": "已授权迁移的Config公开入口子目标",
+  "confirmed": {
+    "product": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+    "plan": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027"
+  },
+  "confirmed_events": [
+    {
+      "sequence": 3,
+      "action": "confirm",
+      "session": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+      "task": "team-web-guide",
+      "reason": "总管已读取四节设计与A1-A4，核对实际Opus5.5 medium回执并查看桌面和移动原型。公开页只保留迁移说明、私有权限提示及三个入口，现有README入口元数据已核实。确认本产品版本进入架构；实现、部署和用户验收另行验证。",
+      "artifact": "product",
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac"
+    },
+    {
+      "sequence": 8,
+      "action": "confirm",
+      "session": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+      "task": "team-web-guide",
+      "reason": "总管已读取四节计划、单步S1、A1-A4映射、唯一生产路径和Opus影响图。复用现有样式、保留原路径及原生链接，不增加私有读取或新依赖。确认进入开发，实际浏览器与部署仍需独立证据。",
+      "artifact": "plan",
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027"
+    }
+  ],
+  "notifications": [
+    {
+      "artifact": "product",
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+      "channel": "chat",
+      "status": "sent"
+    },
+    {
+      "artifact": "product",
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+      "channel": "feishu",
+      "status": "sent"
+    },
+    {
+      "artifact": "plan",
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+      "channel": "chat",
+      "status": "sent"
+    },
+    {
+      "artifact": "plan",
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+      "channel": "feishu",
+      "status": "sent"
+    }
+  ],
+  "review_basis": [
+    "产品四节、A1-A4与桌面/移动原型",
+    "Opus5.5 medium实际模型回执",
+    "架构四节、唯一生产路径、S1映射与影响图"
+  ],
+  "production_and_deployment": "继续由开发和独立测试验证；本记录不表示已上线或用户验收"
+}

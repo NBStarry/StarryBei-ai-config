@@ -1,0 +1,32 @@
+{
+  "status": "pass",
+  "candidate_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "changed_tracked_files": [
+    "site/workflow.html"
+  ],
+  "unchanged_tracked_files": 150,
+  "links": [
+    [
+      "返回 AI Config Dashboard",
+      "index.html"
+    ],
+    [
+      "打开 Team 指南与安装入口",
+      "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md"
+    ],
+    [
+      "打开 Team 仓库",
+      "https://github.com/NBStarry/SuperBeiTeam"
+    ]
+  ],
+  "checks": [
+    "exact approved text",
+    "one title, h1 and main",
+    "three native same-window anchors",
+    "existing CSS references",
+    "lang, charset and viewport",
+    "no scripts, iframe, handlers or automatic redirects",
+    "Dashboard target exists",
+    "other tracked files unchanged"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "verified_at": "2026-10-16T12:44:30.728684+00:00",
+  "method": "gh api metadata fields only; no README body read",
+  "repository": {
+    "full_name": "NBStarry/SuperBeiTeam",
+    "private": true,
+    "default_branch": "main",
+    "html_url": "https://github.com/NBStarry/SuperBeiTeam"
+  },
+  "guide_entry": {
+    "type": "file",
+    "path": "README.md",
+    "git_blob_sha": "90a6d1795fbef946a62e2f91fc1d622f730a6ee8",
+    "html_url": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md"
+  },
+  "baseline": {
+    "commit": "4df46d8f7f5ded9504e29f0f802d77f0ec4d794c",
+    "site/workflow.html_sha256": "26b0c987fd94a09334c37bec647fdea6cbdb20839dea877c5363d1646b611e90"
+  },
+  "not_claimed": [
+    "README contents reviewed",
+    "future guide filename",
+    "anonymous access",
+    "public deployment"
+  ]
+}

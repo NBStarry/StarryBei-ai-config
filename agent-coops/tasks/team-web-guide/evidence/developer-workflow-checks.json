@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-10-16T13:12:52.907309+00:00",
+  "results": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "agent-coops/run.py",
+        "check",
+        "site/workflow.html",
+        "agent-coops/tasks/team-web-guide/执行记录.md",
+        "agent-coops/tasks/team-web-guide/evidence/developer-after-desktop.png",
+        "agent-coops/tasks/team-web-guide/evidence/developer-after-mobile.png",
+        "agent-coops/tasks/team-web-guide/evidence/developer-baseline.json",
+        "agent-coops/tasks/team-web-guide/evidence/developer-before-desktop.png",
+        "agent-coops/tasks/team-web-guide/evidence/developer-before-source.html",
+        "agent-coops/tasks/team-web-guide/evidence/developer-browser-checks.json",
+        "agent-coops/tasks/team-web-guide/evidence/developer-keyboard-focus.png",
+        "agent-coops/tasks/team-web-guide/evidence/developer-server.log",
+        "agent-coops/tasks/team-web-guide/evidence/developer-static-checks.json"
+      ],
+      "exit_code": 0,
+      "stdout": "WORKFLOW_OK\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "site/workflow.html"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "staged_check": "not run: no staging authorized for developer"
+}

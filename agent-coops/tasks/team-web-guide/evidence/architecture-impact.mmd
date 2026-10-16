@@ -1,0 +1,69 @@
+%% 架构影响图：公开团队指南入口迁移（team-web-guide）
+%% 依据产品版本 345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac
+%% 本图为架构证据，不是生产资产；目标仅用文本表示，不含 click 指令或外部链接。
+flowchart TB
+  subgraph BEFORE["修改前"]
+    B1["既有 Dashboard 入口 / 旧书签<br/>（含 8 个历史片段地址）"]
+    B2["site/workflow.html<br/>长篇团队正文：目录、流程、安装"]
+    B3["主题按钮 + js/workflow-doc.js 引用"]
+  end
+
+  subgraph SHARED["共享样式（只读复用，不修改）"]
+    C1["site/css/style.css<br/>颜色、字体、reset、focus-visible"]
+    C2["site/css/workflow.css<br/>现有文档基础样式"]
+  end
+
+  subgraph AFTER["修改后（生产精确 sources 仅 site/workflow.html）"]
+    A1["同一 URL：原地址及历史片段地址"]
+    A2["site/workflow.html<br/>单张迁移说明卡片"]
+    A3["职责说明 + 私有仓库权限提示"]
+    A4["内联 style：迁移页专用少量布局"]
+    L1["原生链接：返回 Dashboard<br/>目标 index.html"]
+    L2["原生链接：Team 指南与安装入口<br/>目标 Team main/README.md"]
+    L3["原生链接：Team 仓库<br/>目标 Team GitHub 仓库首页"]
+  end
+
+  G["浏览器导航；GitHub 判断私有仓库权限"]
+  K["保留文件本体：js/workflow-doc.js<br/>及 Dashboard 其它生产文件（不修改）"]
+  X["不读取或复制 Team 私有内容<br/>无新增 JS、数据接口、自动跳转、框架"]
+
+  B1 --> B2
+  B2 --> B3
+  B2 --> C1
+  B2 --> C2
+  B1 ==>|同一地址| A1
+  B2 ==>|正文替换为卡片| A2
+  A1 --> A2
+  A2 --> A3
+  A2 --> A4
+  A2 --> L1
+  A2 --> L2
+  A2 --> L3
+  A2 -->|继续复用| C1
+  A2 -->|继续复用| C2
+  L2 --> G
+  L3 --> G
+  B3 -.->|移除引用，文件保留| K
+  A2 -.- X
+
+  subgraph VERIFY["验证"]
+    S1["S1：1280px / 390px 可读、无横向滚动<br/>原生链接键盘 focus、原 URL 与 8 个历史片段"]
+    AC["验收 A1–A4"]
+    D["部署与用户验收：另行记录"]
+  end
+
+  S1 --> AC
+  AC -.->|检查对象| A2
+  AC -.-> D
+
+  E["本文件 evidence/architecture-impact.mmd<br/>架构证据，非生产资产"]
+  E -.- A2
+
+  classDef before fill:#eaeef2,stroke:#8c959f,color:#24292f
+  classDef after fill:#ddf4ff,stroke:#0969da,color:#0a3069
+  classDef shared fill:#f6f8fa,stroke:#57606a,color:#24292f
+  classDef boundary fill:#fff8e5,stroke:#d4a72c,color:#3b2300
+  class B1,B2,B3 before
+  class A1,A2,A3,A4,L1,L2,L3 after
+  class C1,C2,K shared
+  class G,X,E,D boundary

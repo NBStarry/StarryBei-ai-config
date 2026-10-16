@@ -1,0 +1,38 @@
+{
+  "created_at": "2026-10-16T12:48:15.304016+00:00",
+  "task": "team-web-guide",
+  "session": "01a1446c-517e-77e0-a876-b5a53f2ae5c1",
+  "model": "phanthy-cloud/claude-opus-5-5",
+  "variant": "medium",
+  "runtime_models": [
+    {
+      "providerID": "phanthy-cloud",
+      "modelID": "claude-opus-5-5",
+      "variant": "medium"
+    }
+  ],
+  "model_session": "ses_ebb432827ffeFU026gWOZ3S633",
+  "exit_code": 0,
+  "fallback_used": false,
+  "requested_file": "agent-coops/tasks/team-web-guide/evidence/product-prototype.html",
+  "actual_write_path_verified": true,
+  "final_text_path_note": "Model final text reported /workspace incorrectly; write tool and actual file used required worktree path.",
+  "raw_evidence_directory": "evidence/model-local/",
+  "raw_evidence_gitignored": true,
+  "raw_log_sha256": {
+    "opus-stderr.log": "5afe5b0f6072750e6c5e2a6fae909e537f71d15b2d6574d6ae8333dfa11dac4d",
+    "opus-session.json": "cd3534bf0171ebdce2981fcb695ab963d8ab44ffa5c545428115045657a30e2e",
+    "opus-prompt.txt": "17dd04d667b0d64307c1eb07b90ffc4908b9ef537e76a55c866e6f1cd1e30d44",
+    "opus-events.jsonl": "8d06a2a802f360bdd42411bf3508a52fa1f18c98c0f2a794031f6158bb50207d"
+  },
+  "request_first_response_timeout": "not runtime-enforced; not claimed",
+  "billing": "not checked; reported cost is not proof",
+  "files": {
+    "产品设计.md": "c36a58eb42ca99b7f5e21d69ab3b66a9a366a526d37c07ee897d3f0499f80643",
+    "evidence/product-manifest.json": "8f742ecf49e63ca0caea506d6ab226acf8c18fc2f822b6e9fefd874708a88601",
+    "evidence/product-prototype.html": "7fdabdb791b947f0f6de29477939d0c7866f16209fd4e121feba8da645921d51",
+    "evidence/before-desktop.png": "f233825c3d083bbe8e663224a3a3f026e7843adccfe415203584d3203b769377",
+    "evidence/product-desktop.png": "b6328d33d6013ce15edf3c79c565470428aef5b6065bf3b3e5bae4c2467cf514",
+    "evidence/product-mobile.png": "ecdc6f303f3aafbcf4ef95acd011ad6b03c422ba33672ed00ab3661e1b90313d"
+  }
+}

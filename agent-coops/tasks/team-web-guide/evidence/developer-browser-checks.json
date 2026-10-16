@@ -1,0 +1,374 @@
+{
+  "status": "pass",
+  "candidate_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "url": "http://127.0.0.1:8765/workflow.html",
+  "browser": "Chrome via existing web-access proxy; CUA viewport and native keyboard",
+  "screenshots": {
+    "before": "developer-before-desktop.png",
+    "desktop": "developer-after-desktop.png",
+    "mobile": "developer-after-mobile.png",
+    "focus": "developer-keyboard-focus.png"
+  },
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 900,
+      "scrollWidth": 1272,
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "main": {
+        "x": 236,
+        "y": 76.796875,
+        "width": 800,
+        "height": 436.796875,
+        "top": 76.796875,
+        "right": 1036,
+        "bottom": 513.59375,
+        "left": 236
+      },
+      "elements": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 277,
+            "y": 117.796875,
+            "width": 718,
+            "height": 59.796875,
+            "top": 117.796875,
+            "right": 995,
+            "bottom": 177.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 277,
+            "y": 197.59375,
+            "width": 718,
+            "height": 63,
+            "top": 197.59375,
+            "right": 995,
+            "bottom": 260.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 277,
+            "y": 272.59375,
+            "width": 718,
+            "height": 28,
+            "top": 272.59375,
+            "right": 995,
+            "bottom": 300.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 277,
+            "y": 324.59375,
+            "width": 193.703125,
+            "height": 44,
+            "top": 324.59375,
+            "right": 470.703125,
+            "bottom": 368.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 277,
+            "y": 376.59375,
+            "width": 194.5625,
+            "height": 44,
+            "top": 376.59375,
+            "right": 471.5625,
+            "bottom": 420.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 277,
+            "y": 428.59375,
+            "width": 114.5625,
+            "height": 44,
+            "top": 428.59375,
+            "right": 391.5625,
+            "bottom": 472.59375,
+            "left": 277
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 382,
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "top": 24,
+        "right": 366,
+        "bottom": 534.5,
+        "left": 16
+      },
+      "elements": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "top": 49,
+            "right": 341,
+            "bottom": 127,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "top": 147,
+            "right": 341,
+            "bottom": 241.5,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "top": 253.5,
+            "right": 341,
+            "bottom": 337.5,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "top": 361.5,
+            "right": 234.703125,
+            "bottom": 405.5,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "top": 413.5,
+            "right": 235.5625,
+            "bottom": 457.5,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "top": 465.5,
+            "right": 155.5625,
+            "bottom": 509.5,
+            "left": 41
+          },
+          "visible": "visible",
+          "display": "block",
+          "unoccluded": true
+        }
+      ]
+    }
+  ],
+  "keyboard": {
+    "viewport": 1280,
+    "method": "native Tab via cua tab.pressKey; activeElement and computed outline read via CDP",
+    "focus_order": [
+      {
+        "text": "返回 AI Config Dashboard",
+        "href": "index.html",
+        "tag": "A",
+        "focusVisible": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(88, 166, 255)"
+      },
+      {
+        "text": "打开 Team 指南与安装入口",
+        "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+        "tag": "A",
+        "focusVisible": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(88, 166, 255)"
+      },
+      {
+        "text": "打开 Team 仓库",
+        "href": "https://github.com/NBStarry/SuperBeiTeam",
+        "tag": "A",
+        "focusVisible": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(88, 166, 255)"
+      }
+    ],
+    "native_return": {
+      "method": "Shift+Tab twice from third link, then Return",
+      "url": "http://127.0.0.1:8765/index.html",
+      "title": "AI Config Dashboard",
+      "heading": "⚙ AI Config"
+    }
+  },
+  "historical_fragments": [
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#overview",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#architecture",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#five-roles",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#example",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#checks",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#principles",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#operations",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    },
+    {
+      "url": "http://127.0.0.1:8765/workflow.html#limits",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "mainVisible": true,
+      "returnHref": "index.html",
+      "links": 3,
+      "width": 390,
+      "scrollWidth": 382
+    }
+  ],
+  "visual_review": "Desktop and mobile screenshots inspected: all text and links visible, no overlap or horizontal clipping.",
+  "limitations": [
+    "Local candidate only; public deployment unverified",
+    "User acceptance unverified",
+    "Private destination authorization belongs to GitHub; no Team body read"
+  ],
+  "recorded_at": "2026-10-16T13:11:05.358597+00:00"
+}

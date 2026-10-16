@@ -1,0 +1,31 @@
+{
+  "source": "site/workflow.html",
+  "source_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "confirmed_product": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+  "confirmed_plan": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+  "owned_files": {
+    "site/workflow.html": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+    "agent-coops/tasks/team-web-guide/执行记录.md": "c954ef9810c43e8f5e0d99dffa91cdc3ef6aa02872faf9aaba66114b82e4791b",
+    "agent-coops/tasks/team-web-guide/evidence/developer-after-desktop.png": "cdfc13c3cd8ebeb90fdecd330fc4f668d09c646e954e8b420a37896b04cbc005",
+    "agent-coops/tasks/team-web-guide/evidence/developer-after-mobile.png": "871efbaf8534f0ef221afa12e49d1031d3a14d93f1ce5fe65cf1a6cdb529435d",
+    "agent-coops/tasks/team-web-guide/evidence/developer-baseline.json": "7bfed4b418047c49a86fa6f6c3f45702ac425f27c07be03acd96bafee76b32cb",
+    "agent-coops/tasks/team-web-guide/evidence/developer-before-desktop.png": "b26e5950eca0ecc7af00222ba9578a1bf5bd9a327e0168db2eabb650af1d6c0e",
+    "agent-coops/tasks/team-web-guide/evidence/developer-before-source.html": "26b0c987fd94a09334c37bec647fdea6cbdb20839dea877c5363d1646b611e90",
+    "agent-coops/tasks/team-web-guide/evidence/developer-browser-checks.json": "fb0ea1a6c86e3feda14ac31e9d37dee7394f44ab5c4c9782331f42c62f7d38d4",
+    "agent-coops/tasks/team-web-guide/evidence/developer-keyboard-focus.png": "c1ecd3c792913df7beb2217ea78ba734f7f1c8dd01d6b857ae492594b23a3585",
+    "agent-coops/tasks/team-web-guide/evidence/developer-server.log": "e9decc0a64444e15754b1a7f5434560b780497a5dab3236f5eeb48244b3ea6d6",
+    "agent-coops/tasks/team-web-guide/evidence/developer-static-checks.json": "6acd4ef29e7d626a0deaedfac1994dcb52cbda9178f6812e6ff218c4681bf666",
+    "agent-coops/tasks/team-web-guide/evidence/developer-workflow-checks.json": "6b1e8d82108ea7a281158ba705f56fe6e127b06e1ef821faf2cee5156299179e"
+  },
+  "other_tracked_files_unchanged": 150,
+  "status": "development and self-check complete; independent test pending",
+  "cleanup": {
+    "viewport_reset": true,
+    "task_browser_tab_closed": true,
+    "temporary_server_stopped": true
+  },
+  "commit": null,
+  "push": false,
+  "deployment": "unverified",
+  "user_acceptance": "unverified"
+}

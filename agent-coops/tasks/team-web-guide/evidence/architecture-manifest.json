@@ -1,0 +1,21 @@
+{
+  "product_version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+  "assets": [
+    "agent-coops/tasks/team-web-guide/evidence/architecture-impact.mmd",
+    "agent-coops/tasks/team-web-guide/evidence/architecture-source-review.md"
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "criteria": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "sources": [
+        "site/workflow.html"
+      ]
+    }
+  ]
+}
