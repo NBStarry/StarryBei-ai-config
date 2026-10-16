@@ -1,0 +1,354 @@
+{
+  "task": "dashboard-native",
+  "guid": "57062456-7138-4334-a865-d10bd34a7c1c",
+  "owner": "韩泽北",
+  "recorded_at": "2026-10-16T15:40:35.756655+00:00",
+  "role": "product",
+  "session": "01a1455b-0015-7cb1-b3fd-41bb480a4fb9",
+  "workspace": "/Users/hanzebei/.codex/worktrees/migration-dashboard-native/StarryBei-ai-config",
+  "candidate_branch": "SuperBei/migration-dashboard-native",
+  "candidate_base_commit": "16efffdbe0ae070922da4a46859d072cc04f407d",
+  "formal_state": {
+    "delegated": true,
+    "binding_verified_by": "python3 agent-coops/run.py status --task dashboard-native",
+    "product_published": false,
+    "product_confirmed": false,
+    "architecture_confirmed": false,
+    "meaning": "新真实Product的实际复核输入；不是正式publish、confirm或用户验收回执"
+  },
+  "readme_preimage_sha256": "56ec62200ede02865d8cb937bf5c97934c1942d9e34ce5637b114c77105a3617",
+  "sources": [
+    {
+      "id": "old-plan",
+      "path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-local-source-audit.md",
+      "sha256": "55091f85030e1e08caf604b7f46964a6c5f6a058ae4c55a7d9cf1b1ad1add0de",
+      "use": "历史产品与检查记录；未提交草稿",
+      "access": "仅本机位置；原文件不复制进候选"
+    },
+    {
+      "id": "old-verify",
+      "path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/VERIFY.md",
+      "sha256": "bee3179965d7c53d44d27a79c37d8ca59cda2deedd2b5600ee8ab7e1e6f8cb9e",
+      "use": "历史人工验收记录；本地原生状态条目当前位于78至81行",
+      "access": "仅本机位置；原文件不复制进候选"
+    },
+    {
+      "id": "old-todo",
+      "path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/TODO.md",
+      "sha256": "20ac92892eb6a61f04ef986a377ee6a916ad521047d7dc728dcc6a69a8d3628c",
+      "use": "历史用户原话；本机唯一信源要求仍未勾选",
+      "access": "仅本机位置；原文件不复制进候选"
+    },
+    {
+      "id": "feishu-snapshot",
+      "path": "/Users/hanzebei/Documents/AI_Projects/SuperBeiTeam/artifacts/team-boundary-migration/feishu-preclose-readback/dashboard-native.json",
+      "sha256": "e1588f336d0cf24aa49493fa64f1128ce6735a96c5b93a673a09114cc27b5d1c",
+      "use": "提供的飞书读回快照；未做实时查询，仅提取本任务状态和验收条件",
+      "access": "仅本机位置；原文件不复制进候选"
+    },
+    {
+      "id": "owner-handoff",
+      "path": "/Users/hanzebei/.codex/worktrees/team-boundary-migration/SuperBeiTeam/agent-coops/tasks/team-boundary-migration/evidence/owner-handoffs-summary.json",
+      "sha256": "e75db6516ceb45c8a2b2f5461d20028143f863096dafc53ad41028f099a17ec1",
+      "use": "原执行者交接摘要；仅提取原Config交接事实",
+      "access": "仅本机位置；原文件不复制进候选"
+    }
+  ],
+  "source_comparison": [
+    {
+      "path": "scripts/local-dashboard-server.mjs",
+      "candidate_exists": true,
+      "candidate_sha256": "40f88fb9c5bdd3c859926f9877b1b913ff1c38f7071c11316691b509a5453744",
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "historical_sha256": "6440e42852a221974bf9b594ebda5c8c66b9e88367ba448ae70ea4ae9a642e14",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "scripts/dashboard-native.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-native.mjs",
+      "historical_sha256": "ce13e5199a4e4fd5dda311c10c42a2f6844102c83e3bd4140b1751740312b020",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "scripts/dashboard-context.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-context.mjs",
+      "historical_sha256": "dce23aa20862c2f0566a98880661b0c00f0cc5e1eb4449e821fe1288f6073831",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    },
+    {
+      "path": "scripts/dashboard-repository.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-repository.mjs",
+      "historical_sha256": "2810d63d26c8008832bd794a6db8cd18550ca3a8659b616c10071981ffa08501",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "scripts/dashboard-sessions.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-sessions.mjs",
+      "historical_sha256": "378005f4613269e98794a953aabfd05244d980c4d2924cfbcd790f14ec8a0ba5",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    },
+    {
+      "path": "scripts/dashboard-hooks.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-hooks.mjs",
+      "historical_sha256": "ccf4a1c5bed598850cdaf519b2e3ad71f53388d98d38f8284c3dff49f9540668",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    },
+    {
+      "path": "scripts/dashboard.test.mjs",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard.test.mjs",
+      "historical_sha256": "db52e9e6809c66a71b38faebbfb1cfd66bb7af1a0d6367951c04b173e9adb895",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "scripts/start-local-dashboard.ps1",
+      "candidate_exists": true,
+      "candidate_sha256": "49545cabd8774fd13cc01aed09faad62733be0daf437f8f7b4242409c9aa6f57",
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/start-local-dashboard.ps1",
+      "historical_sha256": "05158ea74e0fd53979264e34ea6ddaadca4acdb6280a05604979273cfae8d1dc",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "site/js/app.js",
+      "candidate_exists": true,
+      "candidate_sha256": "9f4c234586658597cc58948ae7f4ef9f47b6aa61d161900765e0655e003af5ed",
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/js/app.js",
+      "historical_sha256": "69bb3bf4f0ab40c59b655e7f927570695aafad8074b9efa4003a69560f841b96",
+      "same": false,
+      "inspection": "读取相关函数、导入或测试正文并比较摘要"
+    },
+    {
+      "path": "site/js/i18n.js",
+      "candidate_exists": false,
+      "candidate_sha256": null,
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/js/i18n.js",
+      "historical_sha256": "ae233632347c20f8c02a2d30b4a39ee9ced88ea99cc31b0b30e1c2edb789ffa0",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    },
+    {
+      "path": "site/index.html",
+      "candidate_exists": true,
+      "candidate_sha256": "0e9c25f3bea72bc4ea2152bfe593eb1744da394f76de8a219a20109b98670a2b",
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/index.html",
+      "historical_sha256": "90a5f58e40c00d912166431c6d5f739ec7f01c5b9cee631ecf83b0dd262c798c",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    },
+    {
+      "path": "site/css/style.css",
+      "candidate_exists": true,
+      "candidate_sha256": "a3854f856558252d6901441d9db8e1ce6c004781f1ce72a81ccda2c58f263eb1",
+      "historical_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/css/style.css",
+      "historical_sha256": "f87aedbb28c8c251e1f7eb8d05195fc0a1c4cd81cef29acc668227cb4b6c07a0",
+      "same": false,
+      "inspection": "仅比较存在性和摘要；不声称完整代码审查"
+    }
+  ],
+  "valid_facts": [
+    {
+      "id": "F1",
+      "scope": "需求",
+      "fact": "以本机为唯一信源，检查技能、插件和配置；禁用项不显示为启用，同步状态不展示禁用技能和插件消息。",
+      "sources": [
+        "old-plan",
+        "old-todo",
+        "old-verify"
+      ]
+    },
+    {
+      "id": "F2",
+      "scope": "历史检查记录",
+      "fact": "2026-10-08计划记录36个CLI启用技能、11个禁用技能；Codex插件13个安装和12个启用；Claude插件24个安装和0个启用。数值是历史记录，不是本次实测或当前应有数量。",
+      "sources": [
+        "old-plan"
+      ]
+    },
+    {
+      "id": "F3",
+      "scope": "历史检查记录",
+      "fact": "旧计划记载6项隔离测试、语法和diff检查通过及浏览器36条技能；现存旧测试文件有7项测试，其中原生协议测试使用假进程。不同时间和候选的检查不能合并为本次通过。",
+      "sources": [
+        "old-plan",
+        "scripts/dashboard.test.mjs"
+      ]
+    },
+    {
+      "id": "F4",
+      "scope": "当前候选静态证据",
+      "fact": "buildLocalData先读取site/data.json并复制，再追加本地技能及配置；候选缺少dashboard-native.mjs、原生读取调用和dashboard.test.mjs。",
+      "sources": [
+        "scripts/local-dashboard-server.mjs",
+        "scripts/dashboard-native.mjs",
+        "scripts/dashboard.test.mjs"
+      ]
+    },
+    {
+      "id": "F5",
+      "scope": "旧源码静态证据",
+      "fact": "原checkout的未提交实现从空运行时集合开始，读取CLI原生技能、每项目配置和插件清单；失败写明未使用旧快照。CLI来源不能证明桌面额外注入或已有会话的加载状态。",
+      "sources": [
+        "scripts/local-dashboard-server.mjs",
+        "scripts/dashboard-native.mjs"
+      ]
+    },
+    {
+      "id": "F6",
+      "scope": "旧源码静态证据",
+      "fact": "旧前端限制本地模式分支选择，保留检查范围和失败消息，过滤禁用项同步消息；候选前端没有这一同步视图。",
+      "sources": [
+        "site/js/app.js"
+      ]
+    },
+    {
+      "id": "F7",
+      "scope": "任务快照",
+      "fact": "提供的飞书快照为todo，completed_at为0；负责人韩泽北，GUID未变。此项未做飞书实时复查，不改变正本状态。",
+      "sources": [
+        "feishu-snapshot"
+      ]
+    },
+    {
+      "id": "F8",
+      "scope": "交接摘要",
+      "fact": "原Config执行者已只读交接；原checkout未提交Dashboard文件保留原处，未归入本次实现。",
+      "sources": [
+        "owner-handoff"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G1",
+      "fact": "当前候选仍混入公共快照，且缺少旧原生模块及配套测试；没有可继承的当前候选功能通过结论。",
+      "next": "正式确认产品输入后，由架构角色划分最小迁入范围与共用文件责任。"
+    },
+    {
+      "id": "G2",
+      "fact": "桌面额外注入、已有会话加载状态与未登记项目范围未覆盖；CLI结果不能关闭检查所有配置的原需求。",
+      "next": "先列明支持的来源和未知范围；若缩小验收范围，须在原飞书任务取得用户确认。"
+    },
+    {
+      "id": "G3",
+      "fact": "旧假进程协议测试只证明读取协议处理，未直接证明页面聚合过滤、脱敏、失败展示和不合并公共快照。",
+      "next": "新候选补充有针对性的隔离检查，再记录实际页面与原生清单对照。"
+    },
+    {
+      "id": "G4",
+      "fact": "旧local-dashboard-server与前端同时承载上下文、钩子和样式等其他任务改动。",
+      "next": "架构角色和总管先协调共用文件；不得整份覆盖旧草稿或重复认领其他任务。"
+    },
+    {
+      "id": "G5",
+      "fact": "本次未采集当前CLI、桌面、浏览器、端口或服务状态；没有当前运行和用户验收证据。",
+      "next": "由后续获授权的执行与测试阶段分别记录实际运行、候选摘要和用户验收。"
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "N1",
+      "requirement": "本地运行时技能、配置与插件不混入公开快照；仓库材料明确标注为工作区材料。",
+      "method": "对新候选使用独立样例检查来源，再在本地页面核对来源与范围。",
+      "status": "未验证"
+    },
+    {
+      "id": "N2",
+      "requirement": "按工具分别区分已安装、已启用和未确认；禁用技能不显示为启用，同步状态隐藏禁用项消息。",
+      "method": "用启用、禁用和未确认样例核对清单及计数，再与同次CLI结果对照。",
+      "status": "未验证"
+    },
+    {
+      "id": "N3",
+      "requirement": "配置仅来自允许的本机及已登记项目范围；认证文件排除，敏感值脱敏，本机数据只留内存。",
+      "method": "用隔离敏感值样例与缺失文件样例检查边界；核对公共产物未含本机内容。",
+      "status": "未验证"
+    },
+    {
+      "id": "N4",
+      "requirement": "原生读取失败显示明确提示，保留检查范围；不以公共或历史缓存伪装成功。",
+      "method": "隔离模拟技能、配置和插件读取失败，核对页面可见提示。",
+      "status": "未验证"
+    },
+    {
+      "id": "N5",
+      "requirement": "页面说明CLI、桌面额外注入、已有会话和未登记项目各自覆盖范围；不能显示完整覆盖。",
+      "method": "测试角色核对页面说明；用户在原飞书任务确认仍有缺口或明确调整验收范围。",
+      "status": "未验证"
+    },
+    {
+      "id": "N6",
+      "requirement": "当前候选的自动检查、实际运行和用户验收分别有证据。",
+      "method": "绑定当前提交及文件摘要记录检查；由用户验收本地技能、配置、同步状态和覆盖说明。",
+      "status": "未验证"
+    }
+  ],
+  "next_steps": [
+    "总管审阅本次产品复核输入，按正式入口安排发布和确认。",
+    "架构角色在确认后协调共用文件，并给出旧实现最小迁入和验证安排。",
+    "执行与测试角色针对新候选完成实现、隔离检查及获授权的运行核对。",
+    "用户在原飞书任务完成实际使用验收；缺口未闭合前维持未完成。"
+  ],
+  "waiting_conditions": [
+    "本次没有正式产品发布或确认；未确认上游不得进入实现。",
+    "桌面和未登记项目覆盖缺口仍待处理；历史CLI结果不代替覆盖证据。",
+    "历史未提交代码仍在原checkout；需先确定迁入范围，不能直接认定已在候选。"
+  ],
+  "verification": {
+    "static_read_only_review": "完成；范围为记录、源码选段、文件存在性及SHA256对比",
+    "workflow_binding": "已观察真实session绑定product/dashboard-native；artifacts和confirmed为空",
+    "document_checks": [
+      {
+        "command": "python3 agent-coops/run.py check agent-coops/tasks/dashboard-native/README.md agent-coops/tasks/dashboard-native/evidence/product-continuation.md agent-coops/tasks/dashboard-native/evidence/product-continuation.json",
+        "exit_code": 0,
+        "output": "WORKFLOW_OK"
+      },
+      {
+        "command": "git diff --check",
+        "exit_code": 0,
+        "output": ""
+      },
+      {
+        "command": "Python JSON解析与断言：真实session、workspace、GUID、未发布未确认、六项未验收、12项源码比较",
+        "exit_code": 0,
+        "output": "通过"
+      },
+      {
+        "command": "重新计算已记录来源与候选源码SHA256并比较",
+        "exit_code": 0,
+        "output": "全部一致"
+      }
+    ],
+    "current_runtime": "未运行",
+    "user_acceptance": "未观察，提供的飞书快照为未完成"
+  },
+  "not_performed": [
+    "读取真实用户配置或认证文件",
+    "执行Codex或Claude原生诊断",
+    "启动Dashboard服务或浏览器",
+    "运行安装器",
+    "生成公开site/data.json",
+    "修改实现文件",
+    "复制旧草稿或私有原始证据",
+    "发布或确认产品阶段",
+    "推送提交"
+  ]
+}
