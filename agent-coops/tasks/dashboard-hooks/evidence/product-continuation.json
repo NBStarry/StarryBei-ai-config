@@ -1,0 +1,166 @@
+{
+  "task_id": "dashboard-hooks",
+  "role": "product",
+  "session_id": "01a1455a-bbdd-7800-8951-f08ff6943a19",
+  "workspace": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config",
+  "branch": "SuperBei/migration-dashboard-hooks",
+  "candidate_base_commit": "16efffdbe0ae070922da4a46859d072cc04f407d",
+  "recorded_at": "2026-10-16T23:39:30+08:00",
+  "feishu_guid": "0cbc3739-3940-4f89-ace2-d5a9ebddcf24",
+  "owner": "韩泽北",
+  "previous_owner_session": "01a11a50-c074-7f82-99c2-757fe1b94391",
+  "delegation": {
+    "source": "总管本轮正式 delegate 成功回报",
+    "self_bind_performed": false
+  },
+  "publication": {
+    "product_input": "真实 Product 续接输入",
+    "published": false,
+    "confirmed": false,
+    "architecture_approved": false,
+    "implementation_authorized_by_this_record": false
+  },
+  "sources": [
+    {
+      "id": "original_plan",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-hook-scripts.md",
+      "sha256": "edf6ec3d7f9e56ce81a078374138955250934475b5537a9054df39e5560602ad",
+      "access": "只读本机来源；正文不随本候选发布"
+    },
+    {
+      "id": "original_user_requirement",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/TODO.md",
+      "sha256": "20ac92892eb6a61f04ef986a377ee6a916ad521047d7dc728dcc6a69a8d3628c",
+      "access": "只读本机来源；正文不随本候选发布"
+    },
+    {
+      "id": "original_acceptance",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/VERIFY.md",
+      "sha256": "bee3179965d7c53d44d27a79c37d8ca59cda2deedd2b5600ee8ab7e1e6f8cb9e",
+      "access": "只读本机来源；正文不随本候选发布"
+    },
+    {
+      "id": "feishu_snapshot",
+      "source_path": "/Users/hanzebei/Documents/AI_Projects/SuperBeiTeam/artifacts/team-boundary-migration/feishu-preclose-readback/dashboard-hooks.json",
+      "sha256": "7e8f2b297237b2fb6563d9b590dfdf2de497ac9eadb2aba23c4e77f6869b75a8",
+      "access": "只读本机来源；正文不随本候选发布"
+    },
+    {
+      "id": "owner_handoff",
+      "source_path": "/Users/hanzebei/.codex/worktrees/team-boundary-migration/SuperBeiTeam/agent-coops/tasks/team-boundary-migration/evidence/owner-handoffs-summary.json",
+      "sha256": "e75db6516ceb45c8a2b2f5461d20028143f863096dafc53ad41028f099a17ec1",
+      "access": "只读本机来源；正文不随本候选发布"
+    }
+  ],
+  "candidate_comparison": [
+    {
+      "path": "scripts/dashboard-hooks.mjs",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/scripts/dashboard-hooks.mjs",
+      "candidate_sha256": null,
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard-hooks.mjs",
+      "original_sha256": "ccf4a1c5bed598850cdaf519b2e3ad71f53388d98d38f8284c3dff49f9540668",
+      "same_file_content": false
+    },
+    {
+      "path": "scripts/dashboard.test.mjs",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/scripts/dashboard.test.mjs",
+      "candidate_sha256": null,
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/dashboard.test.mjs",
+      "original_sha256": "db52e9e6809c66a71b38faebbfb1cfd66bb7af1a0d6367951c04b173e9adb895",
+      "same_file_content": false
+    },
+    {
+      "path": "scripts/local-dashboard-server.mjs",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "candidate_sha256": "40f88fb9c5bdd3c859926f9877b1b913ff1c38f7071c11316691b509a5453744",
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "original_sha256": "6440e42852a221974bf9b594ebda5c8c66b9e88367ba448ae70ea4ae9a642e14",
+      "same_file_content": false
+    },
+    {
+      "path": "site/js/app.js",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/site/js/app.js",
+      "candidate_sha256": "9f4c234586658597cc58948ae7f4ef9f47b6aa61d161900765e0655e003af5ed",
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/js/app.js",
+      "original_sha256": "69bb3bf4f0ab40c59b655e7f927570695aafad8074b9efa4003a69560f841b96",
+      "same_file_content": false
+    },
+    {
+      "path": "site/js/i18n.js",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/site/js/i18n.js",
+      "candidate_sha256": null,
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/js/i18n.js",
+      "original_sha256": "ae233632347c20f8c02a2d30b4a39ee9ced88ea99cc31b0b30e1c2edb789ffa0",
+      "same_file_content": false
+    },
+    {
+      "path": "site/css/style.css",
+      "candidate_path": "/Users/hanzebei/.codex/worktrees/migration-dashboard-hooks/StarryBei-ai-config/site/css/style.css",
+      "candidate_sha256": "a3854f856558252d6901441d9db8e1ce6c004781f1ce72a81ccda2c58f263eb1",
+      "original_source_path": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/site/css/style.css",
+      "original_sha256": "f87aedbb28c8c251e1f7eb8d05195fc0a1c4cd81cef29acc668227cb4b6c07a0",
+      "same_file_content": false
+    }
+  ],
+  "valid_conclusions": [
+    "原需求按具体钩子脚本展示；保留来源、路径、事件、命令、匹配条件、超时与读取状态。",
+    "历史计划及原验收记录报告 4 个脚本、23 条绑定和 7 项 Node 测试通过；原验收项仍等待用户确认。",
+    "当前候选缺少 dashboard-hooks.mjs 和 dashboard.test.mjs，服务与页面源码也不同于原 checkout；历史实现及运行证据未进入本候选。",
+    "原测试源码共 7 项测试，其中 1 项直接检查钩子聚合、脱敏、缺失文件和内联命令；本次只读源码，未重跑。",
+    "飞书指定快照保留同一 GUID、负责人韩泽北、todo 状态及 completed_at=0；本次未写飞书，快照不代表新的实时读回。",
+    "本次只编辑产品记录，不执行被展示的钩子，不迁入旧实现，不修改原 checkout。"
+  ],
+  "gaps": [
+    "历史记录的 commit 为 pending，未提供当时被测源码的固定清单；当前原 checkout 的 SHA 也不证明等同于历史运行版本。",
+    "当前候选不具备历史脚本展示实现，不能给出 4/23 或 7 项测试的当前通过结论。",
+    "产品输入尚未正式 publish/confirm；架构确认、实现候选、独立测试和用户验收未在本续接中完成。",
+    "本地服务、浏览器页面、当前实际脚本数与绑定数未核验；无当前候选运行入口可宣称已通过。"
+  ],
+  "acceptance_entry": {
+    "source": "原 VERIFY.md 中“钩子按具体脚本展示”条目及同 GUID 飞书任务",
+    "page_route": "#hooks",
+    "environment": "经后续确认并运行的本地 Dashboard；端口及工作目录须在验收时核对",
+    "observed_in_this_continuation": false,
+    "historical_counts_are_fixed_targets": false,
+    "checks": [
+      "显示脚本名称、路径和来源；多个事件绑定按同一脚本展示。",
+      "能查看事件、命令、匹配条件和超时；绑定和正文可分别展开。",
+      "正文已脱敏；缺失、不可读、过大及内联命令有明确状态。",
+      "页面读取不得执行被展示的钩子；本机配置及脚本正文不进入公开数据。",
+      "按验收时本机实际状态核对计数；用户在原飞书任务确认结果。"
+    ]
+  },
+  "next_steps": [
+    "总管审阅当前产品输入，并按已安装入口处理正式发布与确认。",
+    "确认产品后，由架构角色确定历史实现的最小迁入范围和独立测试安排。",
+    "形成当前候选的自动检查和运行证据后，安排用户在本地钩子页验收，并回到原飞书任务记录结果。"
+  ],
+  "waiting_conditions": [
+    "产品 publish/confirm 完成前，不由本续接推进架构或实现。",
+    "当前候选的实现与运行证据具备前，不引用历史通过作为当前通过。",
+    "用户实际验收完成前，原任务保持未完成。"
+  ],
+  "verification_boundary": {
+    "performed": "只读需求、源码和文件 SHA 对比；限定三文件 workflow check、git diff --check 及 JSON/身份/摘要断言均通过",
+    "runtime_checked": false,
+    "user_accepted": false,
+    "raw_private_sources_copied": false
+  },
+  "checks": [
+    {
+      "command": "python3 agent-coops/run.py check agent-coops/tasks/dashboard-hooks/README.md agent-coops/tasks/dashboard-hooks/evidence/product-continuation.md agent-coops/tasks/dashboard-hooks/evidence/product-continuation.json",
+      "exit_code": 0,
+      "output": "WORKFLOW_OK"
+    },
+    {
+      "command": "git diff --check -- agent-coops/tasks/dashboard-hooks/README.md agent-coops/tasks/dashboard-hooks/evidence/product-continuation.md agent-coops/tasks/dashboard-hooks/evidence/product-continuation.json",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "check": "JSON 解析、真实会话/GUID、来源及候选文件 SHA-256 一致性断言",
+      "exit_code": 0,
+      "output": "JSON、任务身份、来源摘要和候选差异核对通过。"
+    }
+  ]
+}
