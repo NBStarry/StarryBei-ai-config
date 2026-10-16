@@ -1,0 +1,56 @@
+{
+  "observed_at": "2026-10-16T13:55:33.251808+00:00",
+  "refs": {
+    "dev": "aa88f4041ca16fef248cdad6b807067f66898487",
+    "main": "819bbc4a1ad98b9fb657294806e1b06a1b269ebd"
+  },
+  "pr": {
+    "baseRefName": "dev",
+    "headRefName": "SuperBei/team-boundary-migration",
+    "mergeCommit": {
+      "oid": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb"
+    },
+    "mergedAt": "2026-10-16T13:45:47Z",
+    "state": "MERGED",
+    "url": "https://github.com/NBStarry/StarryBei-ai-config/pull/2"
+  },
+  "formal_artifacts": {
+    "product": {
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+      "file_sha256": "c36a58eb42ca99b7f5e21d69ab3b66a9a366a526d37c07ee897d3f0499f80643",
+      "body_matches": true
+    },
+    "plan": {
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+      "file_sha256": "72353b9de1ae27f6f47fdd05f3ef62ad43614cb11e6faba6740e94d8a64e3223",
+      "body_matches": false,
+      "body_matches_after_completed_step_normalization": true,
+      "normalization_note": "计划正文的 S1 完成勾选与已发布规范化正文分别记录；本次部署检查未改动计划。"
+    },
+    "test": {
+      "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e",
+      "file_sha256": "acddec4addcff5152dd8b66d503ce4fa905ca5265725d7be615a237db81833d2",
+      "body_matches": true
+    }
+  },
+  "current_confirmations": {
+    "product": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+    "plan": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+    "test": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e"
+  },
+  "sequence": 16,
+  "dev_followup_commit": {
+    "sha": "aa88f4041ca16fef248cdad6b807067f66898487",
+    "message": "chore(dashboard): refresh generated data",
+    "author_name": "github-actions[bot]",
+    "parents": [
+      "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb"
+    ],
+    "files": [
+      {
+        "filename": "site/data.json",
+        "status": "modified"
+      }
+    ]
+  }
+}

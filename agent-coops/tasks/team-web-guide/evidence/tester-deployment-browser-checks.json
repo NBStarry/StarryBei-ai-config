@@ -1,0 +1,1624 @@
+{
+  "tester_session": "01a14484-7a7d-7cb0-9052-8142ac04bc3a",
+  "public_url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+  "expected_source_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "ci_run": 38910376947,
+  "merge_sha": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb",
+  "desktop": {
+    "observedAt": "2026-10-16T13:50:00.458Z",
+    "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+    "title": "团队指南已迁移至 SuperBeiTeam",
+    "httpStatus": 200,
+    "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+    "viewport": {
+      "width": 1280,
+      "height": 900,
+      "dpr": 1
+    },
+    "scrollWidth": 1272,
+    "scrollHeight": 977,
+    "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+    "main": {
+      "x": 236,
+      "y": 76.796875,
+      "width": 800,
+      "height": 436.796875,
+      "right": 1036,
+      "bottom": 513.59375
+    },
+    "blocks": [
+      {
+        "tag": "H1",
+        "text": "团队指南已迁移至 SuperBeiTeam",
+        "rect": {
+          "x": 277,
+          "y": 117.796875,
+          "width": 718,
+          "height": 59.796875,
+          "right": 995,
+          "bottom": 177.59375
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "P",
+        "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+        "rect": {
+          "x": 277,
+          "y": 197.59375,
+          "width": 718,
+          "height": 63,
+          "right": 995,
+          "bottom": 260.59375
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "P",
+        "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+        "rect": {
+          "x": 277,
+          "y": 272.59375,
+          "width": 718,
+          "height": 28,
+          "right": 995,
+          "bottom": 300.59375
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "返回 AI Config Dashboard",
+        "rect": {
+          "x": 277,
+          "y": 324.59375,
+          "width": 193.703125,
+          "height": 44,
+          "right": 470.703125,
+          "bottom": 368.59375
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "打开 Team 指南与安装入口",
+        "rect": {
+          "x": 277,
+          "y": 376.59375,
+          "width": 194.5625,
+          "height": 44,
+          "right": 471.5625,
+          "bottom": 420.59375
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "打开 Team 仓库",
+        "rect": {
+          "x": 277,
+          "y": 428.59375,
+          "width": 114.5625,
+          "height": 44,
+          "right": 391.5625,
+          "bottom": 472.59375
+        },
+        "centerUnobstructed": true
+      }
+    ],
+    "links": [
+      {
+        "text": "返回 AI Config Dashboard",
+        "href": "index.html",
+        "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+        "tabIndex": 0
+      },
+      {
+        "text": "打开 Team 指南与安装入口",
+        "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+        "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+        "tabIndex": 0
+      },
+      {
+        "text": "打开 Team 仓库",
+        "href": "https://github.com/NBStarry/SuperBeiTeam",
+        "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+        "tabIndex": 0
+      }
+    ],
+    "scripts": 0,
+    "frames": 0,
+    "resourceLoads": [
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+        "type": "link"
+      },
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+        "type": "link"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+        "type": "css"
+      },
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+        "type": "fetch"
+      }
+    ],
+    "refresh": false
+  },
+  "mobile": {
+    "observedAt": "2026-10-16T13:50:11.906Z",
+    "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+    "title": "团队指南已迁移至 SuperBeiTeam",
+    "httpStatus": 200,
+    "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1
+    },
+    "scrollWidth": 382,
+    "scrollHeight": 868,
+    "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+    "main": {
+      "x": 16,
+      "y": 24,
+      "width": 350,
+      "height": 510.5,
+      "right": 366,
+      "bottom": 534.5
+    },
+    "blocks": [
+      {
+        "tag": "H1",
+        "text": "团队指南已迁移至 SuperBeiTeam",
+        "rect": {
+          "x": 41,
+          "y": 49,
+          "width": 300,
+          "height": 78,
+          "right": 341,
+          "bottom": 127
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "P",
+        "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+        "rect": {
+          "x": 41,
+          "y": 147,
+          "width": 300,
+          "height": 94.5,
+          "right": 341,
+          "bottom": 241.5
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "P",
+        "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+        "rect": {
+          "x": 41,
+          "y": 253.5,
+          "width": 300,
+          "height": 84,
+          "right": 341,
+          "bottom": 337.5
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "返回 AI Config Dashboard",
+        "rect": {
+          "x": 41,
+          "y": 361.5,
+          "width": 193.703125,
+          "height": 44,
+          "right": 234.703125,
+          "bottom": 405.5
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "打开 Team 指南与安装入口",
+        "rect": {
+          "x": 41,
+          "y": 413.5,
+          "width": 194.5625,
+          "height": 44,
+          "right": 235.5625,
+          "bottom": 457.5
+        },
+        "centerUnobstructed": true
+      },
+      {
+        "tag": "A",
+        "text": "打开 Team 仓库",
+        "rect": {
+          "x": 41,
+          "y": 465.5,
+          "width": 114.5625,
+          "height": 44,
+          "right": 155.5625,
+          "bottom": 509.5
+        },
+        "centerUnobstructed": true
+      }
+    ],
+    "links": [
+      {
+        "text": "返回 AI Config Dashboard",
+        "href": "index.html",
+        "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+        "tabIndex": 0
+      },
+      {
+        "text": "打开 Team 指南与安装入口",
+        "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+        "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+        "tabIndex": 0
+      },
+      {
+        "text": "打开 Team 仓库",
+        "href": "https://github.com/NBStarry/SuperBeiTeam",
+        "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+        "tabIndex": 0
+      }
+    ],
+    "scripts": 0,
+    "frames": 0,
+    "resourceLoads": [
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+        "type": "link"
+      },
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+        "type": "link"
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+        "type": "css"
+      },
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+        "type": "fetch"
+      },
+      {
+        "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+        "type": "fetch"
+      }
+    ],
+    "refresh": false
+  },
+  "return_navigation": {
+    "observedAt": "2026-10-16T13:50:35.878Z",
+    "url": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+    "title": "AI Config Dashboard",
+    "heading": "⚙ AI Config",
+    "readyState": "complete",
+    "method": "CUA 原生点击返回链接",
+    "synthetic_events": false
+  },
+  "legacy_fragments": [
+    {
+      "fragment": "overview",
+      "observedAt": "2026-10-16T13:52:38.538Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#overview",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "architecture",
+      "observedAt": "2026-10-16T13:52:48.976Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#architecture",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "five-roles",
+      "observedAt": "2026-10-16T13:52:50.248Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#five-roles",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "example",
+      "observedAt": "2026-10-16T13:52:51.310Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#example",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "checks",
+      "observedAt": "2026-10-16T13:52:52.419Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#checks",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "principles",
+      "observedAt": "2026-10-16T13:52:53.574Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#principles",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "operations",
+      "observedAt": "2026-10-16T13:52:54.631Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#operations",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    },
+    {
+      "fragment": "limits",
+      "observedAt": "2026-10-16T13:52:55.694Z",
+      "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html#limits",
+      "title": "团队指南已迁移至 SuperBeiTeam",
+      "httpStatus": 200,
+      "sourceSha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "scrollWidth": 382,
+      "scrollHeight": 868,
+      "text": "团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n打开 Team 指南与安装入口\n打开 Team 仓库",
+      "main": {
+        "x": 16,
+        "y": 24,
+        "width": 350,
+        "height": 510.5,
+        "right": 366,
+        "bottom": 534.5
+      },
+      "blocks": [
+        {
+          "tag": "H1",
+          "text": "团队指南已迁移至 SuperBeiTeam",
+          "rect": {
+            "x": 41,
+            "y": 49,
+            "width": 300,
+            "height": 78,
+            "right": 341,
+            "bottom": 127
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+          "rect": {
+            "x": 41,
+            "y": 147,
+            "width": 300,
+            "height": 94.5,
+            "right": 341,
+            "bottom": 241.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "P",
+          "text": "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+          "rect": {
+            "x": 41,
+            "y": 253.5,
+            "width": 300,
+            "height": 84,
+            "right": 341,
+            "bottom": 337.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "返回 AI Config Dashboard",
+          "rect": {
+            "x": 41,
+            "y": 361.5,
+            "width": 193.703125,
+            "height": 44,
+            "right": 234.703125,
+            "bottom": 405.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 指南与安装入口",
+          "rect": {
+            "x": 41,
+            "y": 413.5,
+            "width": 194.5625,
+            "height": 44,
+            "right": 235.5625,
+            "bottom": 457.5
+          },
+          "centerUnobstructed": true
+        },
+        {
+          "tag": "A",
+          "text": "打开 Team 仓库",
+          "rect": {
+            "x": 41,
+            "y": 465.5,
+            "width": 114.5625,
+            "height": 44,
+            "right": 155.5625,
+            "bottom": 509.5
+          },
+          "centerUnobstructed": true
+        }
+      ],
+      "links": [
+        {
+          "text": "返回 AI Config Dashboard",
+          "href": "index.html",
+          "resolvedHref": "https://nbstarry.github.io/StarryBei-ai-config/index.html",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 指南与安装入口",
+          "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md",
+          "tabIndex": 0
+        },
+        {
+          "text": "打开 Team 仓库",
+          "href": "https://github.com/NBStarry/SuperBeiTeam",
+          "resolvedHref": "https://github.com/NBStarry/SuperBeiTeam",
+          "tabIndex": 0
+        }
+      ],
+      "scripts": 0,
+      "frames": 0,
+      "resourceLoads": [
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/style.css?v=20261008",
+          "type": "link"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/css/workflow.css",
+          "type": "link"
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+          "type": "css"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        },
+        {
+          "url": "https://nbstarry.github.io/StarryBei-ai-config/workflow.html",
+          "type": "fetch"
+        }
+      ],
+      "refresh": false
+    }
+  ],
+  "visual_inspection": {
+    "desktop": true,
+    "mobile": true
+  },
+  "resource_notes": [
+    "实际可见资源为两份同源 CSS、已有 Google Fonts CSS，以及测试者为核对摘要发起的同源 workflow.html fetch。",
+    "未观察到 Team 私有资源读取；两个 Team 链接没有自动加载目标内容。"
+  ],
+  "transient_tool_issue": {
+    "event": "从 Dashboard 返回 #overview 时，浏览器导航和 DOM 读取超时。",
+    "resolution": "核对浏览器连接和当前目标后，原标签已处于正确公开片段地址。随后实际 DOM、源码摘要和其余七个片段全部核对成功。",
+    "site_failure_confirmed": false
+  },
+  "cleanup": {
+    "task_tab_closed": true,
+    "viewport_reset": true
+  },
+  "user_acceptance": "unverified",
+  "checks": {
+    "all_observations_same_candidate": true,
+    "all_http_200": true,
+    "desktop_dimensions": true,
+    "mobile_dimensions": true,
+    "no_horizontal_overflow": true,
+    "no_overlap": true,
+    "all_content_unobstructed": true,
+    "no_private_team_resource_load": true,
+    "return_url_correct": true,
+    "all_eight_old_fragments": true
+  },
+  "screenshots": {
+    "tester-deployment-desktop.png": {
+      "sha256": "cdfc13c3cd8ebeb90fdecd330fc4f668d09c646e954e8b420a37896b04cbc005",
+      "width": 2560,
+      "height": 1800
+    },
+    "tester-deployment-mobile.png": {
+      "sha256": "871efbaf8534f0ef221afa12e49d1031d3a14d93f1ce5fe65cf1a6cdb529435d",
+      "width": 780,
+      "height": 1688
+    }
+  }
+}

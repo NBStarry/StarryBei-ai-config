@@ -1,0 +1,34 @@
+{
+  "observed_at": "2026-10-16T13:57:44.904824+00:00",
+  "browser_observation_start": "2026-10-16T13:50:00.458000+00:00",
+  "browser_observation_end": "2026-10-16T13:52:55.694000+00:00",
+  "scope_check": {
+    "exit_code": 0,
+    "stdout": "WORKFLOW_OK\n",
+    "stderr": ""
+  },
+  "protected_paths_unchanged": {
+    "paths": [
+      "site/workflow.html",
+      "agent-coops/tasks/team-web-guide/产品设计.md",
+      "agent-coops/tasks/team-web-guide/计划.md",
+      "agent-coops/tasks/team-web-guide/evidence/测试验收.md"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "raw_artifact_ignored": true,
+  "evidence_sha256": {
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-artifact-checks.json": "a589f0a6cef0996b5874af07599b30f2e00113f87ae0ff920c70682a0304fac6",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-artifact-content.json": "09b9ff981d590b5c12bf50f8e91d92510e861cf3b68a5f791f353984166f68df",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-browser-checks.json": "1f9fec95d215f3842b778d8b1f77579a32f702ece6f8a6bc18956d15c3065df5",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-desktop.png": "cdfc13c3cd8ebeb90fdecd330fc4f668d09c646e954e8b420a37896b04cbc005",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-mobile.png": "871efbaf8534f0ef221afa12e49d1031d3a14d93f1ce5fe65cf1a6cdb529435d",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-refs.json": "fc6ccceedda641d3fa48f370120aee2f528bb638ce7901abbcc0e99aff42f529",
+    "agent-coops/tasks/team-web-guide/evidence/tester-deployment-report.md": "1ab9618cf92241f1c18010295d6bd2eb39aa8fff081721891b5d2cfc3ee8d80b"
+  },
+  "formal_test_republished": false,
+  "commit_created": false,
+  "push_performed": false
+}

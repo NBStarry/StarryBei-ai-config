@@ -1,0 +1,38 @@
+{
+  "observed_at": "2026-10-16T13:52:20.278585+00:00",
+  "artifact_source": "agent-coops/tasks/team-web-guide/evidence/model-local/tester-deployment-38910376947/workflow.html",
+  "checks": {
+    "same_confirmed_candidate_sha": true,
+    "exact_migration_content_only": true,
+    "exact_three_native_links": true,
+    "no_executable_or_embed_tags": true,
+    "no_inline_handlers": true,
+    "no_auto_redirect": true,
+    "no_data_read_attributes": true,
+    "no_inline_css_network_read": true
+  },
+  "links": [
+    {
+      "text": "返回 AI Config Dashboard",
+      "href": "index.html"
+    },
+    {
+      "text": "打开 Team 指南与安装入口",
+      "href": "https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md"
+    },
+    {
+      "text": "打开 Team 仓库",
+      "href": "https://github.com/NBStarry/SuperBeiTeam"
+    }
+  ],
+  "text": [
+    "团队指南已迁移至 SuperBeiTeam",
+    "团队指南已迁移至 SuperBeiTeam",
+    "AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。",
+    "SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。",
+    "返回 AI Config Dashboard",
+    "打开 Team 指南与安装入口",
+    "打开 Team 仓库"
+  ],
+  "result": "pass"
+}

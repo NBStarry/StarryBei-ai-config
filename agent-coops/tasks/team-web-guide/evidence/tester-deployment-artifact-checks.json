@@ -1,0 +1,263 @@
+{
+  "observed_at": "2026-10-16T13:48:26.614026+00:00",
+  "tester_session": "01a14484-7a7d-7cb0-9052-8142ac04bc3a",
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-10-16T13:45:50Z",
+    "event": "push",
+    "headSha": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb",
+    "jobs": [
+      {
+        "completedAt": "2026-10-16T13:46:04Z",
+        "conclusion": "success",
+        "databaseId": 117004397961,
+        "name": "build",
+        "startedAt": "2026-10-16T13:45:53Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v7",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install jq",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Validate shell scripts",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Validate committed JSON",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Build public Dashboard data",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Detect Dashboard data changes",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Sync generated Dashboard data to dev",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload generated Dashboard data for Windows validation",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload Pages artifact",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v7",
+            "number": 20,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 21,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/NBStarry/StarryBei-ai-config/actions/runs/38910376947/job/117004397961"
+      },
+      {
+        "completedAt": "2026-10-16T13:46:30Z",
+        "conclusion": "success",
+        "databaseId": 117004499295,
+        "name": "windows-validation",
+        "startedAt": "2026-10-16T13:46:06Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v7",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Download generated Dashboard data",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v6",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run PowerShell repository checks",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v6",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v7",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/NBStarry/StarryBei-ai-config/actions/runs/38910376947/job/117004499295"
+      },
+      {
+        "completedAt": "2026-10-16T13:46:45Z",
+        "conclusion": "success",
+        "databaseId": 117004692306,
+        "name": "deploy",
+        "startedAt": "2026-10-16T13:46:34Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Deploy to GitHub Pages",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 3,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/NBStarry/StarryBei-ai-config/actions/runs/38910376947/job/117004692306"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-10-16T13:46:46Z",
+    "url": "https://github.com/NBStarry/StarryBei-ai-config/actions/runs/38910376947",
+    "workflowName": "Validate and Deploy Dashboard"
+  },
+  "merge_sha": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb",
+  "artifact": {
+    "id": 12049204718,
+    "node_id": "MDg6QXJ0aWZhY3QxMjA0OTIwNDcxOA==",
+    "name": "github-pages",
+    "size_in_bytes": 153122,
+    "url": "https://api.github.com/repos/NBStarry/StarryBei-ai-config/actions/artifacts/12049204718",
+    "archive_download_url": "https://api.github.com/repos/NBStarry/StarryBei-ai-config/actions/artifacts/12049204718/zip",
+    "expired": false,
+    "digest": "sha256:b495b809a967e5404de39b813974475f409fabbb51c131044b8f48967673967a",
+    "created_at": "2026-10-16T13:46:02Z",
+    "updated_at": "2026-10-16T13:46:02Z",
+    "expires_at": "2026-10-17T13:46:01Z",
+    "workflow_run": {
+      "id": 38910376947,
+      "repository_id": 1151194557,
+      "head_repository_id": 1151194557,
+      "head_branch": "dev",
+      "head_sha": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb"
+    }
+  },
+  "downloaded_archive_sha256": "b495b809a967e5404de39b813974475f409fabbb51c131044b8f48967673967a",
+  "artifact_tar_sha256": "21625a3a963859d7edbc3df7d325661ba7ec904516bf65124856470ca2422d1e",
+  "zip_members": [
+    "artifact.tar"
+  ],
+  "artifact_members": [
+    ".",
+    "./js",
+    "./js/workflow-doc.js",
+    "./js/app.js",
+    "./js/editor.js",
+    "./workflow-prototype.html",
+    "./css",
+    "./css/workflow.css",
+    "./css/style.css",
+    "./index.html",
+    "./data.json",
+    "./workflow.html"
+  ],
+  "artifact_file_sha256": {
+    "./js/workflow-doc.js": "123b04ec684e62decd2b972b4e29520109328af3500701c601dc84c0b58b8974",
+    "./js/app.js": "9f4c234586658597cc58948ae7f4ef9f47b6aa61d161900765e0655e003af5ed",
+    "./js/editor.js": "f535a048640d8a8fb1e292a6053b43aea4c7f925cca727f8753eb06cc69b8606",
+    "./workflow-prototype.html": "88a4783da0bbc7ae786fca7c9d23c0524451062fa7bb254dc086fed873b8f012",
+    "./css/workflow.css": "62df4674e5fe4fb2c83077ce2abed738b5d72f41c34dfa1c9f412568070b323b",
+    "./css/style.css": "a3854f856558252d6901441d9db8e1ce6c004781f1ce72a81ccda2c58f263eb1",
+    "./index.html": "0e9c25f3bea72bc4ea2152bfe593eb1744da394f76de8a219a20109b98670a2b",
+    "./data.json": "2adcfb17fd33e8981b41e7e1c1d6120f3821b6755479c24e9f28c809ad90f515",
+    "./workflow.html": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d"
+  },
+  "artifact_workflow_html_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "matches_confirmed_local_candidate": true,
+  "artifact_has_no_symlinks_or_traversal": true,
+  "artifact_contains_no_team_or_task_paths": true,
+  "build_scope": "site directory only; actual workflow verified at merge SHA",
+  "workflow_at_merge_sha256": "564dfc03f0a2640f067cd89b557fae3c3e355593481b0e6c5752fdd77664a9a5",
+  "deployment": {
+    "id": 7120566776,
+    "sha": "c9085ce8a80d02aa2e5b21aa35d4df51ef8c47cb",
+    "ref": "dev",
+    "environment": "github-pages",
+    "created_at": "2026-10-16T13:46:30Z",
+    "updated_at": "2026-10-16T13:46:46Z",
+    "statuses_url": "https://api.github.com/repos/NBStarry/StarryBei-ai-config/deployments/7120566776/statuses"
+  },
+  "deployment_success": {
+    "id": 19896881919,
+    "state": "success",
+    "environment_url": "https://nbstarry.github.io/StarryBei-ai-config/",
+    "log_url": "https://github.com/NBStarry/StarryBei-ai-config/actions/runs/38910376947/job/117004692306",
+    "created_at": "2026-10-16T13:46:46Z",
+    "updated_at": "2026-10-16T13:46:46Z"
+  },
+  "raw_artifact_directory": "agent-coops/tasks/team-web-guide/evidence/model-local/tester-deployment-38910376947",
+  "user_acceptance": "unverified"
+}
