@@ -1,0 +1,291 @@
+{
+  "task": "config-baseline",
+  "contract_version": "0.2.1",
+  "role": "product",
+  "session": "01a14554-139e-7b62-9f80-b8b43d89982a",
+  "workspace": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config",
+  "candidate_base_commit": "16efffdbe0ae070922da4a46859d072cc04f407d",
+  "guid": "90c57f97-119d-4f0c-b914-b2f9f2e991cb",
+  "owner": {
+    "task_owner": "韩泽北",
+    "source": "原飞书任务负责人说明",
+    "engineering_assignment": "总管安排；本会话执行Product输入复核"
+  },
+  "reviewed_at_utc": "2026-10-16T15:33:04.621944+00:00",
+  "status": "input_review_complete_awaiting_formal_product_stage",
+  "formal_publish": false,
+  "formal_confirm": false,
+  "acceptance_snapshot": {
+    "status": "todo",
+    "completed_at": "0",
+    "live_read_performed": false,
+    "note": "依据指定迁移读回快照，未在本次修改飞书状态"
+  },
+  "sources": [
+    {
+      "kind": "project_rules",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/AGENTS.md",
+      "sha256": "0c34eeeaa4dd8447c39ffd7461cee2d352a6f25f8fa3a715800312aae454554d",
+      "scope": "项目边界与工程记录规则"
+    },
+    {
+      "kind": "project_status",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/STATUS.md",
+      "sha256": "64f453cab6a9149cdfe692ea735ac8acb49a471592b65aea0040f0a899146185",
+      "scope": "0.2.1项目状态入口"
+    },
+    {
+      "kind": "project_index",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/agent-coops/README.md",
+      "sha256": "ddd960ed3345e1e5312ab4de1a083f685053ebceaa15bdcea2e9cd00597d00c2",
+      "scope": "现有任务与历史记录索引"
+    },
+    {
+      "kind": "task_entry_before_review",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/agent-coops/tasks/config-baseline/README.md",
+      "sha256": "42ca02eed9639dbba22cf0161de1003b011dfd49c8f38c14699e2c5e0cf78ea1",
+      "scope": "本次编辑前的续接入口"
+    },
+    {
+      "kind": "historical_plan",
+      "sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-local-source-audit.md",
+      "sha256": "55091f85030e1e08caf604b7f46964a6c5f6a058ae4c55a7d9cf1b1ad1add0de",
+      "scope": "原需求、历史实现陈述与历史检查结论；原checkout只读"
+    },
+    {
+      "kind": "historical_todo",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/TODO.md",
+      "sha256": "20ac92892eb6a61f04ef986a377ee6a916ad521047d7dc728dcc6a69a8d3628c",
+      "scope": "历史用户原话和未完成范围"
+    },
+    {
+      "kind": "historical_verify",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/VERIFY.md",
+      "sha256": "bee3179965d7c53d44d27a79c37d8ca59cda2deedd2b5600ee8ab7e1e6f8cb9e",
+      "scope": "模板验收条件与等待用户验收记录"
+    },
+    {
+      "kind": "feishu_snapshot",
+      "sourcepath": "/Users/hanzebei/Documents/AI_Projects/SuperBeiTeam/artifacts/team-boundary-migration/feishu-preclose-readback/config-baseline.json",
+      "sha256": "2c3f98e9a75fcca232f6a3e611234b307b3191fd8778dbed7965aa82f1367ea0",
+      "scope": "只提取GUID、标题、负责人说明、todo、completed_at和验收条款；不复制原始JSON"
+    },
+    {
+      "kind": "owner_handoff_summary",
+      "sourcepath": "/Users/hanzebei/.codex/worktrees/team-boundary-migration/SuperBeiTeam/agent-coops/tasks/team-boundary-migration/evidence/owner-handoffs-summary.json",
+      "sha256": "e75db6516ceb45c8a2b2f5461d20028143f863096dafc53ad41028f099a17ec1",
+      "scope": "只核对原Config执行与诊断的交接元数据；不复制私有正文"
+    }
+  ],
+  "candidate_vs_original": [
+    {
+      "path": "codex/config.toml.example",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/codex/config.toml.example",
+      "candidate_sha256": "c8c47c940bf16c6feacc02c78734a3d992538fea2a46d574625f1c55f96364b1",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/codex/config.toml.example",
+      "original_sha256": "92c7a4b75a402fc8e537dc7611f2551ac876a7ada38894edd6ccd8c628fad05b",
+      "same_bytes": false
+    },
+    {
+      "path": "claude/configs/settings.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/claude/configs/settings.json",
+      "candidate_sha256": "70e93629c73304b0e24cd2152315d2d3aa7df9b9d34b2882bfdc6a5be2c46548",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/claude/configs/settings.json",
+      "original_sha256": "be02187e0fd37f1e5cee19a181b31776486afdf709601fa7089aa55bf1d43010",
+      "same_bytes": false
+    },
+    {
+      "path": "claude/configs/settings.windows.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/claude/configs/settings.windows.json",
+      "candidate_sha256": "b803a9f3b859928b98a08239324cf5f526bf364d5b2d4319d14de725654eb41c",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/claude/configs/settings.windows.json",
+      "original_sha256": "b803a9f3b859928b98a08239324cf5f526bf364d5b2d4319d14de725654eb41c",
+      "same_bytes": true
+    },
+    {
+      "path": "claude/configs/recommended-plugins.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/claude/configs/recommended-plugins.json",
+      "candidate_sha256": "e81cd59ec1dd8f2ee0f96a579e433fc7e8e6235caa5d385c29b45350bdf8ad6a",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/claude/configs/recommended-plugins.json",
+      "original_sha256": "fc07fc5f6b83926fe055b42fa4a86995471c1a6dde937b7acabf159c3d02546f",
+      "same_bytes": false
+    },
+    {
+      "path": "claude/configs/recommended-skills.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/claude/configs/recommended-skills.json",
+      "candidate_sha256": "a4a006f2b086ff882b601f8eff901ef2375b60ab1f2df6ddbaaef8e01099a3bd",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/claude/configs/recommended-skills.json",
+      "original_sha256": "998a14190956e942b3da554b368451f9593907f572a73e418850f528fcaa4003",
+      "same_bytes": false
+    },
+    {
+      "path": "config/skill-plugins.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/config/skill-plugins.json",
+      "candidate_sha256": "a93e06bfebff9e696fe56e0850a3f5601378d27439e7272ca43372b5d6c383fd",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/config/skill-plugins.json",
+      "original_sha256": "215ba2598d5b451fd428e6288ffabb794ba263cab73827ced59bf964d1dd80b9",
+      "same_bytes": false
+    },
+    {
+      "path": "config/external-skill-sources.json",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/config/external-skill-sources.json",
+      "candidate_sha256": "f1fe6686025687a6e044774eb2a08664ffcdb15bd1bb13e108df15611d216aff",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/config/external-skill-sources.json",
+      "original_sha256": "c5dce2b98bafe442e2ff6f2d887f8976902bb6c1f03888bc80c48ad6a567a085",
+      "same_bytes": false
+    },
+    {
+      "path": "scripts/local-dashboard-server.mjs",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "candidate_sha256": "40f88fb9c5bdd3c859926f9877b1b913ff1c38f7071c11316691b509a5453744",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/local-dashboard-server.mjs",
+      "original_sha256": "6440e42852a221974bf9b594ebda5c8c66b9e88367ba448ae70ea4ae9a642e14",
+      "same_bytes": false
+    },
+    {
+      "path": "scripts/install-skill-plugins.sh",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/scripts/install-skill-plugins.sh",
+      "candidate_sha256": "4bb1dc6c01d270850d2dedf0f72e8d74ce5c63cf88c3ee0dec772c52b195b0f7",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/install-skill-plugins.sh",
+      "original_sha256": "4bb1dc6c01d270850d2dedf0f72e8d74ce5c63cf88c3ee0dec772c52b195b0f7",
+      "same_bytes": true
+    },
+    {
+      "path": "scripts/install-skill-plugins.ps1",
+      "candidate_sourcepath": "/Users/hanzebei/.codex/worktrees/migration-config-baseline/StarryBei-ai-config/scripts/install-skill-plugins.ps1",
+      "candidate_sha256": "b21d23a651873b4cf682809e7b704f63df8874f1f84d03160017026ce3ac2862",
+      "original_sourcepath": "/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/scripts/install-skill-plugins.ps1",
+      "original_sha256": "b21d23a651873b4cf682809e7b704f63df8874f1f84d03160017026ce3ac2862",
+      "same_bytes": true
+    }
+  ],
+  "manifest_static_readback": {
+    "candidate": {
+      "claude": [
+        "superpowers@claude-plugins-official",
+        "plugin-dev@claude-plugins-official",
+        "claude-md-management@claude-plugins-official",
+        "andrej-karpathy-skills@karpathy-skills",
+        "hzb@hzb-skills"
+      ],
+      "codex": [
+        "hzb@hzb-skills",
+        "superpowers@superpowers-dev"
+      ]
+    },
+    "original_checkout": {
+      "claude": [],
+      "codex": [
+        "hzb@hzb-skills"
+      ]
+    }
+  },
+  "effective_conclusions": [
+    "同步方向已由历史用户确认：以本机为准更新仓库模板和Dashboard，保持本机安装配置原样。",
+    "原验收要求是可共享字段一致、仅计划安装Codex hzb、无本机凭据及路径泄露、现有本机配置不变。",
+    "历史计划记录原checkout已实施模板同步、来源筛选和本地Dashboard调整；本次未重放历史运行。",
+    "指定七项JSON/TOML候选文件可解析；该检查不能证明与当前本机配置一致。",
+    "候选与原checkout的七项实现文件字节不同；Windows模板及两个插件安装脚本字节相同。",
+    "候选manifest静态读取为Claude 5项、Codex 2项；原checkout为Claude 0项、Codex hzb 1项。未执行安装器或--plan。"
+  ],
+  "historical_checks": {
+    "source": "historical_plan",
+    "date": "2026-10-08",
+    "reported_passed": [
+      "JSON/TOML解析",
+      "本机字段一致性",
+      "机器路径排除",
+      "安装计划预览",
+      "Bash语法",
+      "6项Node隔离测试",
+      "浏览器技能列表观察"
+    ],
+    "reported_not_run": [
+      "真实安装或迁移",
+      "PowerShell验证器",
+      "Windows实际运行验收"
+    ],
+    "applicability": "仅保留为历史输入；指定入口未关联这些运行的独立完整回执，不能标记当前候选通过"
+  },
+  "actual_gaps": [
+    "0.2.1状态读回仅有当前真实Product绑定；artifacts、confirmed、current_confirmations为空。",
+    "最早缺失阶段为当前候选的正式Product产物发布与确认；本报告仅提供新Product实际复核输入。",
+    "原checkout保留未提交模板及Dashboard改动；当前候选没有这些历史改动，尚无已确认的迁入文件与来源摘要。",
+    "候选插件清单不符合历史“仅Codex hzb”验收条件；其余模板与当前本机字段是否一致未重新比较。",
+    "桌面应用注入来源和未登记项目覆盖范围仍未闭合，不能将CLI历史数量等同完整本机范围。",
+    "模板及本地Dashboard用户验收未完成；Windows实机及PowerShell验证器结果不能由macOS历史检查替代。"
+  ],
+  "next_steps": [
+    "总管据本报告准备正式Product发布与确认；明确本机唯一信源范围、模板可共享字段和原checkout改动归属。",
+    "在上游确认后，由后续角色核对本JSON的来源SHA及候选文件清单，再安排最小实施；不直接批量复制旧草稿。",
+    "对确定的候选执行脱敏字段比较、凭据和机器路径排除检查及非执行安装计划预览，记录候选SHA、命令和结果。",
+    "向用户提供本地Dashboard及模板验收入口，并把实际人工结论写回原飞书任务；未完成前保持todo。"
+  ],
+  "waiting_conditions": [
+    "正式Product产物及有效上游确认",
+    "已确认的历史改动归属与当前候选",
+    "用户完成原模板与Dashboard验收"
+  ],
+  "not_performed": [
+    "读取auth文件或真实凭据",
+    "读取完整会话",
+    "新实现或历史实现迁入",
+    "安装器运行或真实用户配置变更",
+    "本地Dashboard服务或浏览器验收",
+    "公开data.json生成或部署",
+    "飞书修改",
+    "publish或confirm",
+    "push"
+  ],
+  "verification": {
+    "format_parse": {
+      "result": "passed",
+      "files": [
+        "codex/config.toml.example",
+        "claude/configs/settings.json",
+        "claude/configs/settings.windows.json",
+        "claude/configs/recommended-plugins.json",
+        "claude/configs/recommended-skills.json",
+        "config/skill-plugins.json",
+        "config/external-skill-sources.json"
+      ]
+    },
+    "scope_check": {
+      "result": "passed",
+      "command": "python3 agent-coops/run.py check agent-coops/tasks/config-baseline/README.md agent-coops/tasks/config-baseline/evidence/product-continuation.md agent-coops/tasks/config-baseline/evidence/product-continuation.json",
+      "exit_code": 0,
+      "output": "WORKFLOW_OK"
+    },
+    "staged_scope_check": {
+      "result": "passed_after_link_fix",
+      "command": "python3 agent-coops/run.py check --staged agent-coops/tasks/config-baseline/README.md agent-coops/tasks/config-baseline/evidence/product-continuation.md agent-coops/tasks/config-baseline/evidence/product-continuation.json",
+      "exit_code": 0,
+      "output": "WORKFLOW_OK"
+    },
+    "diff_check": {
+      "result": "passed",
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    "normal_commit_hook": "正常git commit执行时验证；本文件不预先声明提交成功，实际结果由提交回执报告"
+  },
+  "execution_notes": [
+    {
+      "operation": "初次文件发现命令",
+      "result": "failed",
+      "reason": "zsh未匹配.agent*；后续改为已知目录只读搜索"
+    },
+    {
+      "operation": "python3 agent-coops/run.py status（缺少--task）",
+      "result": "usage_error",
+      "recovery": "随后以status --task config-baseline成功读回；未修改角色或state"
+    },
+    {
+      "operation": "首次暂存候选检查",
+      "result": "failed",
+      "exit_code": 2,
+      "output": "agent-coops/tasks/config-baseline/README.md：LINK_MISSING：/Users/hanzebei/Documents/AI_Projects/StarryBei-ai-config/docs/superpowers/plans/2026-10-08-dashboard-local-source-audit.md",
+      "recovery": "将候选外历史Markdown链接改为明确纯文本本机路径，保留原路径和SHA256；未复制旧草稿，未关闭门禁"
+    }
+  ]
+}
