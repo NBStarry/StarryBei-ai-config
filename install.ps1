@@ -6,11 +6,12 @@
 # Existing targets are backed up first. Skills are installed from their
 # declared external marketplaces instead of copied from this repository.
 #
-# Usage:  pwsh -NoProfile -File .\install.ps1 [-SkipSkillPlugins]
+# Usage: pwsh -NoProfile -File .\install.ps1 [-SkipSkillPlugins] [-WorkflowOnly]
 
 [CmdletBinding()]
 param(
-  [switch]$SkipSkillPlugins
+  [switch]$SkipSkillPlugins,
+  [switch]$WorkflowOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -40,6 +41,21 @@ function Find-ToolCommand([string]$Name) {
 
 $ClaudeCommand = Find-ToolCommand 'claude'
 $CodexCommand = Find-ToolCommand 'codex'
+
+function Install-Workflow {
+  if ($null -eq $CodexCommand) { return }
+  $Python = Find-ToolCommand 'python'
+  if ($null -eq $Python) { $Python = Find-ToolCommand 'python3' }
+  if ($null -eq $Python) { throw '开发规范安装需要 Python 3。' }
+  & $Python -B (Join-Path $Repo 'scripts\install-workflow.py') --tool codex --home $CodexHome
+  if ($LASTEXITCODE -ne 0) { throw '开发规范安装失败。' }
+}
+
+if ($WorkflowOnly) {
+  Install-Workflow
+  if ($null -eq $CodexCommand) { Write-Host 'No Codex installation detected; nothing to install.' }
+  return
+}
 
 # Probe symlink capability ONCE up front. If we can't create symlinks (no
 # Developer Mode and not elevated), we must NOT back up/destroy existing files.
@@ -155,6 +171,8 @@ if ($null -ne $CodexCommand) {
 }
 
 # -- External skill plugins --------------------------------------------------
+Install-Workflow
+
 if ($SkipSkillPlugins) {
   Write-Host "SKIP     external skill plugins"
 } else {

@@ -1,0 +1,35 @@
+flowchart TD
+  FAIL["总管接收失败：初次失败不计返工轮次"] --> LIMIT{"同一问题已完成 3 轮自动返工？"}
+  LIMIT -->|是| PAUSE["暂停受影响步骤，请求用户决策；其他步骤可继续"]
+  LIMIT -->|否| KIND{"总管分类"}
+
+  KIND -->|实现问题| DEV["开发修复"]
+  KIND -->|技术方案问题| ARCH["架构修订方案"]
+  ARCH --> AC["总管确认架构修订"] --> DEV
+
+  KIND -->|产品或验收标准问题| PROD["产品修订设计或标准"]
+  PROD --> PC["总管确认产品修订"]
+  PC --> CHECK["架构核对并修订受影响方案"]
+  CHECK --> AC
+
+  KIND -->|测试脚本错误| SCRIPT["测试修正脚本，不得修改业务验收标准"]
+  KIND -->|环境或权限阻塞| ENV["总管恢复授权范围内的条件"]
+  ENV --> RESTORED{"条件已恢复？"}
+  RESTORED -->|否| PAUSE
+
+  DEV --> RETEST["独立测试复测：先失败项，再相关回归，最后全部适用验收项"]
+  SCRIPT --> RETEST
+  RESTORED -->|是| RETEST
+
+  RETEST --> COUNT["同一问题的返工轮次加 1；换角色或编号不重置"]
+  COUNT --> PASS{"全部适用验收项通过？"}
+  PASS -->|否| LIMIT
+  PASS -->|是| VALID{"产物版本有效且无未解决问题？"}
+  VALID -->|是| DONE["总管最终确认完成"]
+  VALID -->|否| FAIL
+
+  PC -.-> NOTICE["总管同步产品确认、架构确认及最终完成：当前会话及飞书机器人私聊；用户复核非阻塞"]
+  AC -.-> NOTICE
+  DONE -.-> NOTICE
+  NOTICE -.-> CONTENT["完成通知由总管提供：交付摘要、验收结论、证据入口"]
+  NOTICE -.-> ERROR["通知发送失败时记录失败，不撤销已完成结论"]

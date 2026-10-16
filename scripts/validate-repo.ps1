@@ -170,10 +170,7 @@ try {
   }
 
   $expectedPublicHzbSkills = @(
-    'codex-review',
-    'conference-meeting-summary',
     'okf',
-    'save-memory-before-compact',
     'web-access'
   )
   $dashboardHzbSkills = @($data.skills | Where-Object { $_.source -eq 'hzb' })

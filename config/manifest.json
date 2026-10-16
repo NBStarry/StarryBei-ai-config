@@ -69,6 +69,44 @@
       "source": "codex/prompts/checkpoint.md",
       "target": "${home}/.codex/prompts/checkpoint.md",
       "description": "Codex slash-menu checkpoint adapter."
+    },
+    {
+      "id": "codex.instructions",
+      "tool": "codex",
+      "kind": "instructions",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "symlink",
+      "source": "codex/AGENTS.md",
+      "target": "${home}/.codex/AGENTS.md",
+      "description": "Codex 本机根原则。"
+    },
+    {
+      "id": "codex.workflow-hook",
+      "tool": "codex",
+      "kind": "script",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "method": "symlink",
+      "source": "codex/hooks/workflow-hook.py",
+      "target": "${home}/.codex/hooks/workflow-hook.py",
+      "description": "Codex 规范检查入口；install-workflow.py 合并四项事件，保留已有 hooks.json 配置。"
+    },
+    {
+      "id": "hermes.workflow-plugin",
+      "tool": "hermes",
+      "kind": "script",
+      "platforms": ["macos", "linux"],
+      "method": "symlink",
+      "source": "hermes/workflow-plugin",
+      "target": "${home}/.hermes/plugins/starrybei-workflow",
+      "description": "Hermes 规范插件；install-workflow.py 同时合并 plugins.enabled。仅建立链接不代表运行时已启用。"
     }
   ]
 }
