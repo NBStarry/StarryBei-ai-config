@@ -1,0 +1,3 @@
+#!/bin/sh
+# Validate the candidate tree with the same policy as tool hooks.
+exec python3 "$(git rev-parse --show-toplevel)/agent-coops/run.py" check --staged

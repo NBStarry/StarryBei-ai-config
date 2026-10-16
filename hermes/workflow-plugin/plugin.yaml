@@ -1,0 +1,7 @@
+name: starrybei-workflow
+version: 0.1.0
+description: 复用固定开发规范，按 Hermes 任务目录检查本次工具调用。
+hooks:
+  - pre_llm_call
+  - pre_verify
+  - on_session_end

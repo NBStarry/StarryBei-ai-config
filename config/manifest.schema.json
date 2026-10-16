@@ -59,6 +59,7 @@
           "enum": [
             "claude",
             "codex",
+            "hermes",
             "shared"
           ]
         },
