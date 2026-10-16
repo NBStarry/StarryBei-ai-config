@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI Config 与 Team 职责边界：产品前后原型（评审草稿）</title>
+<style>
+  :root {
+    --fg: #1f2328;
+    --muted: #59636e;
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --line: #d0d7de;
+    --before: #9a6700;
+    --before-bg: #fff8c5;
+    --after: #1a7f37;
+    --after-bg: #dafbe1;
+    --ext: #0969da;
+    --ext-bg: #ddf4ff;
+    --warn-bg: #fff1e5;
+    --warn: #bc4c00;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    color: var(--fg);
+    background: var(--bg);
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
+  h2 { font-size: 1.2rem; margin: 2rem 0 .75rem; }
+  h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
+  p, li { overflow-wrap: anywhere; }
+  a { color: var(--ext); }
+  a:focus-visible { outline: 3px solid var(--ext); outline-offset: 2px; border-radius: 2px; }
+  .notice {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    padding: .75rem 1rem;
+    border-radius: 6px;
+  }
+  .notice strong { color: var(--warn); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .card.before { border-top: 4px solid var(--before); }
+  .card.after { border-top: 4px solid var(--after); }
+  .tag {
+    display: inline-block;
+    font-size: .8rem;
+    padding: 0 .5rem;
+    border-radius: 999px;
+    margin-bottom: .5rem;
+  }
+  .before .tag { background: var(--before-bg); color: var(--before); }
+  .after .tag { background: var(--after-bg); color: var(--after); }
+  .card ul { padding-left: 1.2rem; margin: .5rem 0 0; }
+
+  /* 简单连接图 */
+  .diagram { margin: .75rem 0; display: flex; flex-direction: column; align-items: stretch; gap: .25rem; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+  .box {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: .4rem .6rem;
+    background: var(--bg);
+    font-size: .92rem;
+  }
+  .box.repo { background: var(--card); border-width: 2px; padding: .6rem; width: 100%; }
+  .box.repo > .label { font-weight: 600; display: block; margin-bottom: .4rem; }
+  .box.team { background: var(--ext-bg); border-color: var(--ext); }
+  .box.frozen { border-style: dashed; color: var(--muted); }
+  .box.mixed { background: var(--before-bg); border-color: var(--before); }
+  .arrow { color: var(--muted); font-size: .9rem; white-space: nowrap; }
+  .arrow.down { text-align: center; }
+  .legend { font-size: .85rem; color: var(--muted); }
+
+  /* TODO / VERIFY 流程 */
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem; list-style: none; padding: 0; margin: .75rem 0; }
+  .flow li {
+    flex: 1 1 200px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: .75rem;
+  }
+  .flow li.sep { flex: 0 0 auto; border: 0; background: none; align-self: center; color: var(--muted); padding: 0; }
+  @media (max-width: 760px) { .flow { flex-direction: column; } .flow li.sep { align-self: center; transform: rotate(90deg); } }
+  .muted { color: var(--muted); font-size: .9rem; }
+  dl { margin: 0; }
+  dt { font-weight: 600; margin-top: .75rem; }
+  dd { margin: .25rem 0 0; }
+  footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>AI Config 与 Team 职责边界：产品前后原型</h1>
+    <p class="notice" role="note">
+      <strong>仅供产品评审。</strong>本页是 bootstrap 草稿，新 loader 尚未安装。页面内容不表示已完成安装、发布、真实闭环或用户验收；图中箭头只表示职责走向，不表示任何迁移已经完成。
+    </p>
+  </header>
+
+  <section aria-labelledby="compare-title">
+    <h2 id="compare-title">迁移前与目标对照</h2>
+    <div class="grid">
+      <article class="card before" aria-labelledby="before-title">
+        <span class="tag">迁移前</span>
+        <h3 id="before-title">Config 同时承载基础配置与团队入口</h3>
+
+        <div class="diagram" role="img" aria-label="迁移前示意：StarryBei-ai-config 内同时包含基础配置和团队入口；基础安装曾关联团队安装；TODO 与 VERIFY 同时承担待办状态。">
+          <div class="box repo">
+            <span class="label">StarryBei-ai-config</span>
+            <div class="row">
+              <span class="box">基础 Claude/Codex 配置</span>
+              <span class="box mixed">团队入口</span>
+              <span class="box">Dashboard</span>
+            </div>
+          </div>
+          <div class="row">
+            <span class="box">基础安装</span>
+            <span class="arrow" aria-hidden="true">—— 关联 ——&gt;</span>
+            <span class="box mixed">团队安装</span>
+          </div>
+          <div class="row">
+            <span class="box mixed">TODO / VERIFY = 历史记录 + 当前待办状态</span>
+          </div>
+        </div>
+
+        <ul>
+          <li>Config 同时包含基础配置与团队入口。</li>
+          <li>基础安装曾关联团队安装。</li>
+          <li>TODO、VERIFY 同时承担历史记录与待办状态。</li>
+          <li>旧 workflow 发行文件与 hook/plugin 程序存在于本仓（迁移后继续保留）。</li>
+        </ul>
+      </article>
+
+      <article class="card after" aria-labelledby="after-title">
+        <span class="tag">目标</span>
+        <h3 id="after-title">Config 只维护基础能力，团队能力走外部入口</h3>
+
+        <div class="diagram" role="img" aria-label="目标示意：StarryBei-ai-config 保留基础配置、通用原则、基础安装和 Dashboard；团队能力通过单独的外部入口 SuperBeiTeam 私有仓库独立安装；旧文件冻结兼容；当前状态在项目飞书任务。">
+          <div class="box repo">
+            <span class="label">StarryBei-ai-config</span>
+            <div class="row">
+              <span class="box">基础 Claude/Codex 配置</span>
+              <span class="box">通用操作与沟通原则</span>
+              <span class="box">基础安装（仅基础配置）</span>
+              <span class="box">Dashboard</span>
+              <span class="box frozen">旧 workflow / hook / plugin（冻结兼容）</span>
+            </div>
+          </div>
+          <div class="arrow down" aria-hidden="true">┆ 仅外部链接，不读取正文 ┆</div>
+          <div class="box team">
+            <strong>SuperBeiTeam（私有）</strong>：团队规则、workflow、Codex/Hermes 适配、独立安装
+          </div>
+          <div class="row">
+            <span class="box">TODO / VERIFY 历史快照 + 映射</span>
+            <span class="arrow" aria-hidden="true">· · ·&gt;</span>
+            <span class="box team">当前状态：项目飞书任务</span>
+          </div>
+        </div>
+
+        <ul>
+          <li>基础配置与基础安装仍在 Config。</li>
+          <li>团队能力通过单独外部入口独立安装。</li>
+          <li>历史 TODO/VERIFY 保留快照与映射，当前状态在项目飞书任务。</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="scope-title">
+    <h2 id="scope-title">产品 v1 边界</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Config 继续维护</h3>
+        <ul>
+          <li>基础 Claude/Codex 配置；Claude 原模型默认规则仍属基础配置。</li>
+          <li>通用操作与沟通原则。</li>
+          <li>基础安装与 Dashboard。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>基础安装说明</h3>
+        <ul>
+          <li>只链接基础配置。</li>
+          <li>不会自动安装团队 hook、Hermes 插件或 workflow。</li>
+          <li>已有团队安装保持不变，不会自动卸载。</li>
+        </ul>
+        <p class="muted">本页只提供说明，不提供安装操作。</p>
+      </div>
+      <div class="card">
+        <h3>冻结兼容（不删除）</h3>
+        <ul>
+          <li>旧 workflow 发行文件与 hook/plugin 程序保留，冻结兼容。</li>
+          <li>其他项目不随本次迁移。</li>
+          <li>不新增 Claude 团队适配器。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Team 归属（Config 不展示正文）</h3>
+        <p>团队规则、workflow、Codex/Hermes 适配与独立安装由 SuperBeiTeam 私有仓库唯一维护。Config 不读取、不展示其私有正文，也不提供团队运行详情。</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="history-title">
+    <h2 id="history-title">TODO / VERIFY 历史迁移流程</h2>
+    <p class="muted">示意流程：箭头表示每项条目的处理方向，不代表任何条目已完成迁移。</p>
+    <ol class="flow">
+      <li>
+        <strong>1. TODO / VERIFY 历史快照</strong><br>
+        保留原文与证据，不删除。
+      </li>
+      <li class="sep" aria-hidden="true">→</li>
+      <li>
+        <strong>2. 迁移映射</strong><br>
+        逐项去重并迁移到飞书，逐项读回；全部读回成功后冻结原文件。
+      </li>
+      <li class="sep" aria-hidden="true">→</li>
+      <li>
+        <strong>3. 项目飞书任务</strong><br>
+        承载当前状态，不在仓库维护第二份待办。
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="links-title">
+    <h2 id="links-title">外部入口</h2>
+    <p class="muted">本离线原型只展示入口名称；请从本任务《产品设计》正文打开真实链接。</p>
+    <dl>
+      <dt>SuperBeiTeam 团队规则与独立安装</dt>
+      <dd class="muted">私有仓库，需要仓库访问权限。</dd>
+      <dt>边界迁移主需求（飞书任务）</dt>
+      <dd class="muted">需要飞书账户权限。</dd>
+    </dl>
+  </section>
+
+  <footer>
+    <p class="muted">后续项：生产页面 <code>site/workflow.html</code> 的最终迁移指针由后续真实 Hermes Web 指南任务交付，本原型不制作或修改生产页面。</p>
+  </footer>
+</main>
+</body>
+</html>

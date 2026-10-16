@@ -3,125 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>开发规范：架构与规则详解 · AI Config</title>
+  <title>团队指南已迁移至 SuperBeiTeam</title>
   <link rel="stylesheet" href="css/style.css?v=20261008">
   <link rel="stylesheet" href="css/workflow.css">
+  <style>
+    .workflow-migration {
+      width: calc(100% - 32px);
+      max-width: 800px;
+      margin: clamp(24px, 6vw, 80px) auto;
+      padding: clamp(24px, 4vw, 40px);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-wrap: anywhere;
+    }
+    .workflow-migration h1 { margin: 0 0 20px; }
+    .workflow-migration-permissions { color: var(--text-secondary); }
+    .workflow-migration-links {
+      display: grid;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .workflow-migration-links a {
+      width: fit-content;
+      max-width: 100%;
+      padding: 8px 0;
+    }
+  </style>
 </head>
 <body class="workflow-doc">
-  <a class="skip" href="#main">跳到正文</a>
-  <header class="doc-header"><a href="index.html">← AI Config Dashboard</a><button type="button" id="doc-theme">切换明暗主题</button></header>
-  <div class="doc-layout">
-    <nav class="doc-nav" aria-label="文档目录"><strong>开发规范指南</strong><a href="#overview">01 · 先理解三层规则</a><a href="#architecture">02 · 文件与数据架构</a><a href="#five-roles">五角色与返工</a><a href="#example">03 · 一次修改如何检查</a><a href="#checks">04 · 程序具体拦什么</a><a href="#principles">05 · 需要 Agent 遵守什么</a><a href="#operations">06 · 失败后怎么处理</a><a href="#limits">07 · 范围与证据</a></nav>
-    <main id="main">
-      <section id="overview">
-        <p class="eyebrow">CODEX / HERMES · 工作流规范 0.2.0 · 说明基线 2026-10-15</p>
-        <h1>到底有哪些规则？<br><span>从一次文件修改说清楚。</span></h1>
-        <p class="lead">这套规范要求 Agent 把任务、计划、执行证据和验收结论放在可追踪的位置。程序能检查部分格式和权限；它不能判断一段“测试通过”的描述是否真实。</p>
-        <div class="layer-grid">
-          <article><span class="tag">行为原则</span><h2>要求 Agent 怎么做</h2><p>例如：编辑前重读文件、不改其他任务的内容、没有观察就不能声称验收通过。</p><p class="muted">写在全局 AGENTS.md。并非每条都有自动拦截。</p></article>
-          <article><span class="tag">工具检查</span><h2>在操作时检查</h2><p>例如：尝试新增未登记根文件，或执行者改写计划正文，写入前就拒绝。</p><p class="muted">由 Codex hook 或 Hermes 原生中间件调用固定版本程序。</p></article>
-          <article><span class="tag">提交检查</span><h2>检查即将提交的文件</h2><p>读取 Git 暂存区，核对目录、任务文档、计划版本及证据格式。</p><p class="muted">由项目 pre-commit 执行，补充工具检查。</p></article>
-        </div>
-        <aside class="callout"><strong>适用范围：</strong>本机 Codex 和已启用规范插件的 Hermes 会加载根原则。只有配置了 <code>agent-coops/project.json</code> 的项目才进入这套程序检查。TokenDeck 已接入；未接入项目保留原有流程。</aside>
-      </section>
-      <section id="architecture">
-        <p class="eyebrow">02 / ARCHITECTURE</p><h2>规则放在哪里，谁负责什么？</h2>
-        <div class="architecture" aria-label="全局入口读取共用程序，项目参数固定版本，任务记录与飞书任务相互链接">
-          <div><h3>本机 Codex 入口</h3><p><code>~/.codex/AGENTS.md</code><br>链接到配置仓 <code>codex/AGENTS.md</code></p><p><code>~/.codex/hooks.json</code><br>注册四个事件，保留其他 hook</p></div>
-          <div><h3>Hermes 原生入口</h3><p><code>~/.hermes/plugins/starrybei-workflow</code><br>链接到配置仓插件；<code>plugins.enabled</code> 启用它</p><p>读取同一份原则，按任务目录检查实际工具调用。独立成员分别安装。</p></div>
-          <p class="arrow">↓ 加载原则，并调用检查入口</p>
-          <div><h3>共用检查程序</h3><p><code>codex/hooks/workflow-hook.py</code><br>确定当前项目 → 核对来源、版本和 SHA-256 → 调用 <code>workflow/v0.2.0/workflow.py</code></p></div>
-          <p class="arrow">↓ 按项目参数检查，不扫描其他任务的全部改动</p>
-          <div><h3>每个项目的本地记录</h3><p><code>project.json</code>：允许目录与固定版本<br><code>STATUS.md</code>：状态摘要与任务入口<br><code>agent-coops/tasks/任务名/</code>：产品设计、计划、执行记录、证据</p></div>
-        </div>
-        <div class="split"><article><h3>本地工程记录</h3><p>计划保存批准的步骤；执行记录保存命令、结果及局限。Git 保存已提交版本。角色绑定和计划发布回执保存在项目 <code>.git/agent-coops/</code>，不作为公开文件提交。</p></article><article><h3>飞书任务与看板</h3><p>工作任务保存需求、负责人、期限、开发阶段和最终验收。多维表格从任务清单原生同步，提供需求池、版本拆解、任务管理表、进度看板和人员分配视图。修改状态时操作源任务。</p></article></div>
-        <p>根原则可以长期统一。项目仍固定自己的规范版本和程序摘要。修改共用程序后，旧项目不会静默使用新内容；摘要不匹配会报错。</p>
-      </section>
-      <section id="five-roles">
-        <p class="eyebrow">0.2.0 / FIVE ROLES</p><h2>新任务如何推进？</h2>
-        <p><a href="workflow-prototype.html">打开五角色交互原型、前后对比与返工演示</a></p>
-        <div class="table-scroll"><table><thead><tr><th>角色</th><th>交付物</th><th>推进条件</th></tr></thead><tbody>
-          <tr><td>总管 coordinator</td><td>需求、分派、确认、返工及通知回执</td><td>使用宿主原生子 Agent；保持用户单入口</td></tr>
-          <tr><td>产品 product</td><td>产品设计.md、HTML 原型、可观察验收标准</td><td>总管确认指定版本后进入架构</td></tr>
-          <tr><td>架构 architect</td><td>计划.md、架构影响图、开发步骤及源码范围</td><td>引用已确认产品版本；总管确认后开发</td></tr>
-          <tr><td>开发 developer</td><td>实现、自检、执行记录.md</td><td>引用已确认计划；不得改写业务验收标准</td></tr>
-          <tr><td>测试 tester</td><td>evidence/ 中的测试报告、缺陷及复测证据</td><td>独立会话；覆盖全部适用项及计划源码范围</td></tr>
-        </tbody></table></div>
-        <p>产物发布使用 <code>publish --artifact product|plan|test --manifest 文件.json</code>。总管使用 <code>confirm</code> 确认版本。正文、本地可视化依赖和实测源码摘要共同约束有效性。设计或源码变化后，旧确认或测试证据失效。</p>
-        <h3>失败后如何返工？</h3>
-        <p>总管将实现问题交开发、技术方案问题交架构、产品或标准问题交产品、测试脚本问题交测试。环境或权限问题由总管在已授权范围内恢复，无法恢复则报告阻塞。设计修订必须重新发布和确认。</p>
-        <p>初次失败记为第0轮。一次修正和独立复测完成后加1轮。同一验收问题第三轮仍失败时暂停受影响步骤，无关步骤继续；更换角色、版本或编号不能重置轮次。用户决策写入 <code>resume</code> 回执后才能恢复。</p>
-        <h3>用户何时收到通知？</h3>
-        <p>产品确认、架构确认、最终确认后，总管都在当前会话和飞书机器人私聊同步摘要、产物及结论。通知列明设备、宿主、会话名称、Session ID 和产物入口，说明用户从哪里复核。<code>notice</code> 按阶段、版本、渠道记录结果，<code>status</code> 显示待发送项。成功记录不重复发送；失败如实记录并报告，不撤销已完成结论。通知由总管实际发送，门禁不代发消息。</p>
-        <aside class="callout"><strong>完成条件：</strong>全部适用验收项通过、执行记录引用当前计划、全部步骤完成且各有证据、没有未解决问题，总管才可确认最终完成。小修改仍提供修改前后展示和架构影响可视化。用户复核不作为推进条件。</aside>
-      </section>
-      <section id="example">
-        <p class="eyebrow">03 / A WORKED EXAMPLE</p><h2>旧任务示例：把计划中的 S1 标记为完成</h2>
-        <ol class="timeline">
-          <li><span class="tag">SessionStart · 会话开始</span><h3>先告诉 Agent 当前规则</h3><p>提示读取 STATUS.md，说明当前规范版本和会话角色。它没有替 Agent 完成阅读，也没有证明任务已经完成。</p></li>
-          <li><span class="tag">PreToolUse · 调用前</span><h3>先检查候选修改，再允许工具写入</h3><p>执行者把 <code>- [ ] S1 检查结果</code> 改成 <code>- [x] S1 检查结果</code>。程序检查任务是否绑定给这个会话、计划正文是否保持不变，以及执行记录是否已有 S1 证据。</p><div class="example-pair"><p><strong>允许</strong><br>先记录 <code>- 证据 S1：2026-10-13，执行相关检查，结果通过。</code>，再勾选 S1。</p><p><strong>拒绝</strong><br>没有证据就勾选 → <code>PLAN_EVIDENCE</code><br>把“检查结果”改成“不用检查” → <code>PLAN_IMMUTABLE</code></p></div></li>
-          <li><span class="tag">PostToolUse · 调用后</span><h3>实际写入必须与候选内容一致</h3><p>程序核对文件摘要，并再次验证文档结构。内容与之前的候选不一致时报告 <code>HOOK_CHANGED</code>。它不会自动恢复文件，因为差异可能来自其他执行者。</p></li>
-          <li><span class="tag">Stop · 准备结束</span><h3>复查尚未清除的检查记录</h3><p>如果还有待核对记录，程序再次检查；没有记录则通过。Stop 不运行全部产品测试，不替用户验收，也不自动完成飞书任务。</p></li>
-        </ol>
-        <aside class="callout"><strong>提交时还有一次检查：</strong>即使工作区文件已经修好，如果暂存区仍是旧的错误版本，pre-commit 仍会拒绝。程序检查的是将被提交的内容。</aside>
-      </section>
-      <section id="checks">
-        <p class="eyebrow">04 / ENFORCED RULES</p><h2>程序具体拦什么？</h2><p>展开一条规则，查看条件、例子和处理方式。“工具前”主要指可解析的 Write、Edit、apply_patch；任意 shell 写入不在完整覆盖范围内。</p>
-        <details open><summary>01 · 只能使用项目固定的规范程序 <span>来源与版本</span></summary><p><strong>条件：</strong>项目存在 project.json。全局入口要求版本格式正确，来源解析到本配置仓对应版本，并且程序 SHA-256 与项目记录一致。</p><p><strong>拒绝：</strong>把来源改成另一个脚本，或改了共用程序却没有经过版本维护。错误包括 <code>WORKFLOW_SOURCE</code>、<code>WORKFLOW_PIN</code>。</p><p><strong>处理：</strong>核对实际版本，由规范维护流程更新引用。不要直接删除摘要检查。此检查不禁止用户授权的规范升级。</p></details>
-        <details><summary>02 · 文件必须放在项目登记的位置 <span>工具前 / 提交</span></summary><p><strong>条件：</strong>根文件要在 root_files 中，子目录要在 allowed_roots 中。路径和符号链接不能越出项目。</p><p><strong>TokenDeck 示例：</strong><code>Sources/</code> 是允许的源码目录；随意新增根文件 <code>notes.md</code> 会触发 <code>PATH_DENIED</code>。同样的文件名放到不同项目，结果取决于该项目的参数。</p><p><strong>处理：</strong>使用项目规定的位置。确实需要新目录时，走已授权的项目规范维护流程。暂存的符号链接变更会触发 <code>PATH_SYMLINK</code>，需要单独审查。</p></details>
-        <details><summary>03 · 同一任务使用一组产物 <span>工具前 / 提交</span></summary><pre><code>agent-coops/tasks/任务名/
-├── 产品设计.md（五角色新任务）
-├── 计划.md
-├── 执行记录.md
-└── evidence/</code></pre><p><strong>拒绝：</strong>在该目录随意新增第二份任务正文，或直接删除计划、执行记录 → <code>TASK_LAYOUT</code> / <code>TASK_DELETE</code>。项目登记的历史任务目录也不再新增文件 → <code>TASK_LEGACY</code>。</p><p><strong>处理：</strong>继续更新原记录；必要附件放 evidence。独立目标才创建另一任务。</p></details>
-        <details><summary>04 · 任务文档必须有固定四节，且不能空着 <span>工具前 / 提交</span></summary><p>五角色任务的产品设计和架构计划使用四节：产品设计、架构设计、验收设计、实施安排。执行记录、测试报告及旧任务仍使用一个一级标题，二级标题依次为：</p><ol><li>目标与范围</li><li>计划与进展</li><li>阻塞与决策</li><li>验收与证据</li></ol><p><strong>拒绝：</strong>缺一节、顺序不同、额外增加二级标题，或某节没有内容 → <code>DOC_FORMAT</code> / <code>DOC_EMPTY</code>。需要细分时使用三级标题。</p></details>
-        <details><summary>05 · 任务必须能从状态入口找到 <span>工具前 / 提交</span></summary><p>STATUS.md 不超过80行，并包含当前任务执行记录的路径。执行记录必须链接 <code>计划.md</code>，并包含飞书任务链接格式。</p><p><strong>拒绝：</strong>只有散落的任务文件，没有入口或计划链接 → <code>TASK_INDEX</code> / <code>TASK_LINK</code>；缺少远端任务链接 → <code>TASK_REMOTE</code>。</p><p><strong>边界：</strong>程序只检查远端链接格式，不登录飞书验证任务是否存在、身份是否有权限。本地 Markdown 相对链接会检查目标；跨项目链接和计划中的未来路径不作同样检查。</p></details>
-        <details><summary>06 · 一个需求入口，由 Agent 安排工作 <span>绑定与委派</span></summary><p>用户授权“只向一个入口提需求，其余由 Agent 安排”后，入口整理需求、安排规划和执行、收集证据并汇总结果。用户不需要手动创建开发会话、运行绑定命令或传递交接内容。</p><p>0.2.0 的新任务由 coordinator 分派 product、architect、developer、tester。测试必须使用独立宿主会话。总管确认产品、架构和最终结果，三个节点都同步到当前会话及飞书机器人私聊。用户无需回复，流程继续推进。旧任务保留 planner/executor 规则和已有绑定。</p><p><strong>拒绝：</strong>冒用来源会话 → <code>ROLE_ACTOR</code>；覆盖已有绑定 → <code>ROLE_FIXED</code>；执行者委派、Planner 跨任务委派或发布越权计划 → <code>ROLE_DENIED</code>；委派自身 → <code>ROLE_TARGET</code>。执行者仍不能改写计划。</p><p><strong>边界：</strong>脚本检查身份、委派关系和冲突；Agent 核对用户授权及任务范围。任意文件或其他 Agent 的声明不算用户授权。委派不是后台调度器，入口仍须使用宿主子 Agent 工具并等待结果。缺少分派能力时明确报告，不要求用户把日常交接当作固定步骤。</p></details>
-        <details><summary>07 · 已发布计划的正文不能由执行者改写 <span>工具前 / 提交</span></summary><p>执行者可以把合法步骤的 <code>[ ]</code> 改成 <code>[x]</code>。不能删除步骤、改目标或改验收标准；不能把已勾选步骤撤回。</p><p><strong>拒绝：</strong>直接改写计划 → <code>PLAN_IMMUTABLE</code>；正文没有匹配的发布版本 → <code>PLAN_UNPUBLISHED</code>；撤回勾选 → <code>PLAN_UNCHECK</code>。</p><p><strong>处理：</strong>将偏差写进执行记录，交独立规划入口在授权范围内发布修订。发布时保留旧版本。勾选状态不计入正文版本摘要。</p></details>
-        <details><summary>08 · 勾选步骤前，先写对应证据 <span>工具前 / 提交</span></summary><p>步骤使用唯一的 S 编号。执行记录通过 <code>计划版本：正文SHA-256</code> 引用当前计划，并为已勾选步骤保存 <code>- 证据 S1：…</code> 格式的记录。</p><p><strong>拒绝：</strong>编号重复 → <code>PLAN_STEPS</code>；记录仍引用旧计划 → <code>PLAN_VERSION</code>；缺少证据行 → <code>PLAN_EVIDENCE</code>。</p><p><strong>边界：</strong>程序不会确认命令真的运行过。证据应写日期、操作、结果和局限，并由执行者和验收者核实。</p></details>
-        <details><summary>09 · 步骤没完成，不能写固定的完成结论 <span>工具前 / 提交</span></summary><p>执行记录出现 <code>工程结论：已完成</code> 时，程序要求计划步骤全部勾选，否则报 <code>TASK_INCOMPLETE</code>。</p><p><strong>边界：</strong>当前实现匹配这个固定文本，不理解所有自然语言表述。全部勾选也只说明工程记录满足结构要求，不等于产品验收通过。</p></details>
-        <details><summary>10 · 执行任务时不能直接改检查配置 <span>工具前</span></summary><p>检查器保护 project.json、项目 run.py、项目 hooks 配置和 pre-commit 文件。直接通过可解析写入工具修改会返回 <code>POLICY_PROTECTED</code>。</p><p><strong>处理：</strong>如果目标本来就是规范维护，按用户授权执行独立维护流程，并重新验证。不要为了让某一次任务通过而削弱规则。</p></details>
-        <details><summary>11 · 写入结果变化时，报告而不自动回退 <span>工具后 / 结束</span></summary><p>程序记录解析出的候选路径及内容摘要。工具调用后核对实际结果；不一致则报告 <code>HOOK_CHANGED</code>，成功才清除待查记录。</p><p><strong>处理：</strong>重新读取文件，确认差异来源。不要把其他执行者的改动覆盖回自己的版本。当前待查记录按会话保存，不是完整的并发事务系统。</p></details>
-        <details><summary>12 · 提交检查读取暂存区，不拿工作区代替 <span>Git pre-commit</span></summary><p>程序只检查本次暂存路径，并从暂存区读取文件与 project.json。工作区中的修复若没有加入暂存区，不会被当作候选内容。</p><p><strong>拒绝：</strong>暂存候选缺少 project.json → <code>CONFIG_INDEX</code>；其他目录、格式、计划和证据问题按对应错误返回。</p><p><strong>边界：</strong>它补充结构检查，不会自动运行 project.json 中列出的全部测试命令，也不证明没有通过其他工具越权操作。</p></details>
-      </section>
-      <section id="principles">
-        <p class="eyebrow">05 / AGENT RESPONSIBILITIES</p><h2>哪些规则仍要靠 Agent 和人执行？</h2>
-        <p>这些要求写在根原则中。当前程序没有为它们提供完整的自动证明。</p>
-        <div class="table-scroll"><table><thead><tr><th>原则</th><th>具体应该做什么</th><th>程序的实际边界</th></tr></thead><tbody>
-          <tr><td>先读再改</td><td>开始时读取项目规则、状态、任务；编辑前读取文件当前内容。</td><td>会话开始只提醒，不追踪每一次阅读。</td></tr>
-          <tr><td>产品、架构的制作模型</td><td>制作流程图或交互原型时，优先通过 free-tokens 调用 opus-5.5；调用失败才回退 astra，不得使用其他模型。</td><td>Agent 记录失败原因和最终模型；astra 也不可用时停止。此为行为要求，当前门禁不检查模型调用。</td></tr>
-          <tr><td>单一需求入口</td><td>总管分派四个专业角色、确认设计、安排返工并同步三个确认节点。</td><td>delegate 检查绑定关系；实际分派和等待由宿主子 Agent 工具完成。</td></tr>
-          <tr><td>同一目标使用同一入口</td><td>已有任务继续更新，独立目标才新建。</td><td>目录检查不判断两个任务的语义是否重复。</td></tr>
-          <tr><td>保护其他任务</td><td>只处理本次范围，不接管其他执行者的状态。</td><td>任务绑定有局部检查；不是全机器访问控制。</td></tr>
-          <tr><td>优先复用</td><td>优先使用现有实现、标准库和原生能力。</td><td>不能自动判断一个依赖或抽象是否必要。</td></tr>
-          <tr><td>分开报告证据</td><td>分别说明测试、真实运行和用户验收。</td><td>检查证据格式，不验证所有陈述真实性。</td></tr>
-          <tr><td>等待输入时通知</td><td>需要用户输入且五分钟无回复时，通过飞书机器人私聊通知。</td><td>四个 hook 没有定时器，也不自动发消息。</td></tr>
-          <tr><td>表达清楚</td><td>使用常用词、主动语态；每次最多问一个问题。</td><td>没有自然语言风格评分或拦截器。</td></tr>
-        </tbody></table></div>
-      </section>
-      <section id="operations">
-        <p class="eyebrow">06 / WHEN A CHECK FAILS</p><h2>遇到拒绝，按这个顺序处理</h2>
-        <ol class="steps"><li><strong>读取错误代码和目标路径。</strong>先判断是目录、任务归属、计划版本还是证据问题。</li><li><strong>重新读取相关文件。</strong>确认当前内容和暂存内容，避免依据旧版本修复。</li><li><strong>修复本次范围内的问题。</strong>放回正确目录、补真实证据、更新入口或让规划者发布修订。</li><li><strong>重新运行对应检查。</strong>不要关闭 hook，也不要用无关产品测试代替规范检查。</li></ol>
-        <h3>只安装工具入口</h3><pre><code>bash install.sh --workflow-only</code></pre>
-        <p>此命令检测已安装的 Codex 和 Hermes，合并规范配置并保存回退快照。重复安装不重复注册；不会自动接入项目。Codex 需在 <code>/hooks</code> 审阅信任后新开会话；Hermes 需重新加载对应进程。</p>
-        <p>Hermes 独立成员使用其虚拟环境 Python 运行 <code>scripts/install-workflow.py --tool hermes --home ~/.hermes/profiles/成员名</code>，逐个安装。保留成员原有身份和派发规则。回退使用安装输出中的收据：<code>scripts/install-workflow.py --rollback 收据路径</code>。</p>
-        <h3>Hermes 与 Codex 的差异</h3><p>Hermes 通过 <code>pre_llm_call</code> 注入原则；原生 <code>tool_execution</code> 中间件按任务目录检查 <code>write_file</code>、<code>patch</code> 和 <code>terminal</code>；<code>pre_verify</code> 与会话结束入口核对待查结果。同一会话的受检调用串行执行，避免并发覆盖记录。当前只支持本地终端后端。</p>
-        <h3>手动检查当前任务</h3><pre><code>python3 agent-coops/run.py check STATUS.md \
-  agent-coops/tasks/任务名/计划.md \
-  agent-coops/tasks/任务名/执行记录.md</code></pre>
-        <h3>检查即将提交的内容</h3><pre><code>python3 agent-coops/run.py check --staged</code></pre>
-        <p>无错误时输出 <code>WORKFLOW_OK</code>。这表示本次规则检查通过，不表示产品已经测试、部署或被用户接受。</p>
-      </section>
-      <section id="limits">
-        <p class="eyebrow">07 / SCOPE &amp; EVIDENCE</p><h2>哪些已经验证，哪些没有？</h2>
-        <p>0.2.0 已通过43项规范隔离测试及30项宿主适配测试。真实独立子 Agent 完成实现返工、架构修订后复测通过，以及三轮失败仅暂停受影响步骤。手动候选检查验证局部暂停，不等同于真实宿主 hook 拦截。用户实际业务试用待确认。远端 Hermes 本轮未升级。</p>
-        <ul><li><strong>历史宿主证据：</strong>旧版安装、回退、规则与宿主适配隔离测试通过；Hermes 原生分发器验证通过；Codex 和 Hermes 真实模型会话均完成合法写入，并拒绝违规根文件。这些旧版结果不替代0.2.0业务验收。</li><li><strong>未覆盖全部写入：</strong>任意 shell、解释器或 MCP 内部修改无法完整还原。Git 检查补充候选内容验证，但不构成操作系统权限隔离。</li><li><strong>没有全局完成认证：</strong>Stop 只处理待查记录，不扫描全部任务、不完成飞书任务、不自动提交或发布。</li><li><strong>0.2.0 更新范围：</strong>本机根原则、规范程序、Web 指南及 TokenDeck 规范引用。TokenDeck 旧任务与绑定不变；远端 Hermes 和其他项目未升级。Claude 和 Windows 实机未验证。</li><li><strong>飞书同步局限：</strong>试点开启每小时同步，手动同步已核验；完整自动周期未观察。未使用的阶段选项暂不显示。</li></ul>
-        <h3>维护时以这些文件为依据</h3><ul class="sources"><li><code>codex/AGENTS.md</code> — 本机根原则</li><li><code>codex/hooks/workflow-hook.py</code> — 全局检查入口</li><li><code>hermes/workflow-plugin/</code> — Hermes 原生适配</li><li><code>scripts/install-workflow.py</code> — 安装与回退</li><li><code>workflow/v0.2.0/workflow.py</code> — 规则实现</li><li><code>workflow/v0.2.0/README.md</code> — 项目接入规范</li><li><code>docs/plans/2026-10-13-codex-root-principles.md</code> — 实施与验收记录</li></ul>
-        <p class="muted">本文是规则说明，不是实时运行状态面板。规则升级时同时核对程序、测试和本文；不要仅修改说明来宣称新增了检查能力。</p>
-      </section>
-      <footer>AI Config · 开发规范指南 <a href="#overview">回到开头 ↑</a></footer>
-    </main>
-  </div>
-  <script src="js/workflow-doc.js"></script>
+  <main class="workflow-migration">
+    <h1>团队指南已迁移至 SuperBeiTeam</h1>
+    <p class="lead">AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。</p>
+    <p class="workflow-migration-permissions">SuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。</p>
+    <nav class="workflow-migration-links" aria-label="相关入口">
+      <a href="index.html">返回 AI Config Dashboard</a>
+      <a href="https://github.com/NBStarry/SuperBeiTeam/blob/main/README.md">打开 Team 指南与安装入口</a>
+      <a href="https://github.com/NBStarry/SuperBeiTeam">打开 Team 仓库</a>
+    </nav>
+  </main>
 </body>
 </html>

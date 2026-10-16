@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-10-16T13:25:55.227086+00:00",
+  "tester_scope_check": {
+    "paths": [
+      "agent-coops/tasks/team-web-guide/evidence/tester-browser-checks.json",
+      "agent-coops/tasks/team-web-guide/evidence/tester-desktop.png",
+      "agent-coops/tasks/team-web-guide/evidence/tester-keyboard-focus.png",
+      "agent-coops/tasks/team-web-guide/evidence/tester-mobile.png",
+      "agent-coops/tasks/team-web-guide/evidence/tester-publish-receipt.json",
+      "agent-coops/tasks/team-web-guide/evidence/tester-report.md",
+      "agent-coops/tasks/team-web-guide/evidence/tester-static-checks.json",
+      "agent-coops/tasks/team-web-guide/evidence/tester-test-manifest.json"
+    ],
+    "exit_code": 0,
+    "stdout": "WORKFLOW_OK\n",
+    "stderr": ""
+  },
+  "source_diff_check": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "developer_files_unchanged": {
+    "site/workflow.html": true,
+    "agent-coops/tasks/team-web-guide/执行记录.md": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-after-desktop.png": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-after-mobile.png": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-baseline.json": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-before-desktop.png": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-before-source.html": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-browser-checks.json": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-keyboard-focus.png": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-server.log": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-static-checks.json": true,
+    "agent-coops/tasks/team-web-guide/evidence/developer-workflow-checks.json": true
+  },
+  "formal_report_direct_check": {
+    "result": "ARTIFACT_IMMUTABLE：阶段产物只能由专业角色通过 publish 发布",
+    "meaning": "正式报告由真实 publish 生成；未执行直接修改。正式内容与发布状态读回已核对一致。",
+    "publish_version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e"
+  },
+  "staged_candidate_check": "未暂存或提交；由总管集成候选时检查。"
+}

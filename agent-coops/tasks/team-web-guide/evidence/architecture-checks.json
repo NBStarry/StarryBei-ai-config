@@ -1,0 +1,29 @@
+{
+  "four_sections": true,
+  "one_step": true,
+  "criteria": [
+    "A1",
+    "A2",
+    "A3",
+    "A4"
+  ],
+  "sources": [
+    "site/workflow.html"
+  ],
+  "assets_exist_in_project": true,
+  "local_plan_links_exist": true,
+  "mermaid_static_structure": true,
+  "mermaid_rendered": false,
+  "production_baselines_unchanged": true,
+  "product_files_unchanged": true,
+  "diff_whitespace_check": true,
+  "raw_logs_ignored": true,
+  "files": {
+    "agent-coops/tasks/team-web-guide/计划.md": "8bac7cf972888fbf0914a66a4840a632bd13f4b5b7726dadf023d00628001cdb",
+    "agent-coops/tasks/team-web-guide/evidence/architecture-manifest.json": "3dadd89a6a77f8cab1133c768c5a7a7f30d56360cf0ef96d22072959f070043c",
+    "agent-coops/tasks/team-web-guide/evidence/architecture-source-review.md": "1b2b436ca5c120a15df833ae74b68e5fce048ccd4d93fa15c2d31ac04d536d46",
+    "agent-coops/tasks/team-web-guide/evidence/architecture-impact.mmd": "779669ff9421650a019abc0dadc6b91e4ac9ef329f8112224ca75d77ea87ea1f",
+    "agent-coops/tasks/team-web-guide/evidence/architecture-model-receipt.json": "a9ff71e27746202693c8806801ce9a654d1789eeafa7d9f88229c85fe921a530"
+  },
+  "implementation_browser_deployment_user_acceptance": "not verified in architecture stage"
+}

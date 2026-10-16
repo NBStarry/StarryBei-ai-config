@@ -1,0 +1,89 @@
+{
+  "product_version": "3100aa3319afe62323fb8938636c83e09f831ef615ad948b78553eab8ff55ade",
+  "assets": [
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-impact.mmd",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-source-review.md"
+  ],
+  "steps": [
+    {
+      "id": "S1",
+      "criteria": [
+        "A1",
+        "A2",
+        "A4"
+      ],
+      "sources": [
+        "AGENTS.md",
+        "README.md",
+        "codex/AGENTS.md",
+        "codex/README.md",
+        "codex/tests/test_workflow_install.py",
+        "config/manifest.json",
+        "hermes/README.md",
+        "hermes/tests/test_native_runtime.py",
+        "hermes/workflow-plugin/README.md",
+        "install.ps1",
+        "install.sh",
+        "scripts/install-workflow.py",
+        "agent-coops/README.md",
+        "workflow/README.md"
+      ]
+    },
+    {
+      "id": "S2",
+      "criteria": [
+        "A1",
+        "A3"
+      ],
+      "sources": [
+        "claude/configs/CLAUDE.md"
+      ]
+    },
+    {
+      "id": "S3",
+      "criteria": [
+        "A5",
+        "A6"
+      ],
+      "sources": [
+        "TODO.md",
+        "VERIFY.md",
+        "docs/migrations/task-record-map.md",
+        "agent-coops/README.md"
+      ]
+    },
+    {
+      "id": "S4",
+      "criteria": [
+        "A2",
+        "A4",
+        "A6"
+      ],
+      "sources": [
+        "agent-coops/project.json",
+        "agent-coops/run.py",
+        "STATUS.md",
+        "agent-coops/hooks/pre-commit"
+      ]
+    },
+    {
+      "id": "S5",
+      "criteria": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "sources": [
+        "codex/tests/test_workflow_install.py",
+        "hermes/tests/test_native_runtime.py",
+        "README.md",
+        "agent-coops/README.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-16T12:48:15.327621+00:00",
+  "workflow_version": "0.2.1",
+  "workflow_sha256": "e139f04a1c8a529d87e7b2037c49bddf681b6b57bad78bf40aa9424de7598d0c",
+  "design_headings": [],
+  "asset_hashes": {
+    "agent-coops/tasks/team-web-guide/evidence/product-mobile.png": "ecdc6f303f3aafbcf4ef95acd011ad6b03c422ba33672ed00ab3661e1b90313d",
+    "agent-coops/tasks/team-web-guide/evidence/product-desktop.png": "b6328d33d6013ce15edf3c79c565470428aef5b6065bf3b3e5bae4c2467cf514",
+    "agent-coops/tasks/team-web-guide/evidence/before-desktop.png": "f233825c3d083bbe8e663224a3a3f026e7843adccfe415203584d3203b769377",
+    "agent-coops/tasks/team-web-guide/evidence/product-prototype.html": "7fdabdb791b947f0f6de29477939d0c7866f16209fd4e121feba8da645921d51"
+  },
+  "checks": {
+    "criteria_ids": "passed",
+    "local_links": "passed",
+    "no_navigation_or_external_assets_in_prototype": "passed",
+    "model_runtime_metadata": "passed",
+    "full_logs_ignored": "passed",
+    "production_source_unchanged": "passed"
+  },
+  "scope": "Product self-check only. Production A1-A4 require independent tests after implementation."
+}

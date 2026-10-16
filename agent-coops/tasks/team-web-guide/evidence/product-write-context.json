@@ -1,0 +1,11 @@
+{
+  "tool": "apply_patch",
+  "error": "WORKFLOW_ERROR：PATH_ESCAPE：路径或符号链接越出项目",
+  "target": "agent-coops/tasks/team-web-guide/evidence/product-browser-checks.json",
+  "cause": "apply_patch has no workdir parameter and used the original chat project root; target was the authorized new worktree.",
+  "coordinator_resolution": "Use host write tools with explicit authorized worktree cwd under the same gate; no scope change.",
+  "resolution": "exec_command with explicit workdir and real existing identity wrote the evidence successfully.",
+  "hook_changed": false,
+  "identity_changed": false,
+  "retry_outcome": "passed"
+}

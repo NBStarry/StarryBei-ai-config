@@ -1,0 +1,25 @@
+{
+  "published_at": "2026-10-16T12:48:42.873915+00:00",
+  "task": "team-web-guide",
+  "session": "01a1446c-517e-77e0-a876-b5a53f2ae5c1",
+  "artifact": "product",
+  "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+  "exit_code": 0,
+  "mode": "five-role",
+  "sequence": 2,
+  "assets": {
+    "agent-coops/tasks/team-web-guide/evidence/product-mobile.png": "ecdc6f303f3aafbcf4ef95acd011ad6b03c422ba33672ed00ab3661e1b90313d",
+    "agent-coops/tasks/team-web-guide/evidence/product-desktop.png": "b6328d33d6013ce15edf3c79c565470428aef5b6065bf3b3e5bae4c2467cf514",
+    "agent-coops/tasks/team-web-guide/evidence/before-desktop.png": "f233825c3d083bbe8e663224a3a3f026e7843adccfe415203584d3203b769377",
+    "agent-coops/tasks/team-web-guide/evidence/product-prototype.html": "7fdabdb791b947f0f6de29477939d0c7866f16209fd4e121feba8da645921d51"
+  },
+  "criteria_ids": [
+    "A1",
+    "A2",
+    "A3",
+    "A4"
+  ],
+  "files_unchanged_after_publish": true,
+  "current_confirmations": {},
+  "scope": "Product publication only; coordinator confirmation and production implementation remain separate."
+}

@@ -1,0 +1,21 @@
+{
+  "stage": "product",
+  "version": "Config bootstrap v1",
+  "confirmed_by": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+  "device": "韩泽北的MacBook Pro",
+  "host": "Codex",
+  "session_title": "统一多项目开发规范",
+  "confirmed_at": "2026-10-16T11:29:40.426935+00:00",
+  "files": {
+    "产品设计.md": "874a3d62c1385fe90918dc8520623260288b2d03d7206cd88d96510a55b26fc6",
+    "evidence/config-product-manifest.json": "afc5065317dd1fa2f52647472a7706807d91f03ced1f91608d6bc4cf02f944b5",
+    "evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa"
+  },
+  "result": "confirmed",
+  "workflow_enrollment": "bootstrap; loader not installed yet",
+  "asset_check": {
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa"
+  },
+  "review": "正文、A1-A8、资产依赖和实际截图通过总管复核；原外部导航缺陷第一轮修正通过。",
+  "user_acceptance": "not claimed"
+}

@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-10-16T12:57:48.110892+00:00",
+  "task": "team-web-guide",
+  "artifact": "plan",
+  "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+  "session": "01a1442a-3b97-7ef2-bfe8-51825da66b49",
+  "product_version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+  "published": true,
+  "coordinator_confirmed_at_readback": false,
+  "source_file": "agent-coops/tasks/team-web-guide/计划.md",
+  "manifest_file": "agent-coops/tasks/team-web-guide/evidence/architecture-manifest.json",
+  "implementation_sources": [
+    "site/workflow.html"
+  ],
+  "post_publish_files_unchanged": true,
+  "implementation_performed": false,
+  "commit_performed": false,
+  "browser_deployment_user_acceptance": "not verified in architecture stage"
+}

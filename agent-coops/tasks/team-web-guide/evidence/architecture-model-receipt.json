@@ -1,0 +1,31 @@
+{
+  "created_at": "2026-10-16T12:57:15.330160+00:00",
+  "task": "team-web-guide",
+  "session": "01a1442a-3b97-7ef2-bfe8-51825da66b49",
+  "model": "phanthy-cloud/claude-opus-5-5",
+  "variant": "medium",
+  "runtime_models": [
+    {
+      "providerID": "phanthy-cloud",
+      "modelID": "claude-opus-5-5",
+      "variant": "medium"
+    }
+  ],
+  "model_session": "ses_ebb3abf13ffepyhFVnVtl656pl",
+  "exit_code": 0,
+  "fallback_used": false,
+  "requested_file": "agent-coops/tasks/team-web-guide/evidence/architecture-impact.mmd",
+  "actual_write_path_verified": true,
+  "raw_evidence_directory": "evidence/model-local/",
+  "raw_evidence_gitignored": true,
+  "raw_log_sha256": {
+    "architecture-opus-events.jsonl": "6a295da20078202ba93a45bd589d3116c5a70c7696687459288d849f265717bd",
+    "architecture-opus-prompt.md": "9ee9e1ec32359d14377a8c24cf046cf0162903920979f98922992c35bc829972",
+    "architecture-opus-session.json": "69c342b3668aaa92aea9fd5595bb7d37cb42c31ce9125cf5dddf8de8671ae6e2",
+    "architecture-opus-stderr.log": "ed44ea0ca234d98aff602699a39df7796c2815835436396d75f476c9e3e43c62"
+  },
+  "request_first_response_timeout": "not runtime-enforced; not claimed",
+  "billing": "not checked; reported cost is not proof",
+  "diagram_rendered": false,
+  "diagram_sha256": "779669ff9421650a019abc0dadc6b91e4ac9ef329f8112224ca75d77ea87ea1f"
+}

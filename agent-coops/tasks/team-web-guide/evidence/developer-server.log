@@ -1,0 +1,14 @@
+127.0.0.1 - - [16/Oct/2026 21:06:55] "GET /workflow.html HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:06:55] "GET /css/style.css?v=20261008 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:06:55] "GET /js/workflow-doc.js HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:06:55] "GET /css/workflow.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:08:12] "GET /workflow.html HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:23] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:23] "GET /css/style.css?v=20260712-4 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:23] "GET /js/editor.js?v=20260712-7 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:23] "GET /js/app.js?v=20260712-7 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:23] "GET /data.json?ts=1792156163812 HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2026 21:09:31] "GET /workflow.html HTTP/1.1" 200 -
+Serving HTTP on 127.0.0.1 port 8765 (http://127.0.0.1:8765/) ...
+
+Keyboard interrupt received, exiting.

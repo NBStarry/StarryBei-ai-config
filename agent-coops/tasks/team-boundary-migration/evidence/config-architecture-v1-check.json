@@ -1,0 +1,73 @@
+{
+  "version": "Config architecture bootstrap v1",
+  "status": "ready-for-coordinator-confirmation",
+  "architect_session": "01a1442a-3b97-7ef2-bfe8-51825da66b49",
+  "product_version": "3100aa3319afe62323fb8938636c83e09f831ef615ad948b78553eab8ff55ade",
+  "canonical_plan_digest_read_only": "c19fe5b5be8df2cda41155a21f2b49e646d847c3b12c41b75c06ee0f201fb6c6",
+  "official_publish_executed": false,
+  "sha256": {
+    "计划.md": "4104377a73e1e131ef23fbde056958a6284855281afc39ff9b5b4f5eb51bca4e",
+    "evidence/config-architecture-manifest.json": "e21fffe3374fa643d668b562269bdf660f4ea54738ab87add79a36baad9f7072",
+    "evidence/config-architecture-impact.mmd": "a93d22672f3f8e94e58054b65ce1f3b705f1cdf324db85ee76777084fcc42264",
+    "evidence/config-architecture-source-review.md": "4516bb3f741b5d6884d69b14b9377144212f8b903136fdfc04a1972640772e9d"
+  },
+  "checks": {
+    "four_design_sections": true,
+    "S1_to_S5_body_manifest_parity": true,
+    "Config_A1_to_A8_covered": true,
+    "confirmed_product_unchanged": true,
+    "exact_implementation_files": 22,
+    "no_cross_repository_sources_or_assets": true,
+    "no_task_artifacts_in_sources": true,
+    "local_markdown_links": true,
+    "asset_closure": true,
+    "frozen_baseline_40_files_equal": true,
+    "future_web_guide_not_in_sources": true
+  },
+  "sources": [
+    "AGENTS.md",
+    "README.md",
+    "STATUS.md",
+    "TODO.md",
+    "VERIFY.md",
+    "agent-coops/README.md",
+    "agent-coops/hooks/pre-commit",
+    "agent-coops/project.json",
+    "agent-coops/run.py",
+    "claude/configs/CLAUDE.md",
+    "codex/AGENTS.md",
+    "codex/README.md",
+    "codex/tests/test_workflow_install.py",
+    "config/manifest.json",
+    "docs/migrations/task-record-map.md",
+    "hermes/README.md",
+    "hermes/tests/test_native_runtime.py",
+    "hermes/workflow-plugin/README.md",
+    "install.ps1",
+    "install.sh",
+    "scripts/install-workflow.py",
+    "workflow/README.md"
+  ],
+  "planned_entry_files_not_created": [
+    "STATUS.md",
+    "agent-coops/hooks/pre-commit",
+    "agent-coops/project.json",
+    "agent-coops/run.py"
+  ],
+  "model": {
+    "provider_model": "phanthy-cloud/claude-opus-5-5",
+    "variant": "medium",
+    "session": "ses_ebb8411c2ffe4f7RvcEhM9gUP5",
+    "exit_code": 0,
+    "astra_fallback": false
+  },
+  "unverified": [
+    "Mermaid_render",
+    "final_implementation_tests",
+    "dual_host_install",
+    "official_role_publish",
+    "actual_Git_hook_install",
+    "later_Hermes_Web_business_cycle",
+    "user_acceptance"
+  ]
+}

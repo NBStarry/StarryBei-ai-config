@@ -1,0 +1,71 @@
+%% Config 团队边界迁移：修改前后影响图（设计，不代表部署验收）
+flowchart TB
+  subgraph BEFORE["修改前"]
+    direction LR
+    B1["Config 基础安装<br/>关联团队安装"]
+    B2["基础规则与团队流程<br/>混合维护"]
+    B3["TODO / VERIFY<br/>同时维护活动状态"]
+    B1 --- B2 --- B3
+  end
+
+  subgraph AFTER["修改后"]
+    direction TB
+    subgraph CFG["Config 本仓：仅基础配置"]
+      C1["Claude / Codex 基础配置"]
+      C2["Bash / PowerShell 基础安装<br/>config/manifest.json<br/>不启用、不管理 Team"]
+      C3["Dashboard<br/>不读 Team 私有内容"]
+      C4["Codex 基础 AGENTS 链接保留"]
+      C5["旧团队安装参数<br/>仅显示迁移提示"]
+      C6["Claude 模型语义保持<br/>显式 model；主代理 opus<br/>常规成员 sonnet；复杂 opus；禁 haiku<br/>不新增 Claude 团队适配器"]
+    end
+    subgraph TEAM["Team 外部仓库：唯一团队入口"]
+      T1["团队规则 / 程序<br/>独立安装入口"]
+    end
+    subgraph FROZEN["冻结兼容"]
+      F1["workflow/v0.1.x、v0.2.0<br/>旧 hook / plugin 程序"]
+      F2["现有消费者保留<br/>其他项目不迁移"]
+      F3["已有团队配置不卸载"]
+      F1 --> F2
+    end
+    subgraph HIST["历史任务迁移"]
+      H1["TODO / VERIFY 原文、状态、证据保留"]
+      H2["逐项映射并读回后冻结"]
+      H3["活动状态：项目飞书"]
+      H4["工程证据：本仓任务目录"]
+      H1 --> H2 --> H3
+      H2 --> H4
+    end
+    subgraph ENTRY["正式接入：仅四文件"]
+      E1["agent-coops/project.json<br/>@installed-team + 固定版本SHA"]
+      E2["agent-coops/run.py<br/>经已安装 loader 调用"]
+      E3["STATUS.md"]
+      E4["agent-coops/hooks/pre-commit"]
+    end
+    CFG -. "仅引用，不复制私有实现<br/>不下载私有代码" .-> T1
+    C5 -. "提示" .-> T1
+    E2 --> L1["已安装 loader"] --> T1
+    E1 -. "不内置私有程序" .-> L1
+  end
+
+  BEFORE ==> AFTER
+
+  subgraph SEQ["接入时序"]
+    direction TB
+    S1["当前未接入：规则审查源码<br/>bootstrap 提交<br/>不能称新版门禁通过"]
+    S2["同步目录外准备<br/>正式 Team 安装源"]
+    S3{"两台设备 loader 均安装<br/>且旧源兼容已验证？"}
+    S4["同步目录外 Config worktree<br/>创建 4 个入口文件"]
+    S5["各角色用真实 session 正式发布<br/>总管确认 / 候选检查"]
+    S6["集成到 Projects 同步目录"]
+    P1["暂停接入<br/>防 Syncthing 同步早于 loader"]
+    K1["既有 hook 不关闭、不覆盖"]
+    S1 --> S2 --> S3
+    S3 -- "是" --> S4 --> S5 --> S6
+    S3 -- "否" --> P1
+    K1 -.- S1
+  end
+
+  ENTRY --> SEQ
+
+  W1["生产 site/workflow.html<br/>后续真实 Hermes Web 指南子目标交付"]
+  AFTER -. "本次延后" .-> W1

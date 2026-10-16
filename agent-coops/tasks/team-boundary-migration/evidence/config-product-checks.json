@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-16T11:27:36.138Z",
+  "role": "product",
+  "session_id": "01a1446c-517e-77e0-a876-b5a53f2ae5c1",
+  "scope": "bootstrap product draft; not independent acceptance",
+  "browser": {
+    "title": "AI Config 与 Team 职责边界：产品前后原型（评审草稿）",
+    "viewport": {
+      "width": 1314,
+      "height": 763
+    },
+    "document": {
+      "width": 1314,
+      "height": 1804
+    },
+    "resourceLoads": [],
+    "scripts": 0,
+    "externalAssets": [],
+    "navigationLinks": 0,
+    "entryInstructions": "外部入口\n\n本离线原型只展示入口名称；请从本任务《产品设计》正文打开真实链接。\n\nSuperBeiTeam 团队规则与独立安装\n私有仓库，需要仓库访问权限。\n边界迁移主需求（飞书任务）\n需要飞书账户权限。"
+  },
+  "visual_review": "Updated desktop top and bottom screenshots. Static entry instructions are readable; no horizontal overflow. Real links remain in the unchanged product Markdown.",
+  "not_verified": [
+    "mobile viewport",
+    "external account access",
+    "real installation",
+    "formal publish",
+    "deployment",
+    "user acceptance"
+  ],
+  "automatic_checks": {
+    "four_h2_sections": "passed",
+    "criteria_pattern_A1_to_A8": "passed",
+    "local_links_and_assets": "passed",
+    "static_html_no_scripts_or_remote_assets": "passed",
+    "freeze_wording": "passed",
+    "runtime_model_metadata": "passed",
+    "zero_html_navigation_attributes": "passed",
+    "team_0_2_1_asset_hashes": "passed",
+    "document_and_criteria_unchanged": "passed"
+  },
+  "candidate_sha256": {
+    "agent-coops/tasks/team-boundary-migration/产品设计.md": "874a3d62c1385fe90918dc8520623260288b2d03d7206cd88d96510a55b26fc6",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-manifest.json": "afc5065317dd1fa2f52647472a7706807d91f03ced1f91608d6bc4cf02f944b5",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop.png": "121b07dde0f4b51d4bf516a61e6831088e544366ffcf7acf4f28412ada8de403",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop-bottom.png": "6c581c54fad3c9327a97ccd9bff09d62cc6d57ec6f8561f73f9b66f4b11531cf"
+  },
+  "asset_validation_evidence": "config-product-asset-validation.json"
+}

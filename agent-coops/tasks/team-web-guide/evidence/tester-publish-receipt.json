@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-10-16T13:25:19.068777+00:00",
+  "task": "team-web-guide",
+  "session": "01a14484-7a7d-7cb0-9052-8142ac04bc3a",
+  "artifact": "test",
+  "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e",
+  "path": "agent-coops/tasks/team-web-guide/evidence/测试验收.md",
+  "sequence": 13,
+  "sources": {
+    "site/workflow.html": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d"
+  },
+  "cases": [
+    {
+      "criterion": "A1",
+      "status": "pass",
+      "evidence": "tester-static-checks.json 与 tester-browser-checks.json：精确文案、单一迁移卡片、无旧正文、无脚本或嵌入、无自动跳转、未加载 Team 私有资源。"
+    },
+    {
+      "criterion": "A2",
+      "status": "pass",
+      "evidence": "tester-static-checks.json links 与 tester-browser-checks.json links：三个原生链接文字和 href 与产品一致；私有权限提示可见，index.html 存在。"
+    },
+    {
+      "criterion": "A3",
+      "status": "pass",
+      "evidence": "tester-browser-checks.json、tester-desktop.png、tester-mobile.png、tester-keyboard-focus.png：真实 1280×900 与 390×844，scrollWidth 1272/382，无重叠遮挡，原生 Tab 三个焦点均可见，Return 返回 Dashboard。"
+    },
+    {
+      "criterion": "A4",
+      "status": "pass",
+      "evidence": "tester-browser-checks.json legacy_fragments：原路径和八个旧片段显示同一 SHA 的迁移页，返回入口均为 index.html。公开部署未在本轮验证，已单列。"
+    }
+  ],
+  "issues": [],
+  "blocked_criteria": [],
+  "blocked_steps": [],
+  "pending_notices": [],
+  "current_confirmations": {
+    "product": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+    "plan": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027"
+  },
+  "readback_matches_report": true,
+  "evidence_hashes_match": true,
+  "temporary_server_stopped": true,
+  "public_ci_artifacts": "unverified",
+  "deployment": "unverified",
+  "user_acceptance": "unverified"
+}

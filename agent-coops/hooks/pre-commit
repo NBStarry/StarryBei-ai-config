@@ -1,0 +1,5 @@
+#!/bin/sh
+# Git worktree 共用 hook 目录；只检查当前 checkout。
+project_root=$(git rev-parse --show-toplevel) || exit $?
+[ -f "$project_root/agent-coops/project.json" ] || exit 0
+exec python3 "$project_root/agent-coops/run.py" check --staged

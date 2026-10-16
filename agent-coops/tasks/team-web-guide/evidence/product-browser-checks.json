@@ -1,0 +1,59 @@
+{
+  "checked_at": "2026-10-16T12:48:14.789Z",
+  "scope": "Product prototype only; not production acceptance",
+  "desktop": {
+    "mode": "1280px same-origin srcdoc viewport, no file changes",
+    "width": 1280,
+    "height": 740,
+    "scrollWidth": 1280,
+    "scrollHeight": 740,
+    "scripts": 0,
+    "hrefs": 0,
+    "resources": [],
+    "text": "目标\n团队指南已迁移至 SuperBeiTeam\n\nAI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。\n\nSuperBeiTeam 是私有仓库，需要仓库访问权限。无法打开时，请确认当前 GitHub 账号已获授权。\n\n返回 AI Config Dashboard\n生产目标：index.html\n打开 Team 指南与安装入口\n生产目标：SuperBeiTeam 仓库 main 分支 README.md\n打开 Team 仓库\n生产目标：NBStarry/SuperBeiTeam 仓库首页\n\n设计示意；真实链接见产品设计正文。",
+    "buttons": [
+      {
+        "disabled": true,
+        "width": 511.1953125
+      },
+      {
+        "disabled": true,
+        "width": 511.1953125
+      },
+      {
+        "disabled": true,
+        "width": 511.1953125
+      }
+    ]
+  },
+  "mobile": {
+    "mode": "390px same-origin srcdoc viewport, no file changes",
+    "width": 390,
+    "height": 740,
+    "scrollWidth": 390,
+    "scrollHeight": 1308,
+    "columns": "358px",
+    "overflow": [],
+    "resources": [],
+    "buttons": [
+      {
+        "disabled": true,
+        "width": 322
+      },
+      {
+        "disabled": true,
+        "width": 322
+      },
+      {
+        "disabled": true,
+        "width": 322
+      }
+    ]
+  },
+  "visual_review": "Desktop and mobile screenshots inspected; text and static entry labels are readable with no overlaps or horizontal overflow.",
+  "limitations": [
+    "Prototype uses disabled static controls to satisfy asset contract; real link keyboard testing belongs to production candidate.",
+    "Iframe srcdoc viewports emulate layout size; not a physical mobile device test.",
+    "No production page edits, deployment or user acceptance."
+  ]
+}

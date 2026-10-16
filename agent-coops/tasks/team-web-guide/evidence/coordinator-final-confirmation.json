@@ -1,0 +1,72 @@
+{
+  "task": "team-web-guide",
+  "coordinator_session": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+  "device": "韩泽北的MacBook Pro",
+  "host": "Codex",
+  "chat_title": "统一多项目开发规范",
+  "recorded_at": "2026-10-16T13:37:04.136597+00:00",
+  "confirmed": {
+    "product": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+    "plan": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+    "test": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e"
+  },
+  "final_confirm_event": [
+    {
+      "sequence": 14,
+      "action": "confirm",
+      "session": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+      "task": "team-web-guide",
+      "reason": "总管已读取独立正式报告、逐项manifest及发布回执，并查看桌面、移动与原生键盘截图。A1-A4全部通过，唯一生产源码摘要一致，S1已按独立结果完成，无未解决问题。确认Config公开入口本地工程完成；公开CI产物、线上部署及用户验收另行验证。",
+      "artifact": "test",
+      "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e"
+    }
+  ],
+  "notifications": [
+    {
+      "artifact": "product",
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+      "channel": "chat",
+      "status": "sent"
+    },
+    {
+      "artifact": "product",
+      "version": "345522eab2fa9c1efb826076b482046ca1bd1055ee9adf991923007b17b9deac",
+      "channel": "feishu",
+      "status": "sent"
+    },
+    {
+      "artifact": "plan",
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+      "channel": "chat",
+      "status": "sent"
+    },
+    {
+      "artifact": "plan",
+      "version": "6fac460aa8936f8b5ca3471758d0d615367270ac4119f459f102eed0a5818027",
+      "channel": "feishu",
+      "status": "sent"
+    },
+    {
+      "artifact": "test",
+      "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e",
+      "channel": "chat",
+      "status": "sent"
+    },
+    {
+      "artifact": "test",
+      "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e",
+      "channel": "feishu",
+      "status": "sent"
+    }
+  ],
+  "candidate_sha256": "00bdce81230230bff2e2444ce843273e101d56552d66a2a7a7150118f339e89d",
+  "independent_test": {
+    "report": "evidence/测试验收.md",
+    "version": "6d50c8e42000a3d42d48ed6e3b412ee75ba7851986a0a5fbf6e4a264094fdf7e",
+    "criteria": "A1-A4 pass",
+    "screenshots_reviewed_by_coordinator": true
+  },
+  "scope": "Config公开入口本地工程完成；主迁移仍继续",
+  "deployment": "未验证",
+  "user_acceptance": "未完成"
+}

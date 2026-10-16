@@ -1,0 +1,11 @@
+{
+  "id": "CONFIG-PRODUCT-ASSET-001",
+  "phase": "bootstrap product review",
+  "result": {
+    "ok": false,
+    "error": "ASSET_EXTERNAL：可视化依赖必须保存在项目内 https://github.com/NBStarry/SuperBeiTeam"
+  },
+  "decision": "产品角色在同一Opus会话将原型外部导航改为静态说明，真实入口保留在设计正文；不改门禁。",
+  "initial_failure": true,
+  "completed_rework_rounds": 0
+}

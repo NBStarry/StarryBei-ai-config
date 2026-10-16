@@ -1,0 +1,507 @@
+{
+  "schema": "config-final-source-review-v1",
+  "checked_at": "2026-10-16T11:46:09.584384+00:00",
+  "reviewer": {
+    "role": "independent-tester",
+    "host": "Codex",
+    "task_name": "/root/config_final_source_review",
+    "CODEX_THREAD_ID": "01a14484-7a7d-7cb0-9052-8142ac04bc3a"
+  },
+  "scope": {
+    "result": "PASS_BOOTSTRAP_DOCUMENT_AND_PUBLIC_SOURCE_SUBSET",
+    "complete_A1_A8_acceptance": false,
+    "formal_gate_pass_claimed": false,
+    "candidate": "current worktree bytes; explicit public allowlist, not a staged or published commit",
+    "baseline_commit": "819bbc4a1ad98b9fb657294806e1b06a1b269ebd",
+    "observed_HEAD": "819bbc4a1ad98b9fb657294806e1b06a1b269ebd",
+    "latest_document_subset": [
+      "claude/configs/CLAUDE.md",
+      "agent-coops/tasks/team-boundary-migration/README.md",
+      "agent-coops/tasks/team-boundary-migration/执行记录.md"
+    ],
+    "comparison_note": "Claude is compared with HEAD. Task README and execution record are untracked additions, so they are checked against confirmed design and current links, not a nonexistent HEAD version.",
+    "source_manifest_count": 22,
+    "existing_source_count": 18,
+    "planned_entry_files_not_created": [
+      "STATUS.md",
+      "agent-coops/hooks/pre-commit",
+      "agent-coops/project.json",
+      "agent-coops/run.py"
+    ]
+  },
+  "confirmed_upstream": {
+    "agent-coops/tasks/team-boundary-migration/evidence/coordinator-config-product-v1.json": {
+      "sha256": "4bbe66ea6346fd933bf8960c1f5b39566c92680a6a5766b49e4701ef70d4734a",
+      "result": "confirmed",
+      "confirmed_asset_hashes_match": {
+        "产品设计.md": true,
+        "evidence/config-product-manifest.json": true,
+        "evidence/config-product-prototype.html": true
+      }
+    },
+    "agent-coops/tasks/team-boundary-migration/evidence/coordinator-config-architecture-v1.json": {
+      "sha256": "f16b185c754992121e6db73d899a77db006127a48900934cb11464be3f65218d",
+      "result": "confirmed",
+      "confirmed_asset_hashes_match": {
+        "计划.md": true,
+        "evidence/config-architecture-manifest.json": true,
+        "evidence/config-architecture-impact.mmd": true,
+        "evidence/config-architecture-source-review.md": true
+      }
+    }
+  },
+  "checks": {
+    "claude_model_semantics": {
+      "result": "passed",
+      "manual_HEAD_semantic_comparison": true,
+      "preserved_rules": {
+        "explicit_model": "子 Agent 调用 `Agent` 工具时，必须显式传入 `model` 参数，值为 `opus` 或 `sonnet`。不得省略该参数并继承主循环模型。",
+        "lead_opus": "主代理始终使用 `model: \"opus\"`。",
+        "normal_sonnet": "常规成员默认使用 `model: \"sonnet\"`。",
+        "complex_opus": "复杂任务使用 `model: \"opus\"`，包括架构、多文件重构和深度调试。",
+        "no_haiku": "成员不得使用 `haiku`。"
+      }
+    },
+    "claude_basic_requirements": {
+      "result": "passed",
+      "checks": {
+        "Language": true,
+        "Shell Scripts & Debugging": true,
+        "Approach-First Workflow": true,
+        "飞书 / lark-cli Rules": true,
+        "original_git_rule_preserved": true,
+        "original_edit_rule_preserved": true,
+        "disk_existence_check_preserved": true
+      }
+    },
+    "claude_team_and_acceptance_boundary": {
+      "result": "passed",
+      "details": "Team permission, task split and checkpoint prose is replaced by the current-project contract and private Team reference. Relevant user acceptance remains required before main; frozen VERIFY is no longer forced on every project."
+    },
+    "public_boundary": {
+      "result": "passed",
+      "explicit_allowlist_file_count": 44,
+      "text_files_scanned": 42,
+      "screenshots_visually_inspected": 2,
+      "secret_pattern_hits": [],
+      "manual_review": "Reviewed active boundary documents, new design and architecture assets, task mapping, task READMEs, changed source additions, and compact receipts. No copied private Team implementation or full private process body, credentials, full model events, chat exports, or real machine configuration dumps were found. The historical TODO/VERIFY requirements, local task resumption facts, Team links, asset hashes, model identity and compact confirmation receipts are boundary/provenance data. Test fixture configuration strings are synthetic.",
+      "machine_path_review": "Five task README links identify the device and original historical document location. All targets exist. These are local evidence pointers, not machine configuration dumps. The /home/ regex hit in architecture source review is the literal tool/home/rollback argument list.",
+      "raw_model_logs": {
+        "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-opus-events.jsonl": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-opus-prompt.md": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-opus-stderr.log": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-assets-events.jsonl": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-assets-prompt.txt": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-assets-session.json": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-assets-stderr.log": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-correction-events.jsonl": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-correction-stderr.log": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-correction.txt": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-events.jsonl": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-final-session.json": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-prompt.txt": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-session.json": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        },
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-opus-stderr.log": {
+          "ignored": true,
+          "tracked": false,
+          "in_public_allowlist": false
+        }
+      },
+      "non_candidate_note": "workflow/v0.2.0/__pycache__/workflow.cpython-313.pyc is outside the explicit public allowlist; no broad git add was performed."
+    },
+    "document_links": {
+      "result": "passed",
+      "markdown_files_checked": 20,
+      "relative_target_count": 60,
+      "absolute_history_target_count": 5,
+      "missing_targets": [],
+      "absolute_targets": [
+        {
+          "source": "agent-coops/tasks/config-baseline/README.md",
+          "line": 9,
+          "exists": true
+        },
+        {
+          "source": "agent-coops/tasks/dashboard-context/README.md",
+          "line": 9,
+          "exists": true
+        },
+        {
+          "source": "agent-coops/tasks/dashboard-hooks/README.md",
+          "line": 9,
+          "exists": true
+        },
+        {
+          "source": "agent-coops/tasks/dashboard-native/README.md",
+          "line": 9,
+          "exists": true
+        },
+        {
+          "source": "agent-coops/tasks/dashboard-style/README.md",
+          "line": 9,
+          "exists": true
+        }
+      ],
+      "scope_note": "Local file target existence only. Historical TODO/VERIFY bodies, remote access, and heading anchor resolution were not revalidated."
+    },
+    "document_format": {
+      "result": "passed",
+      "structural_sections": {
+        "agent-coops/tasks/team-boundary-migration/产品设计.md": true,
+        "agent-coops/tasks/team-boundary-migration/计划.md": true,
+        "agent-coops/tasks/team-boundary-migration/执行记录.md": true
+      },
+      "json_files_parse": true,
+      "git_diff_check_exit_code": 0,
+      "formal_DOC_FORMAT_gate_executed": false
+    },
+    "local_product_assets": {
+      "result": "passed",
+      "html_scripts": 0,
+      "html_resource_or_navigation_attributes": [],
+      "css_external_dependencies": false,
+      "screenshots_reviewed": "Both allowlisted PNGs show only the Config boundary prototype; no desktop UI, chat, credentials or machine configuration."
+    },
+    "frozen_assets": {
+      "result": "passed",
+      "count": 40,
+      "baseline_commit": "819bbc4a1ad98b9fb657294806e1b06a1b269ebd",
+      "comparison": "git baseline blob bytes compared directly with current file bytes; SHA-256 also recorded",
+      "files": {
+        "codex/hooks/workflow-hook.py": {
+          "baseline_sha256": "ff366252057674bb6cf1a37d6c106b612de7bf9c9adeb79ba87bced76d4c5a91",
+          "candidate_sha256": "ff366252057674bb6cf1a37d6c106b612de7bf9c9adeb79ba87bced76d4c5a91",
+          "byte_equal": true
+        },
+        "hermes/workflow-plugin/__init__.py": {
+          "baseline_sha256": "3c0965d0fff2ee2fcfb2fcf60bd2dc7e73199013383070abf2e497e8900ab062",
+          "candidate_sha256": "3c0965d0fff2ee2fcfb2fcf60bd2dc7e73199013383070abf2e497e8900ab062",
+          "byte_equal": true
+        },
+        "hermes/workflow-plugin/plugin.yaml": {
+          "baseline_sha256": "a5cfa3629b8b5098c817966efda1b32b1923912d58f02e08033f1a145ee90faf",
+          "candidate_sha256": "a5cfa3629b8b5098c817966efda1b32b1923912d58f02e08033f1a145ee90faf",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/README.md": {
+          "baseline_sha256": "989d60367e7b301c39f43965a9c01bbf45809c72a88cc2abadb7318a1f02c729",
+          "candidate_sha256": "989d60367e7b301c39f43965a9c01bbf45809c72a88cc2abadb7318a1f02c729",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/templates/STATUS.md": {
+          "baseline_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "candidate_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/templates/pre-commit": {
+          "baseline_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "candidate_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/templates/run.py": {
+          "baseline_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "candidate_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/templates/执行记录.md": {
+          "baseline_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "candidate_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/templates/计划.md": {
+          "baseline_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "candidate_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/tests/test_workflow.py": {
+          "baseline_sha256": "f802defd950352ade4af9fc95c3479a67793386064341958938048309a44a761",
+          "candidate_sha256": "f802defd950352ade4af9fc95c3479a67793386064341958938048309a44a761",
+          "byte_equal": true
+        },
+        "workflow/v0.1.0/workflow.py": {
+          "baseline_sha256": "d8f70c72133a6595612f5169f48b7486d91d28ea0ee3e1e73ada264d7fe4ac88",
+          "candidate_sha256": "d8f70c72133a6595612f5169f48b7486d91d28ea0ee3e1e73ada264d7fe4ac88",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/README.md": {
+          "baseline_sha256": "082a45dfe3c9685c4530b74d993d503e4eb930630304ad60a51d4d022ae50c5a",
+          "candidate_sha256": "082a45dfe3c9685c4530b74d993d503e4eb930630304ad60a51d4d022ae50c5a",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/templates/STATUS.md": {
+          "baseline_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "candidate_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/templates/pre-commit": {
+          "baseline_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "candidate_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/templates/run.py": {
+          "baseline_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "candidate_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/templates/执行记录.md": {
+          "baseline_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "candidate_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/templates/计划.md": {
+          "baseline_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "candidate_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/tests/test_workflow.py": {
+          "baseline_sha256": "ae82104726683237a320d1b472b6bcffa17624d44c385a6b7b44212caf6a3ff3",
+          "candidate_sha256": "ae82104726683237a320d1b472b6bcffa17624d44c385a6b7b44212caf6a3ff3",
+          "byte_equal": true
+        },
+        "workflow/v0.1.1/workflow.py": {
+          "baseline_sha256": "d28292de2a65263fb8b9addd048df841ffd7c5c25e30c765d18620c09512702d",
+          "candidate_sha256": "d28292de2a65263fb8b9addd048df841ffd7c5c25e30c765d18620c09512702d",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/README.md": {
+          "baseline_sha256": "3f7fbfd69e3a7b08cdc91d1794372f86a82e10464616c3250415be36ceeb0877",
+          "candidate_sha256": "3f7fbfd69e3a7b08cdc91d1794372f86a82e10464616c3250415be36ceeb0877",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/templates/STATUS.md": {
+          "baseline_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "candidate_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/templates/pre-commit": {
+          "baseline_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "candidate_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/templates/run.py": {
+          "baseline_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "candidate_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/templates/执行记录.md": {
+          "baseline_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "candidate_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/templates/计划.md": {
+          "baseline_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "candidate_sha256": "1e27e9a40874c828597c048257abac319064efe3ec196bac44d7ec9826cff402",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/tests/test_workflow.py": {
+          "baseline_sha256": "0ee53e12e96cd4fff0c574e7c39543afda5331d5a199ec1214c2eceef4f7e24d",
+          "candidate_sha256": "0ee53e12e96cd4fff0c574e7c39543afda5331d5a199ec1214c2eceef4f7e24d",
+          "byte_equal": true
+        },
+        "workflow/v0.1.2/workflow.py": {
+          "baseline_sha256": "04958f564240a1738b527fc1df857ebc330c367f147b0e0b1022fd8fa497e643",
+          "candidate_sha256": "04958f564240a1738b527fc1df857ebc330c367f147b0e0b1022fd8fa497e643",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/README.md": {
+          "baseline_sha256": "d18d2d52ff2effd40c40d77addd7c7136d4c62ea4a809a3584a729304817aa17",
+          "candidate_sha256": "d18d2d52ff2effd40c40d77addd7c7136d4c62ea4a809a3584a729304817aa17",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/docs/architecture.mmd": {
+          "baseline_sha256": "4e05fdd26b94ce00ae84bdab047c33853de1dfcd6b4e2aabda48be76a9a95959",
+          "candidate_sha256": "4e05fdd26b94ce00ae84bdab047c33853de1dfcd6b4e2aabda48be76a9a95959",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/docs/rework.mmd": {
+          "baseline_sha256": "513cadf6af4a3154d0505113a528d9c635a2e77830dfdd1841215705edb04ede",
+          "candidate_sha256": "513cadf6af4a3154d0505113a528d9c635a2e77830dfdd1841215705edb04ede",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/STATUS.md": {
+          "baseline_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "candidate_sha256": "c6067bd990d9dc3cb7fd75e1d98566b627506f7757e4b1587d98f0cda25b1a77",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/evidence/测试验收.md": {
+          "baseline_sha256": "4d8515040b592e22375e2805696089589603d137634b24707755d8160d83648d",
+          "candidate_sha256": "4d8515040b592e22375e2805696089589603d137634b24707755d8160d83648d",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/pre-commit": {
+          "baseline_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "candidate_sha256": "c31c2363bdca1dc9ec77e8fa7bfa7749071c0ed74a402cc5eb5ae0090d7adc72",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/run.py": {
+          "baseline_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "candidate_sha256": "0a1de6da00382072bcdb8a7cde276959c92751231a456ce8baa02bb5e1c708eb",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/产品设计.md": {
+          "baseline_sha256": "8257a703224db215a76d8bc4767de270f0fc393d8995dae48683a139d0d2a9f1",
+          "candidate_sha256": "8257a703224db215a76d8bc4767de270f0fc393d8995dae48683a139d0d2a9f1",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/执行记录.md": {
+          "baseline_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "candidate_sha256": "0138d69bccd50836d694f2654999b346ce156c4f9b0b3cfd63fc04c546290b01",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/templates/计划.md": {
+          "baseline_sha256": "588d80c7523656ab9fb7dfbbd9e9e2b90fb5f57d3e16f810d35a6924ed4b7384",
+          "candidate_sha256": "588d80c7523656ab9fb7dfbbd9e9e2b90fb5f57d3e16f810d35a6924ed4b7384",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/tests/test_legacy.py": {
+          "baseline_sha256": "cb2518de675c40821187037cbfe1c15751f996b6b064bc800c003e0e3d1df5f0",
+          "candidate_sha256": "cb2518de675c40821187037cbfe1c15751f996b6b064bc800c003e0e3d1df5f0",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/tests/test_roles.py": {
+          "baseline_sha256": "5b32503594e37908bd44faa5214a27edc511da19fc325083f85e022a936970f0",
+          "candidate_sha256": "5b32503594e37908bd44faa5214a27edc511da19fc325083f85e022a936970f0",
+          "byte_equal": true
+        },
+        "workflow/v0.2.0/workflow.py": {
+          "baseline_sha256": "db8ed7850aa47ecc85050cd07898d98ab9dd72a922d4947076734fa989a6241e",
+          "candidate_sha256": "db8ed7850aa47ecc85050cd07898d98ab9dd72a922d4947076734fa989a6241e",
+          "byte_equal": true
+        }
+      }
+    },
+    "deferred_production_web_pointer": {
+      "result": "passed_for_scope",
+      "site_workflow_html_unchanged": true,
+      "sha256": "26b0c987fd94a09334c37bec647fdea6cbdb20839dea877c5363d1646b611e90",
+      "not_claimed": "Later real Hermes Web business subgoal or final pointer delivery"
+    }
+  },
+  "precise_reviewed_file_sha256": {
+    "AGENTS.md": "0c34eeeaa4dd8447c39ffd7461cee2d352a6f25f8fa3a715800312aae454554d",
+    "README.md": "abe074e0dba64b8ff4cf08cda5b0e0aedd054146ebd81357b99433b279ac02e2",
+    "TODO.md": "20ac92892eb6a61f04ef986a377ee6a916ad521047d7dc728dcc6a69a8d3628c",
+    "VERIFY.md": "bee3179965d7c53d44d27a79c37d8ca59cda2deedd2b5600ee8ab7e1e6f8cb9e",
+    "agent-coops/README.md": "ddd960ed3345e1e5312ab4de1a083f685053ebceaa15bdcea2e9cd00597d00c2",
+    "agent-coops/tasks/config-baseline/README.md": "42ca02eed9639dbba22cf0161de1003b011dfd49c8f38c14699e2c5e0cf78ea1",
+    "agent-coops/tasks/dashboard-context/README.md": "243f6c7c821d4e95fcf7bc0daab7f51bc2c2e28fde90ded05b7b82f1316e1ae6",
+    "agent-coops/tasks/dashboard-hooks/README.md": "66d7f6b22c0bfa457f15213b2b305c1a2126c903501b10ff46a6f7c6c947dfbf",
+    "agent-coops/tasks/dashboard-native/README.md": "56ec62200ede02865d8cb937bf5c97934c1942d9e34ce5637b114c77105a3617",
+    "agent-coops/tasks/dashboard-style/README.md": "a2179d4e2e7a1ba2f7e387244cbae8307e88231ad0033d77ba161970ffec8ea9",
+    "agent-coops/tasks/team-boundary-migration/README.md": "08c64f2172135a339724f48e58b2aa2a8d9cfa40414acadc71bda6d7b55711dc",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-impact.mmd": "a93d22672f3f8e94e58054b65ce1f3b705f1cdf324db85ee76777084fcc42264",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-manifest.json": "e21fffe3374fa643d668b562269bdf660f4ea54738ab87add79a36baad9f7072",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-source-review.md": "4516bb3f741b5d6884d69b14b9377144212f8b903136fdfc04a1972640772e9d",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-v1-bot-receipt.json": "23e5eee5eb2fe792ccab35d75edbba6ed764b37569675362b2efecf5ddd06389",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-architecture-v1-check.json": "1017d9876c4992c14dec09c3fa5b85d002e1e1a5fdfb05b7b188dfd6db2df443",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-asset-validation.json": "aaf749a093820d68920c8e4904ec505b86d41cdeb91a3396804f537e3351b2ea",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-browser-assets.json": "160929528bb1ccd3ffb080eeb16fe337c3fb131374a5677d6894fe2b68781709",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-checks.json": "6d4311c9fc73dde90e139063dc1ab687d3de0d9e7d509c39f615c9aba38e6d1c",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop-bottom.png": "6c581c54fad3c9327a97ccd9bff09d62cc6d57ec6f8561f73f9b66f4b11531cf",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop.png": "121b07dde0f4b51d4bf516a61e6831088e544366ffcf7acf4f28412ada8de403",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-manifest.json": "afc5065317dd1fa2f52647472a7706807d91f03ced1f91608d6bc4cf02f944b5",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-provenance.json": "1321629a2f7ccb1988967417c16f5334ff654543dc09216afe61be6cb25f43d6",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-v1-bot-receipt.json": "b2560b45ade3a73eed3037ec02e9230b3076a237c2e24ba6620585baba74ca93",
+    "agent-coops/tasks/team-boundary-migration/evidence/coordinator-config-architecture-v1.json": "f16b185c754992121e6db73d899a77db006127a48900934cb11464be3f65218d",
+    "agent-coops/tasks/team-boundary-migration/evidence/coordinator-config-product-v1.json": "4bbe66ea6346fd933bf8960c1f5b39566c92680a6a5766b49e4701ef70d4734a",
+    "agent-coops/tasks/team-boundary-migration/evidence/coordinator-product-review.json": "7c3e3da90a4d90671fa620b7fca22ebaf9c6980f02a0c5345d78908dbc6acdf0",
+    "agent-coops/tasks/team-boundary-migration/产品设计.md": "874a3d62c1385fe90918dc8520623260288b2d03d7206cd88d96510a55b26fc6",
+    "agent-coops/tasks/team-boundary-migration/执行记录.md": "25105a069aa4be9a67b10b840b01496a3f7531bbda722b7963d6abdc28062cd2",
+    "agent-coops/tasks/team-boundary-migration/计划.md": "4104377a73e1e131ef23fbde056958a6284855281afc39ff9b5b4f5eb51bca4e",
+    "claude/configs/CLAUDE.md": "8cfb02f8299942f17abe4a69ca5405a0db1bdd5156b6b5dbc080064c8250e651",
+    "codex/AGENTS.md": "78021f2d7bb52e9123fc1024d43ff1336767245eb61e2cf30d956f8144988754",
+    "codex/README.md": "59571a99b0fd28de40eb1f7a30aeca86c41154d533f6d635b1846016f354611a",
+    "codex/tests/test_workflow_install.py": "ede402cf4820dea331612146db190cef7475a2c32650047c9b26b8b6e2e26c8a",
+    "config/manifest.json": "df78aa535dc4c69808d078c8d6568e099f439e4398534f5b18e4ece135f890af",
+    "docs/migrations/task-record-map.md": "a38eec62c22f735759b7fb9a0ddef32a952d9c52f39fbf636445965eca93fe8a",
+    "hermes/README.md": "a17d04245ad61cbe1d573a1b37db366fe9a67698bec261ae66042611f101684f",
+    "hermes/tests/test_native_runtime.py": "93712c3776778d08d024deec1fe29684040fff7327cc3293d0b99a4e6b158001",
+    "hermes/workflow-plugin/README.md": "3def3d9bacc57ffcea17f394219c2a4b887aa45270312bd4c489dc0c55a1f58e",
+    "install.ps1": "8517074d71639af5c7a2593490ce5fe96f2eab4aeb37a59b18d01e5952a21e3c",
+    "install.sh": "2f40fd1c3c7d216edea154f95ab9d0851081ff191beca7bc38955d746d7f5490",
+    "scripts/install-workflow.py": "94a301e4490dbd4f7a1237309b6b52c8174a08019cd8bac03aa7a3b40557e95e",
+    "workflow/README.md": "4556ab563fec0a71f6bc1dbf34c6f87c7aef943a42966dacb66ef65ff90a9afe"
+  },
+  "issues": [],
+  "acceptance_scope": {
+    "A1": "active-document/source boundary subset only",
+    "A2": "not rerun; installer runtime outside this review",
+    "A3": "Claude model/basic-rule/acceptance-reference document subset passed",
+    "A4": "40 frozen-file bytes only; no repeated regressions or remote consumer readback",
+    "A5": "public mapping content scan only; no repeated 77-item or remote readback acceptance",
+    "A6": "four formal entry files remain absent as planned; no binding or installation acceptance",
+    "A7": "44-file public allowlist and local assets subset passed; no publication/deployment claim",
+    "A8": "prototype boundary and unchanged production page only; later Web work remains pending"
+  },
+  "not_verified": [
+    "120-install/regression test batch was not rerun",
+    "A4/A5 remote consumer and Feishu readbacks were not repeated",
+    "real dual-host loader installation and installed-reference checks",
+    "formal product/architecture publication, binding, candidate gate and Git hook integration",
+    "Windows/PowerShell or Hermes runtime behavior",
+    "later real Hermes Web business cycle and production pointer",
+    "remote URL access and historical TODO/VERIFY link/anchor completeness",
+    "deployment, main merge, user acceptance"
+  ],
+  "write_scope": [
+    "agent-coops/tasks/team-boundary-migration/evidence/config-final-source-review.json"
+  ],
+  "mutation_statement": "Only this evidence JSON is created. No production, design or existing report file is changed; no install, stage, commit or publication is executed."
+}

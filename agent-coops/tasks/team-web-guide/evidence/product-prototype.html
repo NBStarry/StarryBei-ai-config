@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>产品原型：workflow.html 迁移说明页</title>
+  <style>
+    :root { color-scheme: light; --ink: #1f2328; --muted: #57606a; --line: #d0d7de; --bg: #f6f8fa; --card: #ffffff; --accent: #0b5cad; --warn-bg: #fff8e5; --warn-line: #d4a72c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    main { max-width: 960px; margin: 0 auto; padding: 20px 16px 40px; }
+    h1 { font-size: 1.35rem; margin: 0 0 4px; }
+    h2 { font-size: 1.05rem; margin: 0 0 10px; }
+    h3 { font-size: 1.25rem; margin: 0 0 10px; line-height: 1.4; }
+    p { margin: 0 0 10px; }
+    .meta { color: var(--muted); font-size: .9rem; margin-bottom: 16px; }
+    .compare { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .compare { grid-template-columns: 2fr 3fr; } }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .tag { display: inline-block; font-size: .8rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-bottom: 8px; }
+    .tag-before { background: #eaeef2; color: #424a53; }
+    .tag-after { background: #ddf4ff; color: #0a3069; }
+    .before ul { margin: 0 0 12px; padding-left: 1.2em; color: var(--muted); }
+    .outline { border: 1px dashed var(--line); border-radius: 6px; padding: 10px; display: grid; grid-template-columns: 30% 1fr; gap: 8px; }
+    .outline span { display: block; height: 8px; background: #d8dee4; border-radius: 4px; margin-bottom: 6px; }
+    .outline .toc span { background: #c4ccd5; }
+    .outline .body span:nth-child(3n) { width: 70%; }
+    .outline figcaption { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); }
+    .target { border-color: var(--accent); border-width: 2px; }
+    .private { background: var(--warn-bg); border-left: 4px solid var(--warn-line); padding: 8px 12px; border-radius: 4px; }
+    .entries { list-style: none; margin: 14px 0 8px; padding: 0; display: grid; gap: 8px; }
+    .entries button { width: 100%; text-align: left; font: inherit; color: var(--ink); background: #f6f8fa; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; cursor: not-allowed; }
+    .entries small { display: block; color: var(--muted); font-size: .8rem; word-break: break-all; }
+    .note { font-size: .85rem; color: var(--muted); }
+    .scope { margin-top: 16px; padding: 10px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>workflow.html 迁移说明页 · 产品原型</h1>
+      <p class="meta">设计示意，非生产页面；不含任何链接或外部资源。</p>
+    </header>
+
+    <div class="compare">
+      <section class="panel before" aria-labelledby="before-title">
+        <span class="tag tag-before">修改前</span>
+        <h2 id="before-title">现有长篇指南</h2>
+        <ul>
+          <li>标题为“开发规范：架构与规则详解”的长文档</li>
+          <li>左侧目录 + 多章节正文</li>
+          <li>作为团队规则的公开入口，由本仓维护流程正文</li>
+        </ul>
+        <figure class="outline" aria-label="长文档轮廓示意">
+          <div class="toc"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="body"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <figcaption>轮廓示意：目录 + 长篇正文</figcaption>
+        </figure>
+      </section>
+
+      <section class="panel target" aria-labelledby="target-title">
+        <span class="tag tag-after">目标</span>
+        <h3 id="target-title">团队指南已迁移至 SuperBeiTeam</h3>
+        <p>AI Config 继续维护基础配置与 Dashboard。团队规则、指南与独立安装由 SuperBeiTeam 维护。</p>
+        <p class="private"><strong>SuperBeiTeam 是私有仓库，需要仓库访问权限。</strong>无法打开时，请确认当前 GitHub 账号已获授权。</p>
+        <ul class="entries" aria-label="入口示意（已禁用）">
+          <li><button type="button" disabled>返回 AI Config Dashboard<small>生产目标：index.html</small></button></li>
+          <li><button type="button" disabled>打开 Team 指南与安装入口<small>生产目标：SuperBeiTeam 仓库 main 分支 README.md</small></button></li>
+          <li><button type="button" disabled>打开 Team 仓库<small>生产目标：NBStarry/SuperBeiTeam 仓库首页</small></button></li>
+        </ul>
+        <p class="note">设计示意；真实链接见产品设计正文。</p>
+      </section>
+    </div>
+
+    <p class="scope">范围：保留 workflow.html 旧地址；页面只提示迁移，不展示团队运行状态。</p>
+  </main>
+</body>
+</html>

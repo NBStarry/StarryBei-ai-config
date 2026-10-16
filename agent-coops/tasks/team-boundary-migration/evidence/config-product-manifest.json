@@ -1,0 +1,39 @@
+{
+  "assets": [
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html"
+  ],
+  "criteria": [
+    {
+      "id": "A1",
+      "text": "Config 有效入口只维护基础 Claude/Codex 配置、通用原则、基础安装和 Dashboard；团队规则、workflow、Codex/Hermes 适配与独立安装只指向 Team 正本，不复制维护私有流程。"
+    },
+    {
+      "id": "A2",
+      "text": "Bash、PowerShell 基础安装和 config/manifest.json 不启用或管理团队能力；保留基础 Codex AGENTS.md 链接及既有团队配置；兼容安装参数只提示 Team 入口，不写配置、不下载私有代码。"
+    },
+    {
+      "id": "A3",
+      "text": "Claude 的原模型默认语义继续属于基础配置；旧全局 VERIFY 强制规则改为遵守各项目当前有效验收正本；不新增 Claude 团队适配器。"
+    },
+    {
+      "id": "A4",
+      "text": "旧 workflow/v0.1.x、workflow/v0.2.0 和旧 hook/plugin 程序保持冻结基线字节与摘要；有效入口说明冻结兼容；不卸载已有消费者，不迁移其他项目。"
+    },
+    {
+      "id": "A5",
+      "text": "Config TODO、VERIFY 全部原条目保留原文、原状态与证据；逐项去重并关联飞书任务或历史归档，逐项读回后冻结；当前状态不再在两个历史文件维护。"
+    },
+    {
+      "id": "A6",
+      "text": "Config 全部在办任务沿用同目标 ID 和有效证据，交接后按 Team 已确认合同从最早缺失阶段续接；project.json、run.py、STATUS.md、pre-commit 仅按本次两项目授权接入，正式接入以前置安装和真实绑定回执为准。"
+    },
+    {
+      "id": "A7",
+      "text": "本仓产品和计划使用本仓 manifest 及本地资产；公开候选与 Dashboard 不读取或发布 Team 私有正文、凭证或运行数据；自动检查、真实安装、发布、用户验收各有独立结论。"
+    },
+    {
+      "id": "A8",
+      "text": "本次原型只展示基础安装、Team 外部入口与历史任务迁移；生产 site/workflow.html 的最终迁移指针由后续真实 Hermes Web 指南业务子目标交付，本次不提前实现或宣称完成。"
+    }
+  ]
+}
