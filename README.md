@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-跨项目开发流程参见[统一开发规范 0.2.0](workflow/v0.2.0/README.md)。新任务由总管分派产品、架构、开发和独立测试。总管确认设计后继续推进，并在当前会话与飞书机器人私聊同步；同一问题最多自动返工三轮。用户无需创建开发会话或运行绑定命令。旧版本、旧任务和已有绑定保持原流程。详细规则见[开发规范 Web 指南](site/workflow.html)，实际证据见[本次规范维护记录](docs/plans/2026-10-13-codex-root-principles.md)。
+本仓库维护基础工具配置、通用操作原则和 Dashboard。团队规则、workflow、宿主适配与团队安装由 [SuperBeiTeam 私有仓库](https://github.com/NBStarry/SuperBeiTeam) 维护，需要仓库访问权限。本仓库保留[旧版冻结兼容说明](workflow/README.md)与[本次边界迁移工程入口](agent-coops/tasks/team-boundary-migration/README.md)。
 
 ### Windows
 
@@ -41,28 +41,15 @@ cd StarryBei-ai-config
 bash install.sh
 ```
 
-`install.sh` 只处理当前机器已经安装的工具：Claude Code 存在时链接 `~/.claude` 配置；Codex 存在时链接 prompts、全局原则和规范入口，并合并四项 hook；Hermes 存在时链接规范插件并合并启用列表。不要求安装仓库中出现的所有工具。脚本会先备份已有目标，并只为已安装工具注册对应 marketplace 和 plugins。全量安装依赖 `jq`；规范安装需要 Python 3，Hermes 使用其虚拟环境已有的 PyYAML。
+`install.sh` 只处理当前机器已经安装的 Claude Code 和 Codex。Claude Code 存在时链接基础配置；Codex 存在时链接 prompts 和基础 `AGENTS.md`。脚本先备份已有目标，再为已安装工具注册声明的公开 marketplace 和 plugins。全量安装依赖 `jq`。
 
-### 只安装开发规范
+### 团队安装入口
 
-已有工具配置时，优先使用此入口。它不改 Claude、代理、认证或插件市场：
+团队能力需要按 [SuperBeiTeam 安装说明](https://github.com/NBStarry/SuperBeiTeam) 单独安装。该仓库为私有仓库，需要访问权限。基础安装不创建团队 hook、Hermes 插件或团队启用项，也不删除已有团队配置。
 
-```bash
-bash install.sh --workflow-only
-```
+旧参数 `bash install.sh --workflow-only`、`pwsh -File .\install.ps1 -WorkflowOnly` 和 `scripts/install-workflow.py` 仅显示迁移说明，不安装、不回退、不下载私有代码。保留旧安装回执及备份，按 Team 的回退说明处理。
 
-Windows 的 Codex 入口为 `pwsh -File .\install.ps1 -WorkflowOnly`，需要 Python 3 和创建 symlink 的权限。Windows 实机验收尚未完成。若只指定一个工具，使用：
-
-```bash
-python3 -B scripts/install-workflow.py --tool codex
-~/.hermes/hermes-agent/venv/bin/python -B scripts/install-workflow.py --tool hermes
-```
-
-Hermes 的独立 Profile 需要逐个安装：在 Hermes 命令后添加 `--home ~/.hermes/profiles/<profile>`。默认命令只处理主入口，不自动枚举成员或迁移项目。安装器保留其他配置和 Hermes 原有 AGENTS；新增上下文由插件加载同一份根原则。
-
-重复安装不会重复注册。安装后按输出保存 `receipt.json` 路径。回退使用同一 Python 运行 `scripts/install-workflow.py --rollback <receipt.json>`；若目标已被后来操作修改，回退会拒绝覆盖。备份可能包含私有配置，仅保存在宿主配置目录，不上传。
-
-Codex 安装后在 `/hooks` 审阅并信任新增定义，再新开会话。Hermes 安装后重新加载相应进程。文件链接存在不代表运行时已加载。参见 [Hermes 接入与验证](hermes/README.md) 和 [开发规范 Web 指南](site/workflow.html)。
+旧版程序和适配器仅供既有消费者继续使用，见 [workflow 冻结兼容说明](workflow/README.md)、[Codex 基础原则与兼容入口](codex/README.md)和 [Hermes 冻结适配说明](hermes/README.md)。
 
 ## 安装后需要做的事
 
@@ -104,7 +91,7 @@ pwsh -File .\scripts\config.ps1 rollback
 
 `install.ps1` 继续保留为兼容安装入口；新状态引擎更适合审查差异、迁移新机器和可靠回滚。`codex/config.toml` 采用 `seed`，存在时不会被覆盖，因为它包含机器路径和运行时写入内容。
 
-状态引擎只管理 manifest 声明的文件链接；Codex hook 合并和 Hermes 插件启用使用独立规范安装入口。仅 `config.ps1 apply` 不构成规范安装完成证明。
+状态引擎只管理 manifest 声明的基础资源。团队 hook 与 Hermes 插件不再列为受管项；已有团队安装由 Team 单独维护。
 
 ## 仓库结构
 
@@ -126,7 +113,8 @@ StarryBei-ai-config/
 ├── docs/                      # 设计文档、历史计划和 TODO
 ├── deprecated/                # 已弃用方案归档
 ├── AGENTS.md                  # 本仓库内协作约定
-├── VERIFY.md                  # dev -> main 验证清单
+├── agent-coops/               # 本仓工程记录与飞书任务入口
+├── VERIFY.md                  # 历史验证记录，迁移映射见 agent-coops/
 └── README.md
 ```
 
@@ -160,6 +148,7 @@ Codex 的 `config.toml` 不做 symlink，因为 Codex 会在运行时自动写�
 
 | 文件 | 说明 |
 | --- | --- |
+| `codex/AGENTS.md` | 链接到 `~/.codex/AGENTS.md` 的基础操作与沟通原则 |
 | `codex/config.toml.example` | 可复制到 `~/.codex/config.toml` 的模板 |
 | `~/.codex/auth.json` | `codex login` 生成，永不入库 |
 | Codex plugins | 由 `config/skill-plugins.json` 通过原生 marketplace/plugin 命令安装 |
@@ -233,12 +222,13 @@ Git 工作流：
 
 - `dev`：所有改动先进入开发分支
 - `main`：稳定分支，只包含已验证配置
-- 自动检查由 GitHub Actions 执行；只有需要人工观察的改动才更新 [VERIFY.md](VERIFY.md)
-- 相关验证项全部勾选后再合并到 `main`
+- 自动检查由 GitHub Actions 执行；需求与用户验收进入项目飞书任务，工程证据见 [任务入口](agent-coops/README.md)
+- 相关用户验收完成后再合并到 `main`；保留 TODO、VERIFY 历史条目与迁移映射
 
 ## 相关文档
 
-- [VERIFY.md](VERIFY.md)：验证清单
+- [项目任务入口](agent-coops/README.md)：飞书需求、工程记录及历史映射
+- [VERIFY.md](VERIFY.md)：历史验证记录
 - [AGENTS.md](AGENTS.md)：本仓库协作约定
 - [scripts/README.md](scripts/README.md)：维护脚本说明
 - [deprecated/README.md](deprecated/README.md)：已弃用方案说明

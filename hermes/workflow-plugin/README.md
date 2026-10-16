@@ -1,7 +1,7 @@
-# Hermes 开发规范插件
+# Hermes 冻结兼容插件
 
-`starrybei-workflow` 通过 Hermes 原生插件接口加载共用原则，并在工具调用前后执行项目固定版本的规范检查。插件仅对已接入项目启用门禁。
+`starrybei-workflow` 的旧版程序保留给已安装消费者。本目录不再接受团队功能开发，程序字节保持冻结。不要通过基础配置更新删除已有链接。
 
-使用配置仓的 `scripts/install-workflow.py --tool hermes` 安装。安装器建立插件链接，并合并 `plugins.enabled`；仅建立链接不会启用插件。安装后重新加载 Hermes 进程。
+当前安装、回退与团队维护入口是 [SuperBeiTeam 私有仓库](https://github.com/NBStarry/SuperBeiTeam)，需要访问权限。配置仓的 `scripts/install-workflow.py` 只显示迁移提示。
 
-安装、回退、验证和已知限制见 [Hermes 接入说明](../README.md)。
+冻结适配器的检查方式见 [Hermes 冻结适配说明](../README.md)。

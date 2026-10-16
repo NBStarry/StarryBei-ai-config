@@ -1,0 +1,122 @@
+{
+  "role": "product",
+  "version": "bootstrap-v1",
+  "formal_publish": "pending coordinator notice after loader installation",
+  "codex_session_id": "01a1446c-517e-77e0-a876-b5a53f2ae5c1",
+  "coordinator_session_id": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+  "feishu_requirement_id": "9541c1a5-06aa-4762-8a76-293eaa2bf6c9",
+  "upstream": {
+    "product_version": "Team v1",
+    "product_sha256": "d500b9531f0897155fc00b971952bc909f57d8a33a016b1142955ce410687c24",
+    "manifest_sha256": "bc402e1e293892b50ce2336483669fd6d6569c37b81381f91f21ac7725e0b0fc",
+    "receipt": "coordinator-product-v1.json",
+    "hashes_verified": true
+  },
+  "prototype_generation": {
+    "skill": "free-tokens",
+    "model": "phanthy-cloud/claude-opus-5-5",
+    "variant": "medium",
+    "runtime_metadata": [
+      {
+        "providerID": "phanthy-cloud",
+        "modelID": "claude-opus-5-5",
+        "variant": "medium"
+      }
+    ],
+    "session_id": "ses_ebb9209a5ffeYjipUSkef5LCz2",
+    "initial_exit_code": 0,
+    "correction_exit_code": 0,
+    "fallback_used": false,
+    "request_first_response_timeout": "not runtime-enforced; not claimed",
+    "billing": "not checked; cost=0 is not proof",
+    "path_note": "Initial final text used an inaccurate /workspace path. Actual write tool used the required absolute worktree path. Final wording corrected in the same session.",
+    "correction": "All entries must be read back before freezing original TODO and VERIFY files.",
+    "asset_correction_exit_code": 0,
+    "asset_correction": "Same Opus session removed two external navigation href attributes. Static text directs readers to links in the product Markdown. No JavaScript or workflow changes."
+  },
+  "local_to_team_acceptance": {
+    "A1": [
+      "A1"
+    ],
+    "A2": [
+      "A2"
+    ],
+    "A3": [
+      "A1",
+      "A3"
+    ],
+    "A4": [
+      "A3"
+    ],
+    "A5": [
+      "A4"
+    ],
+    "A6": [
+      "A5",
+      "A7",
+      "A8",
+      "A9"
+    ],
+    "A7": [
+      "A1",
+      "A11",
+      "A12"
+    ],
+    "A8": [
+      "A1",
+      "A12"
+    ]
+  },
+  "pre_publish_correction": "Renamed local C1-C8 draft IDs to A1-A8 to satisfy existing workflow schema; did not alter workflow code.",
+  "sha256": {
+    "agent-coops/tasks/team-boundary-migration/产品设计.md": "874a3d62c1385fe90918dc8520623260288b2d03d7206cd88d96510a55b26fc6",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-manifest.json": "afc5065317dd1fa2f52647472a7706807d91f03ced1f91608d6bc4cf02f944b5",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop.png": "121b07dde0f4b51d4bf516a61e6831088e544366ffcf7acf4f28412ada8de403",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop-bottom.png": "6c581c54fad3c9327a97ccd9bff09d62cc6d57ec6f8561f73f9b66f4b11531cf"
+  },
+  "public_delivery_files": [
+    "agent-coops/tasks/team-boundary-migration/产品设计.md",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-manifest.json",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop.png",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-desktop-bottom.png",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-checks.json",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-provenance.json",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-asset-validation.json",
+    "agent-coops/tasks/team-boundary-migration/evidence/config-product-browser-assets.json"
+  ],
+  "local_invocation_evidence": [
+    "config-product-opus-prompt.txt",
+    "config-product-opus-events.jsonl",
+    "config-product-opus-stderr.log",
+    "config-product-opus-session.json",
+    "config-product-opus-correction.txt",
+    "config-product-opus-correction-events.jsonl",
+    "config-product-opus-correction-stderr.log",
+    "config-product-opus-final-session.json",
+    "config-product-opus-assets-prompt.txt",
+    "config-product-opus-assets-events.jsonl",
+    "config-product-opus-assets-stderr.log",
+    "config-product-opus-assets-session.json"
+  ],
+  "publication_note": "Raw invocation and session exports are local audit evidence, not manifest assets. Review an explicit public allowlist before committing.",
+  "not_claimed": [
+    "installed loader",
+    "formal workflow publish",
+    "deployment",
+    "main merge",
+    "independent test",
+    "user acceptance"
+  ],
+  "asset_pre_publish_check": {
+    "initial_result": "ASSET_EXTERNAL reproduced",
+    "after_fix_result": "passed",
+    "validation_function": "asset_hashes",
+    "module_version": "0.2.1",
+    "module_sha256": "2038d3544fa16dc850ef0f20a50a6786a7bc9d0a4ba6292be226d5fea272261f",
+    "evidence": "config-product-asset-validation.json",
+    "completed_rework_rounds_claimed": 0,
+    "coordinator_confirmation": "pending"
+  }
+}

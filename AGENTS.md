@@ -4,7 +4,15 @@
 
 This public repository manages AI coding tool configuration in a dotfiles style. It contains Claude Code and Codex configuration, shared custom skills, maintenance scripts, and a GitHub Pages dashboard. The main technologies are Bash, PowerShell, Markdown, JSON, HTML, CSS, and JavaScript; there is no application build system or conventional test suite.
 
-Documentation is generally written in Chinese with English section headings. Keep machine-readable paths, commands, APIs, and JSON keys in their original form.
+新增或修订的文档使用中文正文与标题。机器可读路径、命令、API 和 JSON 键保持原样；不要翻译无关历史文档。
+
+## 项目边界与任务入口
+
+本仓维护基础配置、通用操作与沟通原则及 Dashboard。团队规则、workflow、宿主适配和独立安装由 [SuperBeiTeam 私有仓库](https://github.com/NBStarry/SuperBeiTeam) 维护，需要访问权限。不要在本仓继续定义团队流程或复制私有正文。公开站点不得读取 Team 私有内容。
+
+开始工作时读取 [项目工程入口](agent-coops/README.md)和当前任务记录。需求、负责人、验收要求及完成状态以本项目飞书任务为正本；`agent-coops/tasks/<任务名>/` 保存工程记录与证据。TODO、VERIFY 保留历史正文和迁移映射，不为新任务增加第二份待办状态。
+
+本次采用 Team 已确认设计实施边界迁移；工程入口不等于已安装新门禁。未安装时继续遵守既有项目 hook。旧 `workflow/v0.1.x`、`workflow/v0.2.0` 发行文件及旧 hook/plugin 程序只作冻结兼容，见 [冻结范围](workflow/README.md)。其他项目的版本、路径和绑定不随本次变更迁移。
 
 ## Project Structure & Module Organization
 
@@ -18,11 +26,14 @@ Documentation is generally written in Chinese with English section headings. Kee
 - `site/` contains the public GitHub Pages dashboard.
 - `docs/` contains design documents, historical plans, and TODOs.
 - `deprecated/` archives retired approaches; do not extend archived implementations.
-- `VERIFY.md` tracks user validation before changes reach `main`.
+- `agent-coops/` 保存本项目工程记录与任务入口。
+- `TODO.md` 与 `VERIFY.md` 保留历史记录和迁移映射。
 
 Content directories generally use a `README.md` to explain purpose and usage, an optional `examples/` directory for templates, and production files at the directory root.
 
 ## Quick Start
+
+仅在用户要求安装到目标机器时运行安装器。读取、审查或编辑本仓库不授权修改真实用户配置。
 
 On Windows, use PowerShell 7:
 
@@ -81,24 +92,15 @@ Both installers link shareable configuration into the relevant user directories 
 - `pwsh -File .\scripts\config.ps1 plan` shows desired-vs-actual configuration state; use `apply`, `verify`, and `rollback` for the managed migration loop.
 - `pwsh -File .\scripts\start-local-dashboard.ps1` opens the complete local-only Dashboard on `127.0.0.1`; use `-NoBrowser` when running it headlessly.
 - `bash scripts/generate-site-data.sh` rebuilds public/CI `site/data.json` from this repository and registered public external sources.
-- `bash -n install.sh scripts/*.sh claude/scripts/*.sh` checks shell syntax for maintained scripts.
+- `for script in install.sh scripts/*.sh claude/scripts/*.sh; do bash -n "$script" || exit; done` 逐个检查维护中的 Shell 脚本，并传播失败状态。
 - `jq empty claude/configs/*.json site/data.json` validates JSON files after edits.
 
 ## Git Branching & Verification
 
 - `dev` is the development branch. All unverified changes go there first.
 - `main` is the stable branch and should contain only user-verified configuration.
-- Keep code or configuration changes and the corresponding `VERIFY.md` entry in the same commit only when observable user validation is required.
-- Merge `dev` into `main` only after all relevant verification items are marked `[x]`.
-
-Use this format for new validation items:
-
-```markdown
-- [ ] **Change summary** (commit: pending, date: YYYY-MM-DD)
-  - 验证方法：how to test
-  - 预期效果：expected result
-  - 实际效果：（fill after verification）
-```
+- 代码或配置修改与对应工程证据放在同一候选中。
+- 只有本项目飞书任务中的相关用户验收全部完成后，才把 `dev` 合并到 `main`。
 
 ## Coding Style & Naming Conventions
 
@@ -110,11 +112,11 @@ Configuration examples must use placeholder values anywhere credentials or machi
 
 ## Testing Guidelines
 
-Run `pwsh -File .\scripts\validate-repo.ps1` for portable checks. CI additionally runs Bash syntax and public external-source generation on Ubuntu, then automatically syncs changed `site/data.json` on `dev`. Add or update `VERIFY.md` only for behavior that requires a person to observe a real UI, tool session, account, symlink, notification, or machine integration.
+使用 `pwsh -File .\scripts\validate-repo.ps1` 运行跨平台检查。CI 在 Ubuntu 上额外检查 Bash 语法并生成公开外部来源数据，再把变化的 `site/data.json` 同步到 `dev`。需要实际观察的 UI、工具会话、账户、链接、通知或机器集成验收记录在本项目飞书任务中；工程证据保存在任务目录。纯文档检查不运行安装器或公开数据生成。
 
 ## Commit & Pull Request Guidelines
 
-Git history uses concise conventional-style subjects such as `docs(web-access): ...` and `chore(configs): ...`. Keep code/config changes and related documentation or `VERIFY.md` updates in the same commit. PRs should describe what changed, list validation commands, link issues when relevant, and include screenshots for dashboard UI changes. Do not merge to `main` until all relevant `VERIFY.md` items are marked `[x]`.
+提交标题使用简短约定格式，例如 `docs(web-access): ...` 和 `chore(configs): ...`。代码、配置及相关文档或任务证据放在同一提交。PR 描述修改及验证命令，关联相关问题；Dashboard UI 修改提供截图。相关用户验收完成前，不合并到 `main`。
 
 ## Security & Configuration Tips
 

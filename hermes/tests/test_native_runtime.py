@@ -1,6 +1,5 @@
 """在目标 Hermes 虚拟环境运行；使用真实插件发现和工具分发，不调用模型。"""
 import hashlib
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -32,10 +31,11 @@ class NativeRuntimeTests(unittest.TestCase):
                       root_files=['STATUS.md'], allowed_roots=['src', 'agent-coops'])
         cls.config_path = cls.root / 'agent-coops/project.json'
         cls.config_path.write_text(json.dumps(config))
-        spec = importlib.util.spec_from_file_location('native_installer', REPO / 'scripts/install-workflow.py')
-        installer = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(installer)
-        installer.install('hermes', cls.home)
+        # 冻结适配器的隔离 fixture；基础安装器已不再安装团队能力。
+        plugins = cls.home / 'plugins'
+        plugins.mkdir(parents=True)
+        (plugins / 'starrybei-workflow').symlink_to(REPO / 'hermes/workflow-plugin', target_is_directory=True)
+        (cls.home / 'config.yaml').write_text('plugins:\n  enabled: [starrybei-workflow]\n')
         from hermes_cli.plugins import get_plugin_manager
         cls.manager = get_plugin_manager()
         cls.manager.discover_and_load()

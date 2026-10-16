@@ -11,12 +11,15 @@ BACKUP_DIR="$HOME/.ai-config-backup-$(date +%Y%m%d-%H%M%S)"
 SKIP_SKILL_PLUGINS=0
 HAS_CLAUDE=0
 HAS_CODEX=0
-WORKFLOW_ONLY=0
 
 case "${1:-}" in
   "") ;;
   --skip-skill-plugins) SKIP_SKILL_PLUGINS=1 ;;
-  --workflow-only) WORKFLOW_ONLY=1 ;;
+  --workflow-only)
+    echo "团队安装已迁至 SuperBeiTeam（私有仓库，需要访问权限）："
+    echo "https://github.com/NBStarry/SuperBeiTeam"
+    echo "本入口未修改任何配置。请按 Team 安装说明单独安装。"
+    exit 0 ;;
   *) echo "Usage: $0 [--skip-skill-plugins|--workflow-only]" >&2; exit 2 ;;
 esac
 
@@ -63,34 +66,7 @@ CODEX_CMD="$(find_tool codex || true)"
 [ -n "$CLAUDE_CMD" ] && HAS_CLAUDE=1
 [ -n "$CODEX_CMD" ] && HAS_CODEX=1
 
-# Hermes 的官方虚拟环境通常不在 PATH。
-HERMES_PYTHON="$HOME/.hermes/hermes-agent/venv/bin/python"
-HAS_HERMES=0
-if [ -x "$HERMES_PYTHON" ]; then
-  HAS_HERMES=1
-elif find_tool hermes >/dev/null; then
-  HAS_HERMES=1
-  HERMES_PYTHON="$(find_tool python3)"
-fi
-
-install_workflow() {
-  if [ "$HAS_CODEX" -eq 1 ]; then
-    python3 -B "$REPO_DIR/scripts/install-workflow.py" --tool codex
-  fi
-  if [ "$HAS_HERMES" -eq 1 ]; then
-    "$HERMES_PYTHON" -B "$REPO_DIR/scripts/install-workflow.py" --tool hermes --home "${HERMES_HOME:-$HOME/.hermes}"
-  fi
-}
-
-if [ "$WORKFLOW_ONLY" -eq 1 ]; then
-  install_workflow
-  if [ "$HAS_CODEX" -eq 0 ] && [ "$HAS_HERMES" -eq 0 ]; then
-    echo "No Codex/Hermes installation detected; nothing to install."
-  fi
-  exit 0
-fi
-
-if [ "$HAS_CLAUDE" -eq 0 ] && [ "$HAS_CODEX" -eq 0 ] && [ "$HAS_HERMES" -eq 0 ]; then
+if [ "$HAS_CLAUDE" -eq 0 ] && [ "$HAS_CODEX" -eq 0 ]; then
   echo "No supported installed tools detected; nothing to install."
   exit 0
 fi
@@ -126,6 +102,7 @@ fi
 # Custom prompts are deprecated upstream, but they are still Codex's documented
 # local slash-menu adapter. Keep prompt files tiny and make skills the truth.
 if [ "$HAS_CODEX" -eq 1 ]; then
+  link "$REPO_DIR/codex/AGENTS.md" "$HOME/.codex/AGENTS.md"
   if [ -d "$REPO_DIR/codex/prompts" ]; then
     for prompt in "$REPO_DIR"/codex/prompts/*.md; do
       [ -e "$prompt" ] || continue
@@ -143,8 +120,6 @@ else
 fi
 
 # ── External skill plugins ────────────────────────────────────────────────
-install_workflow
-
 if [ "$SKIP_SKILL_PLUGINS" -eq 1 ]; then
   echo "SKIP     external skill plugins"
 else

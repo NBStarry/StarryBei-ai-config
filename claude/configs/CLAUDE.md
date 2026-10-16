@@ -2,9 +2,12 @@
 
 ## Git Commit Rules
 - Code changes and related documentation updates must be in the same commit — never split them into separate commits
+- 开始项目工作时，读取项目 `AGENTS.md` 与当前任务记录，确认该项目当前有效的验收正本。
+- 合并到 `main` 前，完成该正本要求的全部相关用户验收。旧项目继续遵守其原有效流程；不要把已冻结的历史 `VERIFY.md` 作为所有项目的强制验收清单。
 
 ## Editing Rules
 - Before editing any file, always re-read its current content with a fresh `Read` — never edit based on assumed or stale content
+- Verify file existence on disk before claiming files exist
 
 ## Language
 - Default to Chinese when replying to the user, unless the user explicitly asks for another language
@@ -19,16 +22,17 @@
 - For shell script fixes, regex extraction, and non-trivial debugging: propose the approach (with specific commands/flags) before executing
 - Identify root cause first, then propose fix — do not jump directly into implementation
 
-## Agent Teams Rules
-- **Subagents (Agent tool) must always pass an explicit `model` parameter** (opus or sonnet) — never omit it, since omitting inherits the main-loop model, which may be an unintended tier
-- Team Lead: always use `model: "opus"`
-- Teammates: default to `model: "sonnet"`, use `model: "opus"` for complex tasks (architecture, multi-file refactoring, deep debugging)
-- Never use haiku for teammates
-- Verify file existence on disk before claiming files exist
-- Never merge to `main` without all VERIFY.md items marked `[x]`
-- Confirm teammate permissions before assigning tasks
-- Break complex multi-agent setups into smaller validated steps
-- Provide checkpoint summaries after each major step
+## 模型选择
+
+- 子 Agent 调用 `Agent` 工具时，必须显式传入 `model` 参数，值为 `opus` 或 `sonnet`。不得省略该参数并继承主循环模型。
+- 主代理始终使用 `model: "opus"`。
+- 常规成员默认使用 `model: "sonnet"`。
+- 复杂任务使用 `model: "opus"`，包括架构、多文件重构和深度调试。
+- 成员不得使用 `haiku`。
+
+## 团队规则引用
+
+团队权限、任务拆分和阶段 checkpoint 遵守目标项目当前有效合同。规范维护入口为 [SuperBeiTeam 私有仓库](https://github.com/NBStarry/SuperBeiTeam)，需要仓库访问权限。本文件只维护基础规则，不复制团队流程正文。
 
 ## 飞书 / lark-cli Rules
 - **文档归属 = 创建身份**：`lark-cli docs +create` 默认用 **bot（应用）身份**创建，文档 owner 就是该应用（如「HZB 飞书 CLI」），不是用户本人。后果：user 身份删不掉、移动不了，飞书 UI 会提示"向 XX 应用申请删除/无权限"。

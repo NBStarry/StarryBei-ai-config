@@ -1,0 +1,9 @@
+{
+  "stage": "architecture",
+  "version": "Config bootstrap v1",
+  "channel": "feishu-bot-private",
+  "success": true,
+  "idempotency_key": "config-boundary-arch-v1-bot",
+  "message_id": "om_x100b621484ffaca4cf2412fedfd88df",
+  "create_time": "2026-10-16 19:38:11"
+}

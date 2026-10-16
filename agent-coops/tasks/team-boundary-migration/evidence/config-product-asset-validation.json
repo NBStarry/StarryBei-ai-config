@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "checked_at": "2026-10-16T11:26:21.130717+00:00",
+      "phase": "initial_pre_publish_check",
+      "module_version": "0.2.1",
+      "module_sha256": "2038d3544fa16dc850ef0f20a50a6786a7bc9d0a4ba6292be226d5fea272261f",
+      "function": "asset_hashes",
+      "readonly": true,
+      "asset_sha256": {
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "13c8a7eef7c3ac064a54b815c946ad072dbc7c109a344a747fe1c4ca288b0073"
+      },
+      "result": "rejected",
+      "error": "ASSET_EXTERNAL：可视化依赖必须保存在项目内 https://github.com/NBStarry/SuperBeiTeam",
+      "counts_as_completed_rework_round": false
+    },
+    {
+      "checked_at": "2026-10-16T11:26:51.921518+00:00",
+      "phase": "after_static_navigation_fix",
+      "module_version": "0.2.1",
+      "module_sha256": "2038d3544fa16dc850ef0f20a50a6786a7bc9d0a4ba6292be226d5fea272261f",
+      "function": "asset_hashes",
+      "readonly": true,
+      "hashes": {
+        "agent-coops/tasks/team-boundary-migration/evidence/config-product-prototype.html": "fd8dfc2e3443dacf8b8d3e31c9444f05298ab2f69fbdb35fb7aedfb59fce8aaa"
+      },
+      "result": "passed",
+      "scope": "product self-check; coordinator independent confirmation pending",
+      "document_and_criteria_unchanged": true
+    }
+  ]
+}

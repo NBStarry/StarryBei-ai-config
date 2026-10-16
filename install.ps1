@@ -16,6 +16,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+if ($WorkflowOnly) {
+  Write-Host '团队安装已迁至 SuperBeiTeam（私有仓库，需要访问权限）：'
+  Write-Host 'https://github.com/NBStarry/SuperBeiTeam'
+  Write-Host '本入口未修改任何配置。请按 Team 安装说明单独安装。'
+  return
+}
+
 $Repo       = $PSScriptRoot
 $ClaudeHome = Join-Path $env:USERPROFILE '.claude'
 $CodexHome  = Join-Path $env:USERPROFILE '.codex'
@@ -41,21 +48,6 @@ function Find-ToolCommand([string]$Name) {
 
 $ClaudeCommand = Find-ToolCommand 'claude'
 $CodexCommand = Find-ToolCommand 'codex'
-
-function Install-Workflow {
-  if ($null -eq $CodexCommand) { return }
-  $Python = Find-ToolCommand 'python'
-  if ($null -eq $Python) { $Python = Find-ToolCommand 'python3' }
-  if ($null -eq $Python) { throw '开发规范安装需要 Python 3。' }
-  & $Python -B (Join-Path $Repo 'scripts\install-workflow.py') --tool codex --home $CodexHome
-  if ($LASTEXITCODE -ne 0) { throw '开发规范安装失败。' }
-}
-
-if ($WorkflowOnly) {
-  Install-Workflow
-  if ($null -eq $CodexCommand) { Write-Host 'No Codex installation detected; nothing to install.' }
-  return
-}
 
 # Probe symlink capability ONCE up front. If we can't create symlinks (no
 # Developer Mode and not elevated), we must NOT back up/destroy existing files.
@@ -154,6 +146,7 @@ if ($null -ne $ClaudeCommand) {
 
 # -- Codex CLI: local slash-menu prompt adapters (file symlinks) --------------
 if ($null -ne $CodexCommand) {
+  Link-File (Join-Path $Repo 'codex\AGENTS.md') (Join-Path $CodexHome 'AGENTS.md')
   $CodexPrompts = Join-Path $Repo 'codex\prompts'
   if (Test-Path -LiteralPath $CodexPrompts) {
     foreach ($prompt in Get-ChildItem -LiteralPath $CodexPrompts -File -Filter '*.md') {
@@ -171,8 +164,6 @@ if ($null -ne $CodexCommand) {
 }
 
 # -- External skill plugins --------------------------------------------------
-Install-Workflow
-
 if ($SkipSkillPlugins) {
   Write-Host "SKIP     external skill plugins"
 } else {

@@ -1,0 +1,19 @@
+{
+  "stage": "architecture",
+  "version": "Config bootstrap v1",
+  "confirmed_by": "01a13415-a5ff-75a2-bb1b-e9745ad914d4",
+  "host": "Codex",
+  "device": "韩泽北的MacBook Pro",
+  "session_title": "统一多项目开发规范",
+  "confirmed_at": "2026-10-16T11:38:09.962005+00:00",
+  "files": {
+    "计划.md": "4104377a73e1e131ef23fbde056958a6284855281afc39ff9b5b4f5eb51bca4e",
+    "evidence/config-architecture-manifest.json": "e21fffe3374fa643d668b562269bdf660f4ea54738ab87add79a36baad9f7072",
+    "evidence/config-architecture-impact.mmd": "a93d22672f3f8e94e58054b65ce1f3b705f1cdf324db85ee76777084fcc42264",
+    "evidence/config-architecture-source-review.md": "4516bb3f741b5d6884d69b14b9377144212f8b903136fdfc04a1972640772e9d"
+  },
+  "result": "confirmed",
+  "workflow_enrollment": "bootstrap; dual-host loader not installed yet",
+  "canonical_plan_publish_digest": "c19fe5b5be8df2cda41155a21f2b49e646d847c3b12c41b75c06ee0f201fb6c6",
+  "user_acceptance": "not claimed"
+}
